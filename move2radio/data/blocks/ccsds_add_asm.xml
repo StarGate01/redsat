@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<block>
+  <name>Add ASM (CCSDS)</name>
+  <key>ccsds_add_asm</key>
+  <category>CCSDS/Sender</category>
+  <import>import ccsds</import>
+  <make>ccsds.add_asm($ASM,$frame_len)</make>
+	<param>
+		<name>Sync Marker</name>
+		<key>ASM</key>
+		<value>'1ACFFC1D'</value>
+		<type>string</type>
+	</param>
+	<param>
+		<name>Frame data length</name>
+		<key>frame_len</key>
+		<type>int</type>
+	</param>
+	<check>len($ASM)%2 == 0</check>
+	<check>$frame_len > 0</check>
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>message</type>
+	</source>
+	<doc>
+Add ASM
+Take a raw frame as input and output the ASM followed by the raw frame data.
+
+Sync Marker: Hexadecimal representation of the ASM. Must be of odd length as the
+ASM must be an integer number of bytes.
+
+Frame data length: Length of the frame data (excluding the ASM) in bytes.
+	</doc>
+</block>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<block>
+  <name>Convolutional Encoder (CCSDS)</name>
+  <key>ccsds_conv_encode27_bb</key>
+  <category>CCSDS/Channelcoding</category>
+  <import>import ccsds</import>
+  <make>ccsds.conv_encode27_bb($gen_poly_c1, $gen_poly_c2, int($punct.fcn))</make>
+	<param>
+		<name>Generator Polynom C1</name>
+		<key>gen_poly_c1</key>
+		<value>0x79</value>
+		<type>int</type>
+	</param>
+	<param>
+		<name>Generator Polynom C2</name>
+		<key>gen_poly_c2</key>
+		<value>0xDB</value>
+		<type>int</type>
+	</param>
+	<param>
+		<name>Puncturing</name>
+		<key>punct</key>
+		<value>0</value>
+		<type>enum</type>
+		<option>
+			<name>None</name>
+			<key>NONE</key>
+			<opt>fcn:0</opt>
+		</option>
+		<option>
+			<name>ECSS 2/3</name>
+			<key>ECSS_23</key>
+			<opt>fcn:1</opt>
+		</option>
+		<option>
+			<name>ECSS 3/4</name>
+			<key>ECSS_34</key>
+			<opt>fcn:2</opt>
+		</option>
+		<option>
+			<name>ECSS 5/6</name>
+			<key>ECSS_56</key>
+			<opt>fcn:3</opt>
+		</option>
+		<option>
+			<name>ECSS 7/8</name>
+			<key>ECSS_78</key>
+			<opt>fcn:4</opt>
+		</option>
+	</param>
+	<check>$gen_poly_c1 >= 0</check>
+	<check>$gen_poly_c2 >= 0</check>
+	<check>$gen_poly_c1 &lt;= 255</check>
+	<check>$gen_poly_c2 &lt;= 255</check>
+	<sink>
+		<name>in</name>
+		<type>byte</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>byte</type>
+	</source>
+	<doc>
+Convolutional Encoder with puncturing
+
+Convolutional encodes incomming (packed) bytes and perform puncturing.
+
+The compact generator polynom contains two informations. Encoded in the MSB is
+the information whether the stream should be inverted (MSB set) or not (MSB
+unset). Encoded in the 7 less significant bits is the information about the
+connections between the shift registers and the output. The MSB-1 represents the
+influence of the current information bit i(t) while the LSB represents the
+influence of the information bit i(t-6). A set bit means there is a connection,
+while an unset bit means there is no.
+
+The polynomials for the convolutional code defined in ECSS can be generated with
+0x79 for c1 and 0x5B for c2. Together with the MSB for the inversion of c2 the
+compact polynomials are 0x79 and 0xDB for non puncturing. For puncturing, the
+inversion is not performed, so the compact generator polynomials are 0x79 for c1
+and 0x5B for c2.
+	</doc>
+</block>

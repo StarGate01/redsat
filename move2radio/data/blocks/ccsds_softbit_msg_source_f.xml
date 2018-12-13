@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<block>
+  <name>Softbit Message Source</name>
+  <key>ccsds_softbit_msg_source_f</key>
+  <category>CCSDS/Conversion</category>
+  <import>import ccsds</import>
+  <make>ccsds.softbit_msg_source_f($frame_len)</make>
+	<param>
+		<name>Frame length</name>
+		<key>frame_len</key>
+		<value>40</value>
+		<type>int</type>
+	</param>
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>float</type>
+	</source>
+	<doc>
+Softbit message source
+
+Copies the floats contained in the incomming Softbit messages to the output stream.
+
+Frame length: Length of a frame in (soft)bits.
+	</doc>
+</block>

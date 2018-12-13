@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<block>
+    <name>Output rate counter</name>
+    <key>ccsds_output_counter_cc</key>
+    <category>[ccsds]</category>
+    <import>import ccsds</import>
+    <make>ccsds.output_counter_cc($block_length)</make>
+    <param>
+        <name>Block size</name>
+        <key>block_length</key>
+        <value>1024</value>
+        <type>int</type>
+    </param>
+    <sink>
+        <name>in</name>
+        <type>complex</type>
+    </sink>
+    <source>
+        <name>in_cpy</name>
+        <type>complex</type>
+        <optional>1</optional>
+    </source>
+    <source>
+        <name>out</name>
+        <type>message</type>
+        <optional>1</optional>
+    </source>
+    <doc>
+Copies the input complex intput to the (optional) output.
+
+Counts the number of copied samples and emits a "block_out" message everytime 'Block size' samples have been copied.
+
+This block is intendet to enable limiting the number of samples queueing up before a transmitter. So far the only block capable of using this messages is the udp_source_rate_idle block.
+    </doc>
+</block>

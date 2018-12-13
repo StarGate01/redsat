@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<block>
+  <name>Softbit PDU to Hardbyte PDU</name>
+  <key>ccsds_soft_to_hard_message</key>
+  <category>[ccsds]/Conversion</category>
+  <import>import ccsds</import>
+  <make>ccsds.soft_to_hard_message()</make>
+  <sink>
+    <name>in</name>
+    <type>message</type>
+  </sink>
+  <source>
+    <name>out</name>
+    <type>message</type>
+  </source>
+  <doc>Convert PDU with softbit payload to PDU with hardbits (compacted to bytes) payload.</doc>
+</block>

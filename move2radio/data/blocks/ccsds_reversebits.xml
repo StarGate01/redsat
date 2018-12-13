@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<block>
+  <name>Reverse bits (CCSDS)</name>
+  <key>ccsds_reversebits</key>
+  <category>CCSDS/Misc</category>
+  <import>import ccsds</import>
+  <make>ccsds.reversebits($msg_len,$rev_indices)</make>
+	<param>
+		<name>Message length</name>
+		<key>msg_len</key>
+		<value>1115</value>
+		<type>int</type>
+	</param>
+	<param>
+		<name>Reverse indices</name>
+		<key>rev_indices</key>
+		<value>( 0, )</value>
+		<type>raw</type>
+	</param>
+	<check>$msg_len &gt; 0</check>
+	<check>len($rev_indices) &lt;= $msg_len</check>
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>message</type>
+	</source>
+	<doc>
+Reverse bits
+Copies a message from the input to the output port. Ally bytes indicated by
+"Reverse indices" will have their bit order reversed. So the old MSB will
+now be the LSB and the other way round.
+
+msg_length: Expected length of input and output messages in bytes. Messages
+with a different size are discarded after printing a warning.
+
+rev_indices: Indices of the bytes within the message that should be reversed.
+Values within this vector should be in the range from 0 to frame_length - 1.
+The default is to only reverse the first byte (0, ). (0, 2) will reverse the
+first and the third byte, etc. range(msg) will reverse all bytes in this
+message.
+</doc>
+</block>

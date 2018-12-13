@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<block>
+  <name>LDPC Encoder (CCSDS)</name>
+  <key>ccsds_ldpc_encoder</key>
+  <category>CCSDS/Channelcoding</category>
+  <import>import ccsds</import>
+  <make>ccsds.ldpc_encoder($gen_file, $systype.fcn, $puncttype.fcn, $num_punct, tuple($punct_pos))</make>
+
+  <param>
+    <name>Generator matrix</name>
+    <key>gen_file</key>
+    <type>file_open</type>
+  </param>
+  <param>
+    <name>Systematic</name>
+    <key>systype</key>
+    <value>ccsds.LDPC_SYS_FRONT</value>
+    <type>enum</type>
+    <option>
+        <name>None</name>
+        <key>sys_none</key>
+        <opt>fcn:ccsds.LDPC_SYS_NONE</opt>
+    </option>
+    <option>
+        <name>Front</name>
+        <key>sys_front</key>
+        <opt>fcn:ccsds.LDPC_SYS_FRONT</opt>
+    </option>
+    <option>
+        <name>Back</name>
+        <key>sys_back</key>
+        <opt>fcn:ccsds.LDPC_SYS_BACK</opt>
+    </option>
+  </param>
+  <param>
+    <name>Puncturing position</name>
+    <key>puncttype</key>
+    <value>ccsds.LDPC_PUNCT_NONE</value>
+    <type>enum</type>
+    <option>
+        <name>None</name>
+        <key>punct_none</key>
+        <opt>fcn:ccsds.LDPC_PUNCT_NONE</opt>
+    </option>
+    <option>
+        <name>Front</name>
+        <key>punct_front</key>
+        <opt>fcn:ccsds.LDPC_PUNCT_FRONT</opt>
+    </option>
+    <option>
+        <name>Back</name>
+        <key>punct_back</key>
+        <opt>fcn:ccsds.LDPC_PUNCT_BACK</opt>
+    </option>
+    <option>
+        <name>Custom</name>
+        <key>punct_custom</key>
+        <opt>fcn:ccsds.LDPC_PUNCT_CUSTOM</opt>
+    </option>
+  </param>
+  <param>
+    <name>Number of punctures</name>
+    <key>num_punct</key>
+    <value>0</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Custom puncturing positions</name>
+    <key>punct_pos</key>
+    <value>[]</value>
+    <type>int_vector</type>
+  </param>
+  
+  <check>$num_punct >= 0</check>
+  
+  <sink>
+    <name>in</name>
+    <type>message</type>
+  </sink>
+
+  <source>
+    <name>out</name>
+    <type>message</type>
+  </source>
+</block>

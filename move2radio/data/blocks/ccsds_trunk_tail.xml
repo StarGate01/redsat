@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<block>
+  <name>Trunk Tail (CCSDS)</name>
+  <key>ccsds_trunk_tail</key>
+  <category>CCSDS/Misc</category>
+  <import>import ccsds</import>
+  <make>ccsds.trunk_tail($tail_len,$frame_len, $blanc_bits)</make>
+	<param>
+		<name>Number of bits to trunkate</name>
+		<key>tail_len</key>
+		<value>'92'</value>
+		<type>int</type>
+	</param>
+	<param>
+		<name>Frame data length</name>
+		<key>frame_len</key>
+		<type>int</type>
+	</param>
+	<param>
+		<name>uncertain bits at the end</name>
+		<key>blanc_bits</key>
+		<value>12</value>
+		<type>int</type>
+	</param>
+	<check>$tail_len >= 0</check>
+	<check>$frame_len > 0</check>
+	<check>$blanc_bits >= 0</check>
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>message</type>
+	</source>
+	<doc>
+Add ASM
+Take a raw frame as input and output the ASM followed by the raw frame data.
+
+Sync Marker: Hexadecimal representation of the ASM. Must be of odd length as the
+ASM must be an integer number of bytes.
+
+Frame data length: Length of the frame data (excluding the ASM) in bytes.
+	</doc>
+</block>

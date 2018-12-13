@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<block>
+  <name>PLL (CCSDS)</name>
+  <key>ccsds_pll_cc</key>
+  <category>CCSDS/Receiver/Synchronization</category>
+  <import>import ccsds</import>
+  <make>ccsds.pll_cc($M, $BL)</make>
+	<param>
+		<name>M</name>
+		<key>M</key>
+		<value>8</value>
+		<type>int</type>
+	</param>
+	<param>
+		<name>Loopbandwidth</name>
+		<key>BL</key>
+		<type>real</type>
+	</param>
+	<check>$M >= 1</check>
+	<sink>
+		<name>in</name>
+		<type>complex</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>complex</type>
+	</source>
+	<source>
+		<name>freq</name>
+		<type>message</type>
+		<optional>1</optional>
+	</source>
+	<doc>
+Phase locked loop for M-PSK symbols.
+
+M: Number of modulation symbols.
+If M=1: A plain carrier will be synchronized.
+	</doc>
+</block>

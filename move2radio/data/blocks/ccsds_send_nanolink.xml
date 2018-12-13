@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<block>
+  <name>Send Nanolink Frames to REST</name>
+  <key>ccsds_send_nanolink</key>
+  <category>[ccsds]</category>
+  <import>import ccsds</import>
+  <make>ccsds.send_nanolink($url)</make>
+  <param>
+    <name>Url</name>
+    <key>url</key>
+    <value>"localhost:8082"</value>
+  </param>
+  <sink>
+    <name>in</name>
+    <type>message</type>
+  </sink>
+</block>

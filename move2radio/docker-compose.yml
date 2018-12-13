@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  move2radio:
+    build: .
+    environment:
+      - DISPLAY=10.0.0.51:0.0
+    volumes:
+      - ../persistent-data/move2radio/input:/app/input

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<block>
+  <name>M-PSK Detector with Softbits (CCSDS)</name>
+  <key>ccsds_mpsk_detector_soft_cf</key>
+  <category>CCSDS/Receiver</category>
+  <import>import ccsds</import>
+  <make>ccsds.mpsk_detector_soft_cf($M)</make>
+	<param>
+		<name>M</name>
+		<key>M</key>
+		<value>8</value>
+		<type>int</type>
+	</param>
+	<check>$M >= 2</check>
+	<sink>
+		<name>in</name>
+		<type>complex</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>float</type>
+	</source>
+	<doc>
+M-PSK symbol detector with soft bits output.
+
+Take a complex input sample and detect its bit symbol. Output ld(M) floats for
+each incomming sample containing the individual soft bits where a -1.0
+represents the most confident zero bit, 1.0 the most confident one bit and 0.0
+stands for an erasure (in this case the incomming samples energy was zero).
+
+M: Number of modulation symbols.
+	</doc>
+</block>

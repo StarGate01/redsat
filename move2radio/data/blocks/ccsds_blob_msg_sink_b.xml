@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<block>
+  <name>BLOB Message Sink</name>
+  <key>ccsds_blob_msg_sink_b</key>
+  <category>CCSDS/Conversion</category>
+  <import>import ccsds</import>
+  <make>ccsds.blob_msg_sink_b($blob_len)</make>
+	<param>
+		<name>BLOB length</name>
+		<key>blob_len</key>
+		<value>40</value>
+		<type>int</type>
+	</param>
+	<sink>
+		<name>in</name>
+		<type>byte</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>message</type>
+	</source>
+	<doc>
+BLOB Message sink
+
+Copies portions of BLOB length bytes from the input stream to BLOB messages.
+
+BLOB length: Length of a BLOB in bytes.
+	</doc>
+</block>

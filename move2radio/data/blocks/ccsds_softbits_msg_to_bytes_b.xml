@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<block>
+  <name>Softbits message to bytes (CCSDS)</name>
+  <key>ccsds_softbits_msg_to_bytes_b</key>
+  <category>CCSDS/Conversion</category>
+  <import>import ccsds</import>
+  <make>ccsds.softbits_msg_to_bytes_b()</make>
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>byte</type>	
+	</source>
+	<doc>
+Softbit message to byte converter.
+
+Receives messages of softbits and converts them into packed bytes (with hard
+decisions).
+	</doc>
+</block>

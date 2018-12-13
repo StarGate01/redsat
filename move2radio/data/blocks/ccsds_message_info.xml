@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<block>
+    <name>message_info</name>
+    <key>ccsds_message_info</key>
+    <category>[ccsds]</category>
+    <import>import ccsds</import>
+    <make>ccsds.message_info($prefix, $mode)</make>
+    <param>
+        <name>Prefix</name>
+        <key>prefix</key>
+        <value>"Message info: "</value>
+    </param>
+    <param>
+		<name>Mode</name>
+		<key>mode</key>
+		<value>10</value>
+		<type>enum</type>
+		<option>
+			<name>Silent</name>
+			<key>0</key>
+			<opt>fcn:0</opt>
+		</option>
+		<option>
+			<name>Compact</name>
+			<key>10</key>
+			<opt>fcn:10</opt>
+		</option>
+		<option>
+			<name>Full</name>
+			<key>20</key>
+			<opt>fcn:20</opt>
+		</option>
+	</param>
+    <sink>
+        <name>in</name>
+        <type>message</type>
+    </sink>
+    <doc>
+Print out messages with a timestamp.
+
+Prefix: String that will be written before the data line(s)
+
+Modes:
+ - Silent:  Do not write anything
+ - Compact: Write one line summary of the message
+ - Full:    Write full content of the message
+    </doc>
+</block>

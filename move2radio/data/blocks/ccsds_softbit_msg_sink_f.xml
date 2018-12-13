@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<block>
+  <name>Softbit Message Sink</name>
+  <key>ccsds_softbit_msg_sink_f</key>
+  <category>CCSDS/Conversion</category>
+  <import>import ccsds</import>
+  <make>ccsds.softbit_msg_sink_f($frame_len)</make>
+	<param>
+		<name>Frame length</name>
+		<key>frame_len</key>
+		<value>40</value>
+		<type>int</type>
+	</param>
+	<sink>
+		<name>in</name>
+		<type>float</type>
+	</sink>
+	<source>
+		<name>out</name>
+		<type>message</type>
+	</source>
+	<doc>
+Softbit message sink
+
+Copies portions of Frame length softbits from the input stream to a softbit message.
+
+Frame length: Length of a frame in (soft)bits.
+	</doc>
+</block>
