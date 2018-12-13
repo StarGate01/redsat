@@ -50,11 +50,16 @@ RUN make install
 
 RUN apt-get -y install libcurl4-openssl-dev libcurlpp-dev
 
-COPY data/move-ii-gr/* /app/move-ii-gr/
+COPY data/move-ii-gr/file_gui/* /app/move-ii-gr/file_gui/
+COPY data/move-ii-gr/file_nogui/* /app/move-ii-gr/file_nogui/
+COPY data/move-ii-gr/tcp_gui/* /app/move-ii-gr/tcp_gui/
+COPY data/move-ii-gr/tcp_nogui/* /app/move-ii-gr/tcp_nogui/
+
 COPY data/AR4JA_r12_k1024n.a /tmp/
 COPY data/lib/* /usr/local/lib/
 COPY data/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
 COPY data/blocks/* /usr/local/share/gnuradio/grc/blocks/
+
 RUN ldconfig
 
 COPY run.sh /app/
