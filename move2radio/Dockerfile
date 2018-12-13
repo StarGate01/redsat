@@ -55,7 +55,9 @@ COPY data/AR4JA_r12_k1024n.a /tmp/
 COPY data/lib/* /usr/local/lib/
 COPY data/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
 COPY data/blocks/* /usr/local/share/gnuradio/grc/blocks/
-
 RUN ldconfig
 
-CMD ["python", "/app/move-ii-gr/downlink.py"]
+COPY run.sh /app/
+RUN chmod +x /app/run.sh
+
+CMD ["/app/run.sh"]

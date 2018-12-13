@@ -7,3 +7,4 @@ services:
       - DISPLAY=10.0.0.51:0.0
     volumes:
       - ../persistent-data/move2radio/input:/app/input
+      - ../persistent-data/move2radio/output:/app/output
