@@ -50,19 +50,43 @@ RUN make install
 
 RUN apt-get -y install libcurl4-openssl-dev libcurlpp-dev pulseaudio alsa-base alsa-utils
 
-COPY data/move-ii-gr/file_gui/* /app/move-ii-gr/file_gui/
-COPY data/move-ii-gr/file_nogui/* /app/move-ii-gr/file_nogui/
-COPY data/move-ii-gr/tcp_gui/* /app/move-ii-gr/tcp_gui/
-COPY data/move-ii-gr/tcp_nogui/* /app/move-ii-gr/tcp_nogui/
-
 COPY data/AR4JA_r12_k1024n.a /tmp/
 COPY data/.asoundrc /home/root/.asoundrc
 COPY data/lib/* /usr/local/lib/
 COPY data/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
 COPY data/blocks/* /usr/local/share/gnuradio/grc/blocks/
 
-RUN ldconfig
+COPY data/move-ii-gr/ /app/move-ii-gr/
 
+
+
+RUN apt-get -y install libogg-dev libvorbis-dev libpng-dev libpng++-dev swig gnuplot-qt socat python-pip
+
+WORKDIR /app/deps/gr-satnogs
+RUN git clone https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
+WORKDIR /app/deps/gr-satnogs/gr-satnogs
+RUN git checkout v1.5
+RUN git reset --hard
+WORKDIR /app/deps/gr-satnogs/gr-satnogs/build
+RUN cmake ..
+RUN make
+RUN make install
+
+WORKDIR /app/deps/gr-gpredict-doppler
+RUN git clone https://github.com/wnagele/gr-gpredict-doppler
+WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler
+RUN git checkout 8392f6442fd1fbeb307a315474c83688f29817a7
+RUN git reset --hard
+WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler/build
+RUN cmake ..
+RUN make
+RUN make install
+
+RUN pip install pyephem
+
+
+
+RUN ldconfig
 COPY run.sh /app/
 RUN chmod +x /app/run.sh
 
