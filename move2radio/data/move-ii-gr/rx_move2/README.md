@@ -34,8 +34,8 @@ _On Host side_:
 - `start_rx.sh`/`stop_rx.sh`: starts/stops recording
 - `plot.sh`: creates PNG image with waterfall from spectrum data (file with `.wf` extension)
 - `start_server.sh`: starts TCP server on port 1234 to send data out in realtime (from UDP port 12345)
-- `rx_move2_no_gui.grc`: Flowgraph of recorder. The generated python script is `rx_move2.py`
-- `rm_move2.py`: recording tool, generated from `rx_move2_no_gui.grc`
+- `rx_move2_no_gui.grc`/`rx_move2.py`: Flowgraph of recorder. The generated python script is `rx_move2.py`
+- `create_waterfall.grc`/`c_waterfall.py`: Creates waterfall data file with and without Doppler shift. This is useful to change the resolution afterwards. 
 - `dopplerscript/doppler.py`: uses current time and TLE of MOVE-II to calculate doppler shift and send it to recording tool (on TCP port `4532`)
 
 ## TODO
