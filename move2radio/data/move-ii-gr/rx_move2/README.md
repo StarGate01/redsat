@@ -26,7 +26,7 @@ _On SDR side_:
 - ./start_server.sh
 
 _On Host side_:
-- Open ...
+- Open `realtime_waterfall.grc`
 - Set IP of Client in the `TCP source` block
 - Run Flowgraph
 
