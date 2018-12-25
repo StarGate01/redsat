@@ -5,7 +5,6 @@ services:
     build: .
     environment:
       - DISPLAY=10.0.0.51:0.0
-      - M2RCHOICE=file_gui
     volumes:
       - ../persistent-data/move2radio/input:/app/input
       - ../persistent-data/move2radio/output:/app/output

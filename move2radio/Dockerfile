@@ -48,19 +48,9 @@ RUN ./configure
 RUN make
 RUN make install
 
-RUN apt-get -y install libcurl4-openssl-dev libcurlpp-dev pulseaudio alsa-base alsa-utils
 
-COPY data/AR4JA_r12_k1024n.a /tmp/
-COPY data/.asoundrc /home/root/.asoundrc
-COPY data/lib/* /usr/local/lib/
-COPY data/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
-COPY data/blocks/* /usr/local/share/gnuradio/grc/blocks/
-
-COPY data/move-ii-gr/ /app/move-ii-gr/
-
-
-
-RUN apt-get -y install libogg-dev libvorbis-dev libpng-dev libpng++-dev swig gnuplot-qt socat python-pip
+RUN apt-get -y install libcurl4-openssl-dev libcurlpp-dev pulseaudio alsa-base alsa-utils \
+    libogg-dev libvorbis-dev libpng-dev libpng++-dev swig gnuplot-qt socat python-pip
 
 WORKDIR /app/deps/gr-satnogs
 RUN git clone https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
@@ -85,9 +75,17 @@ RUN make install
 RUN pip install pyephem
 
 
+COPY data/AR4JA_r12_k1024n.a /tmp/
+COPY data/.asoundrc /home/root/.asoundrc
+COPY data/lib/* /usr/local/lib/
+COPY data/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
+COPY data/blocks/* /usr/local/share/gnuradio/grc/blocks/
+
+COPY data/gr/ /app/gr/
 
 RUN ldconfig
 COPY run.sh /app/
 RUN chmod +x /app/run.sh
 
+WORKDIR /app
 CMD ["/app/run.sh"]

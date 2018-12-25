@@ -1,6 +1,8 @@
 #!/bin/bash
 
-gnuradio-companion
+/app/scripts/start_rx.sh
+
+# gnuradio-companion
 
 # rm -f /app/output/decode.log
-# python /app/move-ii-gr/$M2RCHOICE/downlink.py > /app/output/decode.log
+# python /app/gr/$M2RCHOICE > /app/output/decode.log
