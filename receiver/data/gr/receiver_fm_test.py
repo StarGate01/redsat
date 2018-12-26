@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: REDSAT test FM listener
 # Author: Christoph Honal
-# Generated: Wed Dec 26 11:24:08 2018
+# Generated: Wed Dec 26 19:45:30 2018
 ##################################################
 
 from gnuradio import analog
@@ -17,7 +17,7 @@ from gnuradio.filter import firdes
 from optparse import OptionParser
 
 
-class receiver_fm(gr.top_block):
+class receiver_fm_test(gr.top_block):
 
     def __init__(self):
         gr.top_block.__init__(self, "REDSAT test FM listener")
@@ -30,7 +30,7 @@ class receiver_fm(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.blocks_udp_source_0 = blocks.udp_source(gr.sizeof_gr_complex*1, '127.0.0.1', 7474, 1472, True)
+        self.blocks_udp_source_0 = blocks.udp_source(gr.sizeof_gr_complex*1, '0.0.0.0', 7474, 1472, True)
         self.audio_sink_0 = audio.sink(samp_rate, '', True)
         self.analog_wfm_rcv_0 = analog.wfm_rcv(
         	quad_rate=500000,
@@ -52,7 +52,7 @@ class receiver_fm(gr.top_block):
         self.samp_rate = samp_rate
 
 
-def main(top_block_cls=receiver_fm, options=None):
+def main(top_block_cls=receiver_fm_test, options=None):
 
     tb = top_block_cls()
     tb.start()

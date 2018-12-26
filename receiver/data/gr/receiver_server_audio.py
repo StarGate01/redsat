@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 ##################################################
 # GNU Radio Python Flow Graph
-# Title: REDSAT receiver server
+# Title: REDSAT receiver server (audio)
 # Author: Christoph Honal
-# Generated: Wed Dec 26 18:13:28 2018
+# Generated: Wed Dec 26 20:45:44 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -18,6 +18,7 @@ if __name__ == '__main__':
             print "Warning: failed to XInitThreads()"
 
 from PyQt4 import Qt
+from gnuradio import audio
 from gnuradio import blocks
 from gnuradio import eng_notation
 from gnuradio import filter
@@ -34,12 +35,12 @@ import time
 from gnuradio import qtgui
 
 
-class receiver_server(gr.top_block, Qt.QWidget):
+class receiver_server_audio(gr.top_block, Qt.QWidget):
 
     def __init__(self, meta_dev='rtl=1', meta_freq=103200000, meta_gain=40, meta_samp=128000):
-        gr.top_block.__init__(self, "REDSAT receiver server")
+        gr.top_block.__init__(self, "REDSAT receiver server (audio)")
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("REDSAT receiver server")
+        self.setWindowTitle("REDSAT receiver server (audio)")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -57,7 +58,7 @@ class receiver_server(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "receiver_server")
+        self.settings = Qt.QSettings("GNU Radio", "receiver_server_audio")
         self.restoreGeometry(self.settings.value("geometry").toByteArray())
 
 
@@ -125,19 +126,22 @@ class receiver_server(gr.top_block, Qt.QWidget):
         self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(bandwidth_rtlsdr, 0)
 
-        self.blocks_udp_sink_0 = blocks.udp_sink(gr.sizeof_gr_complex*1, '127.0.0.1', 7474, 1472, True)
+        self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
+        self.audio_sink_0 = audio.sink(samp_rate, '2', True)
 
 
 
         ##################################################
         # Connections
         ##################################################
+        self.connect((self.blocks_complex_to_float_0, 1), (self.audio_sink_0, 1))
+        self.connect((self.blocks_complex_to_float_0, 0), (self.audio_sink_0, 0))
         self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0, 0))
-        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_udp_sink_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_complex_to_float_0, 0))
         self.connect((self.rational_resampler_xxx_0, 0), (self.qtgui_sink_x_0, 0))
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "receiver_server")
+        self.settings = Qt.QSettings("GNU Radio", "receiver_server_audio")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
@@ -221,7 +225,7 @@ def argument_parser():
     return parser
 
 
-def main(top_block_cls=receiver_server, options=None):
+def main(top_block_cls=receiver_server_audio, options=None):
     if options is None:
         options, _ = argument_parser().parse_args()
 

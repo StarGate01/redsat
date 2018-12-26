@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>receiver</value>
+      <value>receiver_server_audio</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -66,7 +66,7 @@
     </param>
     <param>
       <key>run_options</key>
-      <value>prompt</value>
+      <value>run</value>
     </param>
     <param>
       <key>run</key>
@@ -82,7 +82,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>REDSAT receiver</value>
+      <value>REDSAT receiver server (audio)</value>
     </param>
     <param>
       <key>placement</key>
@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(760, 132)</value>
+      <value>(792, 28)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -144,7 +144,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>freq_real</value>
+      <value>real_freq</value>
     </param>
     <param>
       <key>label</key>
@@ -160,11 +160,11 @@
     </param>
     <param>
       <key>start</key>
-      <value>100000000</value>
+      <value>50000000</value>
     </param>
     <param>
       <key>step</key>
-      <value>5000</value>
+      <value>10000</value>
     </param>
     <param>
       <key>stop</key>
@@ -195,7 +195,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(648, 132)</value>
+      <value>(928, 28)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -207,11 +207,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>gain</value>
+      <value>real_gain</value>
     </param>
     <param>
       <key>label</key>
-      <value>RF Gain</value>
+      <value>RX Gain</value>
     </param>
     <param>
       <key>min_len</key>
@@ -231,7 +231,7 @@
     </param>
     <param>
       <key>stop</key>
-      <value>200</value>
+      <value>100</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -297,34 +297,7 @@
     </param>
   </block>
   <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(96, 156)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>unix_now</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>str(calendar.timegm(time.gmtime()))</value>
-    </param>
-  </block>
-  <block>
-    <key>blks2_selector</key>
+    <key>audio_sink</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -338,12 +311,16 @@
       <value></value>
     </param>
     <param>
+      <key>device_name</key>
+      <value>2</value>
+    </param>
+    <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(496, 448)</value>
+      <value>(752, 448)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -351,94 +328,23 @@
     </param>
     <param>
       <key>id</key>
-      <value>blks2_selector_1</value>
-    </param>
-    <param>
-      <key>input_index</key>
-      <value>meta_rec_udp</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
+      <value>audio_sink_0</value>
     </param>
     <param>
       <key>num_inputs</key>
       <value>2</value>
     </param>
     <param>
-      <key>num_outputs</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>output_index</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
-    <key>blocks_file_sink</key>
-    <param>
-      <key>append</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
+      <key>ok_to_block</key>
       <value>True</value>
     </param>
     <param>
-      <key>file</key>
-      <value>meta_output_file</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(696, 364)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_file_sink_0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>unbuffered</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
+      <key>samp_rate</key>
+      <value>samp_rate</value>
     </param>
   </block>
   <block>
-    <key>blocks_udp_source</key>
+    <key>blocks_complex_to_float</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -457,7 +363,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 452)</value>
+      <value>(568, 448)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -465,11 +371,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>blocks_udp_source_0</value>
-    </param>
-    <param>
-      <key>ipaddr</key>
-      <value>meta_rec_udp_host</value>
+      <value>blocks_complex_to_float_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -480,117 +382,8 @@
       <value>0</value>
     </param>
     <param>
-      <key>eof</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>psize</key>
-      <value>1472</value>
-    </param>
-    <param>
-      <key>port</key>
-      <value>meta_rec_udp_port</value>
-    </param>
-    <param>
       <key>vlen</key>
       <value>1</value>
-    </param>
-  </block>
-  <block>
-    <key>import</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(8, 108)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>import_0</value>
-    </param>
-    <param>
-      <key>import</key>
-      <value>import time</value>
-    </param>
-  </block>
-  <block>
-    <key>import</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(8, 156)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>import_0_0</value>
-    </param>
-    <param>
-      <key>import</key>
-      <value>import sys</value>
-    </param>
-  </block>
-  <block>
-    <key>import</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(96, 108)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>import_0_0_0</value>
-    </param>
-    <param>
-      <key>import</key>
-      <value>import calendar</value>
     </param>
   </block>
   <block>
@@ -609,7 +402,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(616, 28)</value>
+      <value>(512, 28)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -637,7 +430,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>rtl_tcp=host.docker.internal:1234</value>
+      <value>rtl=1</value>
     </param>
   </block>
   <block>
@@ -656,7 +449,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(368, 28)</value>
+      <value>(272, 28)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -684,7 +477,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>145950000</value>
+      <value>103200000</value>
     </param>
   </block>
   <block>
@@ -703,7 +496,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(816, 28)</value>
+      <value>(656, 28)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -731,7 +524,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>20</value>
+      <value>40</value>
     </param>
   </block>
   <block>
@@ -750,195 +543,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(200, 28)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>meta_output_file</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>string</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>/app/input/test.raw</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(976, 28)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>meta_rec_udp</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(976, 124)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>meta_rec_udp_host</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>string</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>127.0.0.1</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(976, 220)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>meta_rec_udp_port</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>7575</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(496, 28)</value>
+      <value>(376, 28)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -997,7 +602,7 @@
     </param>
     <param>
       <key>freq0</key>
-      <value>freq_real</value>
+      <value>real_freq</value>
     </param>
     <param>
       <key>gain_mode0</key>
@@ -1013,7 +618,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>gain</value>
+      <value>real_gain</value>
     </param>
     <param>
       <key>ant10</key>
@@ -2273,7 +1878,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 240)</value>
+      <value>(32, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2380,7 +1985,7 @@
     <key>qtgui_sink_x</key>
     <param>
       <key>bw</key>
-      <value>bandwidth_rtlsdr</value>
+      <value>samp_rate</value>
     </param>
     <param>
       <key>alias</key>
@@ -2388,7 +1993,7 @@
     </param>
     <param>
       <key>fc</key>
-      <value>samp_rate</value>
+      <value>0</value>
     </param>
     <param>
       <key>freqchangevar</key>
@@ -2412,7 +2017,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(696, 484)</value>
+      <value>(568, 340)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -2503,7 +2108,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(272, 292)</value>
+      <value>(312, 228)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2535,22 +2140,16 @@
     </param>
   </block>
   <connection>
-    <source_block_id>blks2_selector_1</source_block_id>
-    <sink_block_id>blocks_file_sink_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blks2_selector_1</source_block_id>
-    <sink_block_id>qtgui_sink_x_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_udp_source_0</source_block_id>
-    <sink_block_id>blks2_selector_1</sink_block_id>
-    <source_key>0</source_key>
+    <source_block_id>blocks_complex_to_float_0</source_block_id>
+    <sink_block_id>audio_sink_0</sink_block_id>
+    <source_key>1</source_key>
     <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_complex_to_float_0</source_block_id>
+    <sink_block_id>audio_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>osmosdr_source_0</source_block_id>
@@ -2560,7 +2159,13 @@
   </connection>
   <connection>
     <source_block_id>rational_resampler_xxx_0</source_block_id>
-    <sink_block_id>blks2_selector_1</sink_block_id>
+    <sink_block_id>blocks_complex_to_float_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>rational_resampler_xxx_0</source_block_id>
+    <sink_block_id>qtgui_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
