@@ -22,7 +22,6 @@ RUN ldconfig
 # GNURadio flowcharts and scripts
 
 COPY data/gr/ /app/gr/
-COPY data/scripts/ /app/scripts/
 
 # Entrypoint
 

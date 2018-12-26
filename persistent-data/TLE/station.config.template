@@ -8,5 +8,6 @@ export ELV="123"
 
 export SDRDEV="rtl_tcp=host.docker.internal:1234"
 export SDRSAMP="30000"
+export SDRGAIN="30"
 
 export DISPLAY="host.docker.internal:0.0"

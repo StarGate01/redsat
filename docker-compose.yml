@@ -26,8 +26,14 @@ services:
   decoder:
     build: ./decoder
     volumes:
+      - ./persistent-data/TLE:/app/TLE
       - ./persistent-data/input:/app/input
       - ./persistent-data/output:/app/output
+
+  scheduler:
+    build: ./scheduler
+    volumes:
+      - ./persistent-data/TLE:/app/TLE
 
 
   nginx:

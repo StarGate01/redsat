@@ -28,6 +28,8 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [SatNOGS GNU Radio Blocks](https://gitlab.com/librespacefoundation/satnogs)
         - [libFEC](https://github.com/quiet/libfec)
         - [TUM WARR](https://www.warr.de/de/) closed source assets
+    - scheduler:
+        - [PyEphem](https://rhodesmill.org/pyephem/)
     - tlesync: Loads the newest TLEs from the internet
         - [Celestrak NORAD](https://www.celestrak.com)
 - Frontend
