@@ -15,9 +15,9 @@ class blk(gr.sync_block):
     def __init__(self, callback=None):  # only default arguments here
         gr.sync_block.__init__(
             self,
-            name='First packet probe',
+            name='First packet time callback',
             in_sig=[np.complex64],
-            out_sig=[]
+            out_sig=None
         )
         
         self.time = None
@@ -32,4 +32,4 @@ class blk(gr.sync_block):
             if self.callback is not None:
                 print('calling callback to set time:', self.time)
                 self.callback(self.time)
-        return 0
+        return len(input_items)
