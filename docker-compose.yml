@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  gnuradio:
+    build: ./gnuradio
+
+  receiver:
+    build: ./receiver
+    environment:
+      - SAMP=30000
+      - DISPLAY=10.0.0.51:0.0
+    volumes:
+      - ./persistent-data/TLE:/app/TLE
+      - ./persistent-data/input:/app/input
+
+  move2radio:
+    build: ./move2radio
+    environment:
+      - DISPLAY=10.0.0.51:0.0
+    volumes:
+      - ./persistent-data/input:/app/input
+      - ./persistent-data/output:/app/output

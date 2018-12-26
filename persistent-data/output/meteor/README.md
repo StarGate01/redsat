@@ -1,0 +1,1 @@
+```image.jpg``` will be placed in this directory

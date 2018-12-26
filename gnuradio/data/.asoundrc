@@ -1,0 +1,14 @@
+pcm.pulse-output {
+    type pulse
+    device "output"
+}
+
+pcm.pulse-input {
+    type pulse
+    device "input"
+}
+
+pcm.pulse-output-monitor {
+    type pulse
+    device "output.monitor"
+}
