@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 ##################################################
 # GNU Radio Python Flow Graph
-# Title: REDSAT receiver
+# Title: REDSAT receiver (device)
 # Author: Christoph Honal, Alexander Ulanowski
-# Generated: Wed Dec 26 17:50:02 2018
+# Generated: Wed Dec 26 20:45:03 2018
 ##################################################
 
 from gnuradio import blocks
@@ -15,67 +15,64 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from optparse import OptionParser
 from os.path import splitext
-from time_watch import blk
 import ConfigParser
 import osmosdr
 import sys
 import time
+import time_updater
 
 
-class receiver_nogui(gr.top_block):
+class receiver_nogui_dev(gr.top_block):
 
-    def __init__(self, config_file="./default.ini"):
-        gr.top_block.__init__(self, "REDSAT receiver")
+    def __init__(self, config_file='./default.ini', meta_dev='rtl=1'):
+        gr.top_block.__init__(self, "REDSAT receiver (device)")
 
         ##################################################
         # Parameters
         ##################################################
         self.config_file = config_file
+        self.meta_dev = meta_dev
 
         ##################################################
         # Variables
         ##################################################
-        self.start_time = start_time = time.time()
-        self.samp_rate_rtlsdr = samp_rate_rtlsdr = 1536000
-        self._meta_time_config = ConfigParser.ConfigParser()
-        self._meta_time_config.read(config_file)
-        try: meta_time = self._meta_time_config.getfloat("main", "time")
-        except: meta_time = 0
-        self.meta_time = meta_time
         self._meta_samp_rate_config = ConfigParser.ConfigParser()
         self._meta_samp_rate_config.read(config_file)
-        try: meta_samp_rate = self._meta_samp_rate_config.getint("main", "samp_rate")
+        try: meta_samp_rate = self._meta_samp_rate_config.getint('main', 'samp_rate')
         except: meta_samp_rate = 128000
         self.meta_samp_rate = meta_samp_rate
+        self.start_time = start_time = time.time()
+        self.samp_rate_rtlsdr = samp_rate_rtlsdr = 1536000
+        self.samp_rate = samp_rate = meta_samp_rate
+        self._meta_time_config = ConfigParser.ConfigParser()
+        self._meta_time_config.read(config_file)
+        try: meta_time = self._meta_time_config.getfloat('main', 'time')
+        except: meta_time = 0
+        self.meta_time = meta_time
         self._meta_output_file_config = ConfigParser.ConfigParser()
         self._meta_output_file_config.read(config_file)
-        try: meta_output_file = self._meta_output_file_config.get("main", "output_file")
+        try: meta_output_file = self._meta_output_file_config.get('main', 'output_file')
         except: meta_output_file = splitext(config_file)[0] + ".raw"
         self.meta_output_file = meta_output_file
         self._meta_gain_config = ConfigParser.ConfigParser()
         self._meta_gain_config.read(config_file)
-        try: meta_gain = self._meta_gain_config.getfloat("main", "gain")
+        try: meta_gain = self._meta_gain_config.getfloat('main', 'gain')
         except: meta_gain = 38
         self.meta_gain = meta_gain
         self._meta_freq_config = ConfigParser.ConfigParser()
         self._meta_freq_config.read(config_file)
-        try: meta_freq = self._meta_freq_config.getfloat("main", "freq")
+        try: meta_freq = self._meta_freq_config.getfloat('main', 'freq')
         except: meta_freq = 145950000
         self.meta_freq = meta_freq
-        self._meta_dev_config = ConfigParser.ConfigParser()
-        self._meta_dev_config.read(config_file)
-        try: meta_dev = self._meta_dev_config.get("main", "dev")
-        except: meta_dev = "rtl=0"
-        self.meta_dev = meta_dev
         self.bandwidth_rtlsdr = bandwidth_rtlsdr = 100000
 
         ##################################################
         # Blocks
         ##################################################
-        self.time_updater = blk(callback=lambda t: self.set_start_time(t))
-        self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
+        self.time_updater = time_updater.blk(callback=lambda t: self.set_start_time(t))
+        self.rational_resampler_xxx_0_0 = filter.rational_resampler_ccc(
                 interpolation=1,
-                decimation=int(samp_rate_rtlsdr/meta_samp_rate),
+                decimation=int(samp_rate_rtlsdr/samp_rate),
                 taps=None,
                 fractional_bw=None,
         )
@@ -89,61 +86,70 @@ class receiver_nogui(gr.top_block):
         self.osmosdr_source_0.set_gain(meta_gain, 0)
         self.osmosdr_source_0.set_if_gain(20, 0)
         self.osmosdr_source_0.set_bb_gain(20, 0)
-        self.osmosdr_source_0.set_antenna("", 0)
+        self.osmosdr_source_0.set_antenna('', 0)
         self.osmosdr_source_0.set_bandwidth(bandwidth_rtlsdr, 0)
-          
+
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, meta_output_file, False)
         self.blocks_file_sink_0.set_unbuffered(False)
+
+
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0, 0))    
-        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_file_sink_0, 0))    
-        self.connect((self.rational_resampler_xxx_0, 0), (self.time_updater, 0))    
+        self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0_0, 0))
+        self.connect((self.rational_resampler_xxx_0_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.rational_resampler_xxx_0_0, 0), (self.time_updater, 0))
 
     def get_config_file(self):
         return self.config_file
 
     def set_config_file(self, config_file):
         self.config_file = config_file
-        self._meta_dev_config = ConfigParser.ConfigParser()
-        self._meta_dev_config.read(self.config_file)
-        if not self._meta_dev_config.has_section("main"):
-        	self._meta_dev_config.add_section("main")
-        self._meta_dev_config.set("main", "dev", str(None))
-        self._meta_dev_config.write(open(self.config_file, 'w'))
-        self._meta_freq_config = ConfigParser.ConfigParser()
-        self._meta_freq_config.read(self.config_file)
-        if not self._meta_freq_config.has_section("main"):
-        	self._meta_freq_config.add_section("main")
-        self._meta_freq_config.set("main", "freq", str(None))
-        self._meta_freq_config.write(open(self.config_file, 'w'))
-        self._meta_gain_config = ConfigParser.ConfigParser()
-        self._meta_gain_config.read(self.config_file)
-        if not self._meta_gain_config.has_section("main"):
-        	self._meta_gain_config.add_section("main")
-        self._meta_gain_config.set("main", "gain", str(None))
-        self._meta_gain_config.write(open(self.config_file, 'w'))
         self.set_meta_output_file(splitext(self.config_file)[0] + ".raw")
         self._meta_output_file_config = ConfigParser.ConfigParser()
         self._meta_output_file_config.read(self.config_file)
-        if not self._meta_output_file_config.has_section("main"):
-        	self._meta_output_file_config.add_section("main")
-        self._meta_output_file_config.set("main", "output_file", str(None))
+        if not self._meta_output_file_config.has_section('main'):
+        	self._meta_output_file_config.add_section('main')
+        self._meta_output_file_config.set('main', 'output_file', str(None))
         self._meta_output_file_config.write(open(self.config_file, 'w'))
-        self._meta_samp_rate_config = ConfigParser.ConfigParser()
-        self._meta_samp_rate_config.read(self.config_file)
-        if not self._meta_samp_rate_config.has_section("main"):
-        	self._meta_samp_rate_config.add_section("main")
-        self._meta_samp_rate_config.set("main", "samp_rate", str(None))
-        self._meta_samp_rate_config.write(open(self.config_file, 'w'))
+        self._meta_gain_config = ConfigParser.ConfigParser()
+        self._meta_gain_config.read(self.config_file)
+        if not self._meta_gain_config.has_section('main'):
+        	self._meta_gain_config.add_section('main')
+        self._meta_gain_config.set('main', 'gain', str(None))
+        self._meta_gain_config.write(open(self.config_file, 'w'))
+        self._meta_freq_config = ConfigParser.ConfigParser()
+        self._meta_freq_config.read(self.config_file)
+        if not self._meta_freq_config.has_section('main'):
+        	self._meta_freq_config.add_section('main')
+        self._meta_freq_config.set('main', 'freq', str(None))
+        self._meta_freq_config.write(open(self.config_file, 'w'))
         self._meta_time_config = ConfigParser.ConfigParser()
         self._meta_time_config.read(self.config_file)
-        if not self._meta_time_config.has_section("main"):
-        	self._meta_time_config.add_section("main")
-        self._meta_time_config.set("main", "time", str(self.start_time))
+        if not self._meta_time_config.has_section('main'):
+        	self._meta_time_config.add_section('main')
+        self._meta_time_config.set('main', 'time', str(self.start_time))
         self._meta_time_config.write(open(self.config_file, 'w'))
+        self._meta_samp_rate_config = ConfigParser.ConfigParser()
+        self._meta_samp_rate_config.read(self.config_file)
+        if not self._meta_samp_rate_config.has_section('main'):
+        	self._meta_samp_rate_config.add_section('main')
+        self._meta_samp_rate_config.set('main', 'samp_rate', str(None))
+        self._meta_samp_rate_config.write(open(self.config_file, 'w'))
+
+    def get_meta_dev(self):
+        return self.meta_dev
+
+    def set_meta_dev(self, meta_dev):
+        self.meta_dev = meta_dev
+
+    def get_meta_samp_rate(self):
+        return self.meta_samp_rate
+
+    def set_meta_samp_rate(self, meta_samp_rate):
+        self.meta_samp_rate = meta_samp_rate
+        self.set_samp_rate(self.meta_samp_rate)
 
     def get_start_time(self):
         return self.start_time
@@ -152,9 +158,9 @@ class receiver_nogui(gr.top_block):
         self.start_time = start_time
         self._meta_time_config = ConfigParser.ConfigParser()
         self._meta_time_config.read(self.config_file)
-        if not self._meta_time_config.has_section("main"):
-        	self._meta_time_config.add_section("main")
-        self._meta_time_config.set("main", "time", str(self.start_time))
+        if not self._meta_time_config.has_section('main'):
+        	self._meta_time_config.add_section('main')
+        self._meta_time_config.set('main', 'time', str(self.start_time))
         self._meta_time_config.write(open(self.config_file, 'w'))
 
     def get_samp_rate_rtlsdr(self):
@@ -164,17 +170,17 @@ class receiver_nogui(gr.top_block):
         self.samp_rate_rtlsdr = samp_rate_rtlsdr
         self.osmosdr_source_0.set_sample_rate(self.samp_rate_rtlsdr)
 
+    def get_samp_rate(self):
+        return self.samp_rate
+
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
+
     def get_meta_time(self):
         return self.meta_time
 
     def set_meta_time(self, meta_time):
         self.meta_time = meta_time
-
-    def get_meta_samp_rate(self):
-        return self.meta_samp_rate
-
-    def set_meta_samp_rate(self, meta_samp_rate):
-        self.meta_samp_rate = meta_samp_rate
 
     def get_meta_output_file(self):
         return self.meta_output_file
@@ -197,12 +203,6 @@ class receiver_nogui(gr.top_block):
         self.meta_freq = meta_freq
         self.osmosdr_source_0.set_center_freq(self.meta_freq, 0)
 
-    def get_meta_dev(self):
-        return self.meta_dev
-
-    def set_meta_dev(self, meta_dev):
-        self.meta_dev = meta_dev
-
     def get_bandwidth_rtlsdr(self):
         return self.bandwidth_rtlsdr
 
@@ -212,18 +212,21 @@ class receiver_nogui(gr.top_block):
 
 
 def argument_parser():
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
+    parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
     parser.add_option(
-        "-c", "--config-file", dest="config_file", type="string", default="./default.ini",
+        "", "--config-file", dest="config_file", type="string", default='./default.ini',
         help="Set config_file [default=%default]")
+    parser.add_option(
+        "", "--meta-dev", dest="meta_dev", type="string", default='rtl=1',
+        help="Set meta_dev [default=%default]")
     return parser
 
 
-def main(top_block_cls=receiver_nogui, options=None):
+def main(top_block_cls=receiver_nogui_dev, options=None):
     if options is None:
         options, _ = argument_parser().parse_args()
 
-    tb = top_block_cls(config_file=options.config_file)
+    tb = top_block_cls(config_file=options.config_file, meta_dev=options.meta_dev)
     tb.start()
     tb.wait()
 
