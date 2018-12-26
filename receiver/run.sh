@@ -1,6 +1,15 @@
 #!/bin/bash
 
-source /app/TLE/station.config
+# TODO document usage here 
+# 
+
+# 
+: "${REDSAT_TLE_DIR:=/app/TLE}"
+: "${REDSAT_INPUT_DIR:=/app/input}"
+: "${REDSAT_GR_DIR:=/app/gr}"
+: "${REDSAT_DEPS_DIR:=/app/input}"
+
+source ${REDSAT_TLE_DIR}/station.config
 
 if [ -z "$1" ]; then
     SAT="MOVEII"
@@ -29,15 +38,15 @@ if [ -z "$4" ]; then
         ADDR=${SDRDEV#"rtl_tcp="}
         HOST=`echo $ADDR | cut -d':' -f1`
         PORT=`echo $ADDR | cut -d':' -f2`
-        CONFIG=/app/deps/rtl_mus/rtl_mus/config_rtl_custom.py
-        cp -f /app/deps/rtl_mus/rtl_mus/config_rtl.py $CONFIG
+        CONFIG=$REDSAT_DEPS_DIR/rtl_mus/rtl_mus/config_rtl_custom.py
+        cp -f $REDSAT_DEPS_DIR/rtl_mus/rtl_mus/config_rtl.py $CONFIG
         echo "rtl_tcp_host = '$HOST'" >> $CONFIG
         echo "rtl_tcp_port = $PORT" >> $CONFIG
         echo "Info: Attaching to $HOST:$PORT"
-        cd /app/deps/rtl_mus/rtl_mus && python rtl_mus.py config_rtl_custom &
+        cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py config_rtl_custom &
     else
         rtl_tcp -a 127.0.0.1 &
-        cd /app/deps/rtl_mus/rtl_mus && python rtl_mus.py &
+        cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py &
     fi
     GRDEV="rtl_tcp=localhost:7373"
 else
@@ -45,18 +54,25 @@ else
     GRDEV=$SDRDEV
 fi
 
-FREQ=`grep $SAT /app/TLE/sats.list | cut -d, -f3`
-TLE="/app/TLE/elements/$SAT.txt"
+FREQ=`grep $SAT $REDSAT_TLE_DIR/sats.list | cut -d, -f3`
+TLE="$REDSAT_TLE_DIR/elements/$SAT.txt"
 
-META=/app/input/$OUTPUT_BASE.meta
-echo `date +%s` >> $META
-cat $TLE >> $META
-echo $SDRSAMP >> $META
-echo $FREQ >> $META
-echo $LAT >> $META
-echo $LON >> $META
-echo $ELV >> $META
+META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
+cat > $META <<-EOF
+[main]
+creation_time=$(date +%s)
+samp_rate=$SDRSAMP
+freq=$FREQ
+gain=$GAIN
+dev=$GRDEV
+[tle]
+tle=$(tr '\n' ';' < $TLE)
+[position]
+lat=$LAT
+lon=$LON
+elv=$ELV
+EOF
 
-python /app/gr/$KIND.py --meta-output-file=/app/input/$OUTPUT_BASE.raw --meta-freq=$FREQ --meta-gain=$SDRGAIN --meta-dev=$GRDEV --meta-samp=$SDRSAMP
+python $REDSAT_GR_DIR/$KIND.py -c $META
 
-#gnuradio-companion /app/gr/receiver.grc
+#gnuradio-companion $REDSAT_GR_DIR/receiver.grc
