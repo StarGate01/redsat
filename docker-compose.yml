@@ -1,6 +1,14 @@
 version: '3'
 
+networks:
+  frontend:
+
+volumes:
+  portainer_data:
+
+
 services:
+
   gnuradio:
     build: ./gnuradio
 
@@ -11,17 +19,45 @@ services:
 
   receiver:
     build: ./receiver
-    environment:
-      - SAMP=30000
-      - DISPLAY=10.0.0.51:0.0
     volumes:
       - ./persistent-data/TLE:/app/TLE
       - ./persistent-data/input:/app/input
 
   decoder:
     build: ./decoder
-    environment:
-      - DISPLAY=10.0.0.51:0.0
     volumes:
       - ./persistent-data/input:/app/input
       - ./persistent-data/output:/app/output
+
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      - apache
+      - portainer
+    ports:
+      - "80:80"
+      - "8081:8081"
+    restart: always
+    networks:
+      - frontend
+
+  apache:
+    build: ./httpd
+    volumes:
+      - ./persistent-data/TLE:/app/TLE
+      - ./persistent-data/input:/app/input
+      - ./persistent-data/output:/app/output
+    restart: always
+    networks:
+      - frontend
+
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+    networks:
+      - frontend
