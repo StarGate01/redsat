@@ -6,7 +6,7 @@ export LAT="12.34567"
 export LON="12.34567"
 export ELV="123"
 
-export SDRDEV="rtl_sdr=0"
+export SDRDEV="rtl=0"
 #export SDRDEV="rtl_tcp=host.docker.internal:1234"
 #export SDRDEV="audio=pulse"
 export SDRSAMP="30000"

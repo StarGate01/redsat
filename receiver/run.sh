@@ -12,6 +12,7 @@
 : "${REDSAT_INPUT_DIR:=/app/input}"
 : "${REDSAT_GR_DIR:=/app/gr}"
 : "${REDSAT_DEPS_DIR:=/app/deps}"
+: "${REDSAT_OS:=linux}"
 
 source ${REDSAT_TLE_DIR}/station.config
 
@@ -37,8 +38,8 @@ else
 fi
 
 if [ -z "$4" ]; then
-    NETKIND="tcp"
-    echo "Warning: No rtl_tcp choice specified, defaulting to enabled"
+    NETKIND="notcp"
+    echo "Warning: No rtl_tcp choice specified, defaulting to disabled"
 else
     NETKIND = $4
 fi
@@ -96,10 +97,22 @@ lon=$LON
 elv=$ELV
 EOF
 
-if [ "$RECUDP" == "0" ]; then
-    python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV
+if [ "$REDSAT_OS" == "linux" ]; then
+    if [ "$RECUDP" == "0" ]; then
+        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV
+    else
+        python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
+    fi
 else
-    python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
+    echo "Running native on windows..."
+    META_WIN="${REDSAT_INPUT_DIR_WIN}\\${OUTPUT_BASE}.meta"
+    if [ "$RECUDP" == "0" ]; then
+        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_dev.py\" --config-file=\"$META_WIN\" --meta-dev=\"$GRDEV\""
+    else
+        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_audio.py\" --config-file=\"$META_WIN\" --meta-rec-audio-dev=\"$RECADDR\""
+    fi
+    echo "$CMD_WIN" > launch_win.bat
+    cmd.exe /c launch_win.bat
 fi
 
 # gnuradio-companion
