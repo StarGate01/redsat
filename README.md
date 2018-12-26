@@ -11,6 +11,11 @@ Raspberry Pi satellite SDR base station for weather &amp; telemetry.
 - [TUM](https://www.move2space.de/MOVE-II/)
     - MOVE-II
 
+## Configuration
+Edit ```persistent-data/TLE/station.config``` to configure your groundstation.
+
+Edit ```persistent-data/TLE/sats.list``` and ```persistent-data/TLE/sources.list``` to configure satellites and TLE sources.
+
 ## Setup
 Run ```docker-compose up tlesync``` to pull fresh TLE data from the internet.
 
@@ -24,6 +29,8 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
     - receiver: Receives a signal from a SDR device and saves it to a file, along with TLE and geodata.
         - [osmocom GNU Radio Blocks](https://osmocom.org/projects/gr-osmosdr/wiki)
         - [Gpredict Doppler GNU Radio Blocks](https://github.com/wnagele/gr-gpredict-doppler)
+        - [rtl-sdr](https://git.osmocom.org/rtl-sdr)
+        - [rtl-mus](https://github.com/simonyiszk/rtl_mus)
     - decoder: Decodes a saved signal into usable data (weather maps or telemetry dumps)
         - [SatNOGS GNU Radio Blocks](https://gitlab.com/librespacefoundation/satnogs)
         - [libFEC](https://github.com/quiet/libfec)
