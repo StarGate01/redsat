@@ -6,13 +6,13 @@
 #   output_basename: Capture file base name
 #   gui|nogui: Enable/disable QT GUI
 #   tcp|notcp: Enable/disable rtl_tcp on port 7373
-# Note: This script respects device "rtl_tcp", "audio", and "udp" in station.config 
+# Note: This script respects device "rtl_tcp" and "audio" in station.config 
 
 # 
 : "${REDSAT_TLE_DIR:=/app/TLE}"
 : "${REDSAT_INPUT_DIR:=/app/input}"
 : "${REDSAT_GR_DIR:=/app/gr}"
-: "${REDSAT_DEPS_DIR:=/app/input}"
+: "${REDSAT_DEPS_DIR:=/app/deps}"
 
 source ${REDSAT_TLE_DIR}/station.config
 
@@ -43,17 +43,9 @@ if [ -z "$4" ]; then
 else
     NETKIND = $4
 fi
-if [[ $SDRDEV == *"udp"* ]]; then
-    echo "Info: Using UDP input"
-    RECUDP="1"
-    RECADDR=${SDRDEV#"udp="}
-    if [ "$NETKIND" == "tcp" ]; then
-        echo "Warning: Cannot enable rtl_tcp server in UDP receive mode"
-    fi
-    echo "Info: Using UDP input on port $RECADDR"
-elif [[ $SDRDEV == *"audio"* ]]; then
+if [[ $SDRDEV == *"audio"* ]]; then
     echo "Info: Using audio input"
-    RECUDP="2"
+    RECUDP="1"
     RECADDR=${SDRDEV#"audio="}
     if [ "$NETKIND" == "tcp" ]; then
         echo "Warning: Cannot enable rtl_tcp server in audio receive mode"
@@ -88,6 +80,7 @@ fi
 
 FREQ=`grep $SAT $REDSAT_TLE_DIR/sats.list | cut -d, -f3`
 TLE="$REDSAT_TLE_DIR/elements/$SAT.txt"
+TLEALL=`cat $TLE | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
 cat > $META <<-EOF
@@ -95,9 +88,9 @@ cat > $META <<-EOF
 creation_time=$(date +%s)
 samp_rate=$SDRSAMP
 freq=$FREQ
-gain=$GAIN
+gain=$SDRGAIN
 [tle]
-tle=$(tr '\n' ';' < $TLE)
+tle=$TLEALL
 [position]
 lat=$LAT
 lon=$LON
@@ -106,8 +99,6 @@ EOF
 
 if [ "$RECUDP" == "0" ]; then
     python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV
-elif [ "$RECUDP" == "1" ]; then
-    python $REDSAT_GR_DIR/receiver_${KIND}_udp.py --config-file=$META --meta-rec-udp-port=$RECADDR
 else
     python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
 fi
