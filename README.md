@@ -26,7 +26,7 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
     - gnuradio: Base image for radio related software, builds gnuradio from source.
         - [GNU Radio](https://www.gnuradio.org/)
         - [Boost](https://www.boost.org/)
-    - receiver: Receives a signal from a SDR device and saves it to a file, along with TLE and geodata.
+    - receiver: Receives a signal from a SDR device or an audio interface (useful for piping a stream across system boundaries) and saves it to a file, along with TLE and geodata.
         - [osmocom GNU Radio Blocks](https://osmocom.org/projects/gr-osmosdr/wiki)
         - [Gpredict Doppler GNU Radio Blocks](https://github.com/wnagele/gr-gpredict-doppler)
         - [rtl-sdr](https://git.osmocom.org/rtl-sdr)
