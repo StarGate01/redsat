@@ -21,7 +21,6 @@ services:
     build: ./receiver
     ports:
       - "7373:7373"
-      - "7474:7474/udp"
     volumes:
       - ./persistent-data/TLE:/app/TLE
       - ./persistent-data/input:/app/input

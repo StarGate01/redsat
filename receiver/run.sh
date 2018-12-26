@@ -8,7 +8,6 @@
 #   tcp|notcp: Enable/disable rtl_tcp on port 7373
 # Note: This script respects device "rtl_tcp" and "audio" in station.config 
 
-# 
 : "${REDSAT_TLE_DIR:=/app/TLE}"
 : "${REDSAT_INPUT_DIR:=/app/input}"
 : "${REDSAT_GR_DIR:=/app/gr}"
