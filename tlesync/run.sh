@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf /app/TLE/elements
 mkdir -p /app/TLE/elements
 cd /app/TLE/elements && wget -i /app/TLE/sources.list -O all.tmp
 
