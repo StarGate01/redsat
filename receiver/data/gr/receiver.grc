@@ -124,6 +124,69 @@
     </param>
     <param>
       <key>value</key>
+      <value>meta_freq</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(840, 156)</value>
+    </param>
+    <param>
+      <key>gui_hint</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>freq_real</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Frequency</value>
+    </param>
+    <param>
+      <key>min_len</key>
+      <value>200</value>
+    </param>
+    <param>
+      <key>orient</key>
+      <value>Qt.Horizontal</value>
+    </param>
+    <param>
+      <key>start</key>
+      <value>100000000</value>
+    </param>
+    <param>
+      <key>step</key>
+      <value>5000</value>
+    </param>
+    <param>
+      <key>stop</key>
+      <value>200000000</value>
+    </param>
+    <param>
+      <key>rangeType</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>widget</key>
+      <value>counter_slider</value>
+    </param>
+  </block>
+  <block>
+    <key>variable_qtgui_range</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>value</key>
       <value>meta_gain</value>
     </param>
     <param>
@@ -168,7 +231,7 @@
     </param>
     <param>
       <key>stop</key>
-      <value>50</value>
+      <value>200</value>
     </param>
     <param>
       <key>rangeType</key>
@@ -667,7 +730,7 @@
     </param>
     <param>
       <key>freq0</key>
-      <value>meta_freq</value>
+      <value>freq_real</value>
     </param>
     <param>
       <key>gain_mode0</key>

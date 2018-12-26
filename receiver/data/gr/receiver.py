@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: REDSAT receiver
 # Author: Christoph Honal
-# Generated: Wed Dec 26 08:26:12 2018
+# Generated: Wed Dec 26 09:50:47 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -78,14 +78,18 @@ class receiver(gr.top_block, Qt.QWidget):
         self.samp_rate_rtlsdr = samp_rate_rtlsdr = 1536000
         self.samp_rate = samp_rate = meta_samp
         self.gain = gain = meta_gain
+        self.freq_real = freq_real = meta_freq
         self.bandwidth_rtlsdr = bandwidth_rtlsdr = 100000
 
         ##################################################
         # Blocks
         ##################################################
-        self._gain_range = Range(0, 50, 1, meta_gain, 200)
+        self._gain_range = Range(0, 200, 1, meta_gain, 200)
         self._gain_win = RangeWidget(self._gain_range, self.set_gain, 'RF Gain', "counter_slider", float)
         self.top_grid_layout.addWidget(self._gain_win)
+        self._freq_real_range = Range(100000000, 200000000, 5000, meta_freq, 200)
+        self._freq_real_win = RangeWidget(self._freq_real_range, self.set_freq_real, 'Frequency', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._freq_real_win)
         self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
                 interpolation=1,
                 decimation=int(samp_rate_rtlsdr/samp_rate),
@@ -113,7 +117,7 @@ class receiver(gr.top_block, Qt.QWidget):
 
         self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + meta_dev )
         self.osmosdr_source_0.set_sample_rate(samp_rate_rtlsdr)
-        self.osmosdr_source_0.set_center_freq(meta_freq, 0)
+        self.osmosdr_source_0.set_center_freq(freq_real, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
         self.osmosdr_source_0.set_dc_offset_mode(0, 0)
         self.osmosdr_source_0.set_iq_balance_mode(0, 0)
@@ -152,7 +156,7 @@ class receiver(gr.top_block, Qt.QWidget):
 
     def set_meta_freq(self, meta_freq):
         self.meta_freq = meta_freq
-        self.osmosdr_source_0.set_center_freq(self.meta_freq, 0)
+        self.set_freq_real(self.meta_freq)
 
     def get_meta_gain(self):
         return self.meta_gain
@@ -201,6 +205,13 @@ class receiver(gr.top_block, Qt.QWidget):
     def set_gain(self, gain):
         self.gain = gain
         self.osmosdr_source_0.set_gain(self.gain, 0)
+
+    def get_freq_real(self):
+        return self.freq_real
+
+    def set_freq_real(self, freq_real):
+        self.freq_real = freq_real
+        self.osmosdr_source_0.set_center_freq(self.freq_real, 0)
 
     def get_bandwidth_rtlsdr(self):
         return self.bandwidth_rtlsdr

@@ -57,6 +57,6 @@ echo $LAT >> $META
 echo $LON >> $META
 echo $ELV >> $META
 
-python /app/gr/$KIND.py --meta-output-file=/app/input/$OUTPUT_BASE.raw --meta-freq=$FREQ meta-gain=$SDRGAIN --meta-dev=$GRDEV --meta-samp=$SDRSAMP
+python /app/gr/$KIND.py --meta-output-file=/app/input/$OUTPUT_BASE.raw --meta-freq=$FREQ --meta-gain=$SDRGAIN --meta-dev=$GRDEV --meta-samp=$SDRSAMP
 
 #gnuradio-companion /app/gr/receiver.grc
