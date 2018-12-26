@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Copy and adjust to station.config
+
+export LAT=12.34567
+export LON=12.34567
+export ELV=123
