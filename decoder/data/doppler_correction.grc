@@ -1060,7 +1060,7 @@
     </param>
     <param>
       <key>nsamps</key>
-      <value>int(meta_samp_rate/p_doppler_correct)</value>
+      <value>int(meta_samp_rate/p_doppler_correct) if p_doppler_correct &gt; 0 else 0xFFFFFFFFFFFFFFFF</value>
     </param>
     <param>
       <key>type</key>
