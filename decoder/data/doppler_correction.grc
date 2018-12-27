@@ -738,7 +738,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(576, 721)</value>
+      <value>(584, 721)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1319,7 +1319,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>dbg</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1327,7 +1327,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>freq</key>
-      <value>145950000.0</value>
+      <value>meta_freq</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1347,7 +1347,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>samp_rate</key>
-      <value>128000</value>
+      <value>meta_samp_rate</value>
     </param>
     <param>
       <key>time</key>
@@ -1355,7 +1355,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>tle</key>
-      <value>'MOVE-II;1 43774U 18099S   18340.66044376  .00001644  00000-0  15648-3 0  9996;2 43774  97.7715  49.7845 0011035 250.7436 273.4950 14.94768966   423;'</value>
+      <value>meta_tle</value>
     </param>
   </block>
   <block>
