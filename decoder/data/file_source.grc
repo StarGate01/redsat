@@ -824,7 +824,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(424, 508)</value>
+      <value>(424, 540)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -867,7 +867,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1032, 433)</value>
+      <value>(1048, 433)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1080,6 +1080,57 @@
     </param>
   </block>
   <block>
+    <key>blocks_multiply_const_vxx</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>const</key>
+      <value>2*pi</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(656, 516)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_multiply_const_vxx_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
     <key>blocks_multiply_xx</key>
     <param>
       <key>alias</key>
@@ -1099,7 +1150,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 489)</value>
+      <value>(920, 489)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1150,7 +1201,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(592, 561)</value>
+      <value>(592, 601)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1319,7 +1370,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(720, 558)</value>
+      <value>(768, 558)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1339,11 +1390,11 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>1</value>
+      <value>meta_samp_rate</value>
     </param>
     <param>
       <key>sensitivity</key>
-      <value>1</value>
+      <value>2*pi</value>
     </param>
   </block>
   <block>
@@ -1434,18 +1485,28 @@ class doppler_calculator(gr.sync_block):
         tle_data = tle.split(";")
         self.sat = ephem.readtle(tle_data[0], tle_data[1], tle_data[2])
 
+        if time != 0.:
+            self.last_freq = self.get_doppler_freq(0)
+        else:
+            self.last_freq = freq
+
     def work(self, input_items, output_items):        
         num_input_items = len(input_items[0])
 
         nread = self.nitems_read(0)
         tags = self.get_tags_in_range(0, nread, nread+num_input_items)
-        for tag in tags:            
-            i = tag.offset - nread
-            output_items[0][i:] = self.get_doppler_freq(tag.offset)
-            
-            #print pmt.pmt_symbol_to_string(tag.key)
-            #print pmt.pmt_symbol_to_string(tag.value)
-            #self.key = pmt.pmt_symbol_to_string(tag.key)    
+
+        output_items[0][:] = self.last_freq
+        if len(tags) &gt; 0:
+            for tag in tags:            
+                i = tag.offset - nread
+                output_items[0][i:] = self.get_doppler_freq(tag.offset)
+                
+                #print pmt.pmt_symbol_to_string(tag.key)
+                #print pmt.pmt_symbol_to_string(tag.value)
+                #self.key = pmt.pmt_symbol_to_string(tag.key)    
+
+            self.last_freq = self.get_doppler_freq(tags[-1].offset)
 
         return len(output_items[0])
 
@@ -1469,7 +1530,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(368, 560)</value>
+      <value>(368, 600)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1512,7 +1573,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1560,6 +1621,37 @@ class doppler_calculator(gr.sync_block):
     <param>
       <key>id</key>
       <value>epy_module_0</value>
+    </param>
+  </block>
+  <block>
+    <key>import</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(128, 84)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>import_0</value>
+    </param>
+    <param>
+      <key>import</key>
+      <value>from math import pi</value>
     </param>
   </block>
   <block>
@@ -1814,10 +1906,22 @@ class doppler_calculator(gr.sync_block):
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_multiply_const_vxx_0</source_block_id>
+    <sink_block_id>blocks_vco_c_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>blocks_multiply_xx_0</source_block_id>
     <sink_block_id>blks2_selector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_sub_xx_0</source_block_id>
+    <sink_block_id>blocks_multiply_const_vxx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_sub_xx_0</source_block_id>
