@@ -284,7 +284,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(928, 773)</value>
+      <value>(896, 756)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -746,7 +746,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(584, 721)</value>
+      <value>(552, 720)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -789,7 +789,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(760, 721)</value>
+      <value>(728, 720)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -828,7 +828,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1048, 433)</value>
+      <value>(1040, 432)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -895,7 +895,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(592, 596)</value>
+      <value>(552, 596)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -923,57 +923,6 @@
     </param>
   </block>
   <block>
-    <key>blocks_add_xx</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(256, 585)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_add_xx_0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>num_inputs</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
     <key>blocks_multiply_xx</key>
     <param>
       <key>alias</key>
@@ -993,7 +942,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(920, 489)</value>
+      <value>(904, 480)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1044,7 +993,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 598)</value>
+      <value>(16, 580)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1162,7 +1111,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(744, 574)</value>
+      <value>(744, 580)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1212,7 +1161,7 @@ def print_value(value):
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(928, 724)</value>
+      <value>(896, 724)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1340,7 +1289,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(352, 560)</value>
+      <value>(264, 560)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1387,7 +1336,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(592, 665)</value>
+      <value>(552, 664)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1601,7 +1550,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1200, 444)</value>
+      <value>(1192, 444)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1735,12 +1684,6 @@ class doppler_calculator(gr.sync_block):
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>blocks_add_xx_0</source_block_id>
-    <sink_block_id>doppler_calculator</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>blocks_multiply_xx_0</source_block_id>
     <sink_block_id>blks2_selector_0</sink_block_id>
     <source_key>0</source_key>
@@ -1748,19 +1691,13 @@ class doppler_calculator(gr.sync_block):
   </connection>
   <connection>
     <source_block_id>blocks_tags_strobe_0</source_block_id>
-    <sink_block_id>blocks_add_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_throttle_0</source_block_id>
-    <sink_block_id>blks2_selector_0</sink_block_id>
+    <sink_block_id>doppler_calculator</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
     <source_block_id>blocks_throttle_0</source_block_id>
-    <sink_block_id>blocks_add_xx_0</sink_block_id>
+    <sink_block_id>blks2_selector_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
