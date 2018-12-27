@@ -41,7 +41,7 @@ if [ -z "$4" ]; then
     NETKIND="notcp"
     echo "Warning: No rtl_tcp choice specified, defaulting to disabled"
 else
-    NETKIND = $4
+    NETKIND=$4
 fi
 if [[ $SDRDEV == *"audio"* ]]; then
     echo "Info: Using audio input"
@@ -68,6 +68,7 @@ else
             cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py config_rtl_custom &
         else
             rtl_tcp -a 127.0.0.1 &
+            echo "starting rtl mus"
             cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py &
         fi
         GRDEV="rtl_tcp=127.0.0.1:7373"
@@ -78,9 +79,9 @@ else
     echo "Info: Using $SDRDEV via $GRDEV"
 fi
 
-FREQ=`grep $SAT $REDSAT_TLE_DIR/sats.list | cut -d, -f3`
+FREQ=`grep "$SAT" "$REDSAT_TLE_DIR/sats.list" | cut -d, -f3`
 TLE="$REDSAT_TLE_DIR/elements/$SAT.txt"
-TLEALL=`cat $TLE | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
+TLEALL=`cat "$TLE" | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
 cat > $META <<-EOF
