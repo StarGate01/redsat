@@ -23,6 +23,8 @@ RUN ldconfig
 
 COPY data/gr/ /app/gr/
 
+COPY data/ /app/data-temp/
+
 # Entrypoint
 
 COPY run.sh /app/
