@@ -4,7 +4,7 @@
 # GNU Radio Python Flow Graph
 # Title: REDSAT receiver (device)
 # Author: Christoph Honal, Alexander Ulanowski
-# Generated: Wed Dec 26 23:04:21 2018
+# Generated: Thu Dec 27 17:06:30 2018
 ##################################################
 
 if __name__ == '__main__':
@@ -39,7 +39,7 @@ from gnuradio import qtgui
 
 class receiver_gui_dev(gr.top_block, Qt.QWidget):
 
-    def __init__(self, config_file='./default.ini', meta_dev='rtl=0'):
+    def __init__(self, config_file='./default.ini', meta_dev='rtl=0', meta_samp_rate_dev=1536000):
         gr.top_block.__init__(self, "REDSAT receiver (device)")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("REDSAT receiver (device)")
@@ -69,6 +69,7 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
         ##################################################
         self.config_file = config_file
         self.meta_dev = meta_dev
+        self.meta_samp_rate_dev = meta_samp_rate_dev
 
         ##################################################
         # Variables
@@ -89,7 +90,6 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
         except: meta_freq = 145950000
         self.meta_freq = meta_freq
         self.start_time = start_time = time.time()
-        self.samp_rate_rtlsdr = samp_rate_rtlsdr = 1536000
         self.samp_rate = samp_rate = meta_samp_rate
         self._meta_time_config = ConfigParser.ConfigParser()
         self._meta_time_config.read(config_file)
@@ -117,7 +117,7 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
         self.time_updater = time_updater.blk(callback=lambda t: self.set_start_time(t))
         self.rational_resampler_xxx_0_0 = filter.rational_resampler_ccc(
                 interpolation=1,
-                decimation=int(samp_rate_rtlsdr/samp_rate),
+                decimation=int(meta_samp_rate_dev/samp_rate),
                 taps=None,
                 fractional_bw=None,
         )
@@ -141,7 +141,7 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
 
 
         self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + meta_dev )
-        self.osmosdr_source_0.set_sample_rate(samp_rate_rtlsdr)
+        self.osmosdr_source_0.set_sample_rate(meta_samp_rate_dev)
         self.osmosdr_source_0.set_center_freq(freq_real, 0)
         self.osmosdr_source_0.set_freq_corr(0, 0)
         self.osmosdr_source_0.set_dc_offset_mode(0, 0)
@@ -214,6 +214,13 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
     def set_meta_dev(self, meta_dev):
         self.meta_dev = meta_dev
 
+    def get_meta_samp_rate_dev(self):
+        return self.meta_samp_rate_dev
+
+    def set_meta_samp_rate_dev(self, meta_samp_rate_dev):
+        self.meta_samp_rate_dev = meta_samp_rate_dev
+        self.osmosdr_source_0.set_sample_rate(self.meta_samp_rate_dev)
+
     def get_meta_samp_rate(self):
         return self.meta_samp_rate
 
@@ -246,13 +253,6 @@ class receiver_gui_dev(gr.top_block, Qt.QWidget):
         	self._meta_time_config.add_section('main')
         self._meta_time_config.set('main', 'time', str(self.start_time))
         self._meta_time_config.write(open(self.config_file, 'w'))
-
-    def get_samp_rate_rtlsdr(self):
-        return self.samp_rate_rtlsdr
-
-    def set_samp_rate_rtlsdr(self, samp_rate_rtlsdr):
-        self.samp_rate_rtlsdr = samp_rate_rtlsdr
-        self.osmosdr_source_0.set_sample_rate(self.samp_rate_rtlsdr)
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -305,6 +305,9 @@ def argument_parser():
     parser.add_option(
         "", "--meta-dev", dest="meta_dev", type="string", default='rtl=0',
         help="Set meta_dev [default=%default]")
+    parser.add_option(
+        "", "--meta-samp-rate-dev", dest="meta_samp_rate_dev", type="intx", default=1536000,
+        help="Set meta_samp_rate_dev [default=%default]")
     return parser
 
 
@@ -318,7 +321,7 @@ def main(top_block_cls=receiver_gui_dev, options=None):
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
 
-    tb = top_block_cls(config_file=options.config_file, meta_dev=options.meta_dev)
+    tb = top_block_cls(config_file=options.config_file, meta_dev=options.meta_dev, meta_samp_rate_dev=options.meta_samp_rate_dev)
     tb.start()
     tb.show()
 

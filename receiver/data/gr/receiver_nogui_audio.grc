@@ -776,7 +776,7 @@
     </param>
     <param>
       <key>_io_cache</key>
-      <value>('First packet probe', 'blk', [('callback', 'None')], [('0', 'complex')], [], '')</value>
+      <value>('First packet time callback', 'blk', [('callback', 'None')], [('0', 'complex', 1)], [], '', ['callback'])</value>
     </param>
     <param>
       <key>callback</key>
@@ -801,16 +801,13 @@ class blk(gr.sync_block):
     def __init__(self, callback=None):  # only default arguments here
         gr.sync_block.__init__(
             self,
-            name='First packet probe',
+            name='First packet time callback',
             in_sig=[np.complex64],
-            out_sig=[]
+            out_sig=None
         )
         
         self.time = None
         self.callback = callback
-
-        print(self.callback)
-        
 
     def work(self, input_items, output_items):        
         if self.time is None:
@@ -818,7 +815,7 @@ class blk(gr.sync_block):
             if self.callback is not None:
                 print('calling callback to set time:', self.time)
                 self.callback(self.time)
-        return 0</value>
+        return len(input_items)</value>
     </param>
     <param>
       <key>comment</key>

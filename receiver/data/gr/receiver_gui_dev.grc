@@ -489,7 +489,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(160, 164)</value>
+      <value>(264, 164)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -502,33 +502,6 @@
     <param>
       <key>value</key>
       <value>meta_samp_rate</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(248, 164)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>samp_rate_rtlsdr</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1536000</value>
     </param>
   </block>
   <block>
@@ -625,7 +598,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(208, 8)</value>
+      <value>(168, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -765,7 +738,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(400, 12)</value>
+      <value>(408, 12)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -794,6 +767,53 @@
     <param>
       <key>value</key>
       <value>rtl=0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(272, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>meta_samp_rate_dev</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value></value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>1536000</value>
     </param>
   </block>
   <block>
@@ -2196,7 +2216,7 @@
     </param>
     <param>
       <key>sample_rate</key>
-      <value>samp_rate_rtlsdr</value>
+      <value>meta_samp_rate_dev</value>
     </param>
     <param>
       <key>sync</key>
@@ -2318,7 +2338,7 @@
     </param>
     <param>
       <key>decim</key>
-      <value>int(samp_rate_rtlsdr/samp_rate)</value>
+      <value>int(meta_samp_rate_dev/samp_rate)</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -2369,7 +2389,7 @@
     </param>
     <param>
       <key>_io_cache</key>
-      <value>('First packet probe', 'blk', [('callback', 'None')], [('0', 'complex')], [], '')</value>
+      <value>('First packet time callback', 'blk', [('callback', 'None')], [('0', 'complex', 1)], [], '', ['callback'])</value>
     </param>
     <param>
       <key>callback</key>
@@ -2394,16 +2414,13 @@ class blk(gr.sync_block):
     def __init__(self, callback=None):  # only default arguments here
         gr.sync_block.__init__(
             self,
-            name='First packet probe',
+            name='First packet time callback',
             in_sig=[np.complex64],
-            out_sig=[]
+            out_sig=None
         )
         
         self.time = None
         self.callback = callback
-
-        print(self.callback)
-        
 
     def work(self, input_items, output_items):        
         if self.time is None:
@@ -2411,7 +2428,7 @@ class blk(gr.sync_block):
             if self.callback is not None:
                 print('calling callback to set time:', self.time)
                 self.callback(self.time)
-        return 0</value>
+        return len(input_items)</value>
     </param>
     <param>
       <key>comment</key>
