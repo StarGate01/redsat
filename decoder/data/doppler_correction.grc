@@ -299,7 +299,7 @@
     </param>
     <param>
       <key>config_file</key>
-      <value>v_meta_elv</value>
+      <value>v_meta_file</value>
     </param>
     <param>
       <key>value</key>
@@ -331,7 +331,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>int</value>
+      <value>real</value>
     </param>
     <param>
       <key>writeback</key>
@@ -1245,8 +1245,8 @@ class doppler_calculator(gr.sync_block):
 
     def __init__(self, 
         time=0., 
-        freq=0, 
-        samp_rate=0, 
+        freq=0., 
+        samp_rate=0., 
         tle="", 
         location=None,
         dbg=True):
@@ -1265,7 +1265,7 @@ class doppler_calculator(gr.sync_block):
         if location is not None:
             self.obs.lat = str(location.lat)
             self.obs.lon = str(location.lon)
-            self.obs.elevation = location.elv
+            self.obs.elevation = float(location.elv)
 
         tle_data = tle.split(";")
         if len(tle_data) &gt;= 3:
