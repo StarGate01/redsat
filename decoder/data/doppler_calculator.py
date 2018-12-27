@@ -19,7 +19,8 @@ class doppler_calculator(gr.sync_block):
         freq=145.95e6, 
         samp_rate=128000, 
         tle="MOVE-II;1 43774U 18099S   18340.66044376  .00001644  00000-0  15648-3 0  9996;2 43774  97.7715  49.7845 0011035 250.7436 273.4950 14.94768966   423;", 
-        location=None):
+        location=None,
+        dbg=True):
         #lat=0., lon=0., elv=0.): 
         gr.sync_block.__init__(
             self,
@@ -33,8 +34,8 @@ class doppler_calculator(gr.sync_block):
                 
         self.obs = ephem.Observer()        
         if location is not None:
-            self.obs.lat = location.lat
-            self.obs.lon = location.lon
+            self.obs.lat = str(location.lat)
+            self.obs.lon = str(location.lon)
             self.obs.elevation = location.elv
 
         tle_data = tle.split(";")
@@ -44,6 +45,14 @@ class doppler_calculator(gr.sync_block):
             self.last_freq = self.get_doppler_freq(0)
         else:
             self.last_freq = freq
+
+        self.dbg = dbg
+        if dbg:
+            print "time: ", self.time
+            print "freq:", self.freq
+            if location is not None:
+                print "lat, lon, elv:", location.lat, location.lon, location.elv
+            print "obs:", self.obs
 
     def work(self, input_items, output_items):        
         num_input_items = len(input_items[0])
@@ -55,15 +64,19 @@ class doppler_calculator(gr.sync_block):
         if len(tags) > 0:
             for tag in tags:            
                 i = tag.offset - nread
-                output_items[0][i:] = self.get_doppler_freq(tag.offset)
+                d_f = self.get_doppler_freq(tag.offset)
+                output_items[0][i:] = d_f
                 
+                if self.dbg:
+                    print(gmtime(self.time + tag.offset/self.samp_rate), d_f)
+
                 #print pmt.pmt_symbol_to_string(tag.key)
                 #print pmt.pmt_symbol_to_string(tag.value)
                 #self.key = pmt.pmt_symbol_to_string(tag.key)    
 
             self.last_freq = self.get_doppler_freq(tags[-1].offset)
-
-        return len(output_items[0])
+        
+        return num_input_items
 
     def get_doppler_freq(self, offset):        
         self.obs.date = strftime('%Y/%m/%d %H:%M:%S', gmtime(self.time + offset/self.samp_rate))

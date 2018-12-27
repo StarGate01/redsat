@@ -82,69 +82,6 @@
     </param>
   </block>
   <block>
-    <key>blks2_selector</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(560, 257)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blks2_selector_1</value>
-    </param>
-    <param>
-      <key>input_index</key>
-      <value>int(keep&gt;0)</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>num_inputs</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>num_outputs</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>output_index</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-  </block>
-  <block>
     <key>blocks_head</key>
     <param>
       <key>alias</key>
@@ -164,7 +101,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(376, 284)</value>
+      <value>(400, 220)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -184,7 +121,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>int(keep*samp_rate)</value>
+      <value>int(keep*samp_rate) if keep &gt; 0 else 0xFFFFFFFFFFFFFFFF</value>
     </param>
     <param>
       <key>type</key>
@@ -301,7 +238,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(728, 268)</value>
+      <value>(640, 220)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -462,20 +399,8 @@
     </param>
   </block>
   <connection>
-    <source_block_id>blks2_selector_1</source_block_id>
-    <sink_block_id>pad_sink_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>blocks_head_0</source_block_id>
-    <sink_block_id>blks2_selector_1</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>blocks_skiphead_0</source_block_id>
-    <sink_block_id>blks2_selector_1</sink_block_id>
+    <sink_block_id>pad_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

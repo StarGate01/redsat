@@ -170,6 +170,10 @@
       <value></value>
     </param>
     <param>
+      <key>p_doppler_correct</key>
+      <value>10</value>
+    </param>
+    <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
@@ -190,16 +194,12 @@
       <value>0</value>
     </param>
     <param>
+      <key>p_meta_file</key>
+      <value>filename</value>
+    </param>
+    <param>
       <key>minoutbuf</key>
       <value>0</value>
-    </param>
-    <param>
-      <key>p_doppler_correct</key>
-      <value>100</value>
-    </param>
-    <param>
-      <key>v_meta_file</key>
-      <value>filename</value>
     </param>
     <param>
       <key>p_realtime</key>
@@ -221,8 +221,12 @@
       <value></value>
     </param>
     <param>
+      <key>p_doppler_correct</key>
+      <value>0</value>
+    </param>
+    <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -241,16 +245,12 @@
       <value>0</value>
     </param>
     <param>
+      <key>p_meta_file</key>
+      <value>filename</value>
+    </param>
+    <param>
       <key>minoutbuf</key>
       <value>0</value>
-    </param>
-    <param>
-      <key>p_doppler_correct</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>v_meta_file</key>
-      <value>filename</value>
     </param>
     <param>
       <key>p_realtime</key>
@@ -390,7 +390,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -441,7 +441,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -496,7 +496,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>fft_size</key>
