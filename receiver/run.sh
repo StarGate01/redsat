@@ -99,7 +99,7 @@ EOF
 
 if [ "$REDSAT_OS" == "linux" ]; then
     if [ "$RECUDP" == "0" ]; then
-        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV
+        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV --meta-samp-rate-dev=$SDRSAMPDEV
     else
         python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
     fi
@@ -107,7 +107,7 @@ else
     echo "Running native on windows..."
     META_WIN="${REDSAT_INPUT_DIR_WIN}\\${OUTPUT_BASE}.meta"
     if [ "$RECUDP" == "0" ]; then
-        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_dev.py\" --config-file=\"$META_WIN\" --meta-dev=\"$GRDEV\""
+        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_dev.py\" --config-file=\"$META_WIN\" --meta-dev=\"$GRDEV\" --meta-samp-rate-dev=\"$SDRSAMPDEV\""
     else
         CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_audio.py\" --config-file=\"$META_WIN\" --meta-rec-audio-dev=\"$RECADDR\""
     fi

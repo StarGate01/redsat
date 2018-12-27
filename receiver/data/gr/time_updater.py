@@ -23,9 +23,6 @@ class blk(gr.sync_block):
         self.time = None
         self.callback = callback
 
-        print(self.callback)
-        
-
     def work(self, input_items, output_items):        
         if self.time is None:
             self.time = time.time()
