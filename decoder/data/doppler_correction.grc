@@ -1223,7 +1223,7 @@ def print_value(value):
     </param>
     <param>
       <key>_io_cache</key>
-      <value>('Doppler calculator', 'doppler_calculator', [('time', '0.0'), ('freq', '145950000.0'), ('samp_rate', '128000'), ('tle', "'MOVE-II;1 43774U 18099S   18340.66044376  .00001644  00000-0  15648-3 0  9996;2 43774  97.7715  49.7845 0011035 250.7436 273.4950 14.94768966   423;'"), ('location', 'None'), ('dbg', 'True')], [('0', 'complex')], [('0', 'float')], '')</value>
+      <value>('Doppler calculator', 'doppler_calculator', [('time', '0.0'), ('freq', '0'), ('samp_rate', '0'), ('tle', "''"), ('location', 'None'), ('dbg', 'True')], [('0', 'complex')], [('0', 'float')], '')</value>
     </param>
     <param>
       <key>_source_code</key>
@@ -1245,9 +1245,9 @@ class doppler_calculator(gr.sync_block):
 
     def __init__(self, 
         time=0., 
-        freq=145.95e6, 
-        samp_rate=128000, 
-        tle="MOVE-II;1 43774U 18099S   18340.66044376  .00001644  00000-0  15648-3 0  9996;2 43774  97.7715  49.7845 0011035 250.7436 273.4950 14.94768966   423;", 
+        freq=0, 
+        samp_rate=0, 
+        tle="", 
         location=None,
         dbg=True):
         #lat=0., lon=0., elv=0.): 
@@ -1268,7 +1268,8 @@ class doppler_calculator(gr.sync_block):
             self.obs.elevation = location.elv
 
         tle_data = tle.split(";")
-        self.sat = ephem.readtle(tle_data[0], tle_data[1], tle_data[2])
+        if len(tle_data) &gt;= 3:
+            self.sat = ephem.readtle(tle_data[0], tle_data[1], tle_data[2])
 
         if time != 0.:
             self.last_freq = self.get_doppler_freq(0)
