@@ -16,8 +16,8 @@ class doppler_calculator(gr.sync_block):
 
     def __init__(self, 
         time=0., 
-        freq=0, 
-        samp_rate=0, 
+        freq=0., 
+        samp_rate=0., 
         tle="", 
         location=None,
         dbg=True):
@@ -36,11 +36,15 @@ class doppler_calculator(gr.sync_block):
         if location is not None:
             self.obs.lat = str(location.lat)
             self.obs.lon = str(location.lon)
-            self.obs.elevation = location.elv
+            self.obs.elevation = float(location.elv)
 
-        tle_data = tle.split(";")
+        tle_data = tle.split(",")
         if len(tle_data) >= 3:
             self.sat = ephem.readtle(tle_data[0], tle_data[1], tle_data[2])
+        elif len(tle) > 0:
+            raise ValueError("TLE string should have three entries separated by commas")
+        else:
+            pass
 
         if time != 0.:
             self.last_freq = self.get_doppler_freq(0)
