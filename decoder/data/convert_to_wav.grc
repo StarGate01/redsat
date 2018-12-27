@@ -242,7 +242,7 @@
     </param>
     <param>
       <key>samp_rate</key>
-      <value>meta_samp_rate</value>
+      <value>int(meta_samp_rate)</value>
     </param>
   </block>
   <block>
