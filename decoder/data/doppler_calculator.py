@@ -40,18 +40,28 @@ class doppler_calculator(gr.sync_block):
         tle_data = tle.split(";")
         self.sat = ephem.readtle(tle_data[0], tle_data[1], tle_data[2])
 
+        if time != 0.:
+            self.last_freq = self.get_doppler_freq(0)
+        else:
+            self.last_freq = freq
+
     def work(self, input_items, output_items):        
         num_input_items = len(input_items[0])
 
         nread = self.nitems_read(0)
         tags = self.get_tags_in_range(0, nread, nread+num_input_items)
-        for tag in tags:            
-            i = tag.offset - nread
-            output_items[0][i:] = self.get_doppler_freq(tag.offset)
-            
-            #print pmt.pmt_symbol_to_string(tag.key)
-            #print pmt.pmt_symbol_to_string(tag.value)
-            #self.key = pmt.pmt_symbol_to_string(tag.key)    
+
+        output_items[0][:] = self.last_freq
+        if len(tags) > 0:
+            for tag in tags:            
+                i = tag.offset - nread
+                output_items[0][i:] = self.get_doppler_freq(tag.offset)
+                
+                #print pmt.pmt_symbol_to_string(tag.key)
+                #print pmt.pmt_symbol_to_string(tag.value)
+                #self.key = pmt.pmt_symbol_to_string(tag.key)    
+
+            self.last_freq = self.get_doppler_freq(tags[-1].offset)
 
         return len(output_items[0])
 
