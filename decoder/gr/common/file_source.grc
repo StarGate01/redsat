@@ -129,7 +129,7 @@
     </param>
   </block>
   <block>
-    <key>blocks_file_source</key>
+    <key>blocks_file_meta_source</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -143,6 +143,10 @@
       <value></value>
     </param>
     <param>
+      <key>detached</key>
+      <value>False</value>
+    </param>
+    <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
@@ -152,15 +156,19 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 437)</value>
+      <value>(32, 423)</value>
     </param>
     <param>
       <key>_rotation</key>
       <value>0</value>
     </param>
     <param>
+      <key>hdr_file</key>
+      <value></value>
+    </param>
+    <param>
       <key>id</key>
-      <value>blocks_file_source_0</value>
+      <value>blocks_file_meta_source_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -438,7 +446,7 @@
     </param>
   </block>
   <connection>
-    <source_block_id>blocks_file_source_0</source_block_id>
+    <source_block_id>blocks_file_meta_source_0</source_block_id>
     <sink_block_id>doppler_correction_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

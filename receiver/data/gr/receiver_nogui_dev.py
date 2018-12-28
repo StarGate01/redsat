@@ -4,10 +4,9 @@
 # GNU Radio Python Flow Graph
 # Title: REDSAT receiver (device)
 # Author: Christoph Honal, Alexander Ulanowski
-# Generated: Thu Dec 27 23:31:14 2018
+# Generated: Sat Dec 29 00:01:39 2018
 ##################################################
 
-from gnuradio import blocks
 from gnuradio import eng_notation
 from gnuradio import filter
 from gnuradio import gr
@@ -18,15 +17,14 @@ from optparse import OptionParser
 from os.path import splitext
 import ConfigParser
 import osmosdr
-import pmt
-import satnogs
 import sys
 import time
+import time_tagger
 
 
 class receiver_nogui_dev(gr.top_block):
 
-    def __init__(self, config_file='./default.ini', meta_dev='rtl=0', meta_samp_rate_dev=1536000):
+    def __init__(self, config_file='./default.meta', meta_dev='rtl=0', meta_samp_rate_dev=1536000):
         gr.top_block.__init__(self, "REDSAT receiver (device)")
 
         ##################################################
@@ -44,7 +42,6 @@ class receiver_nogui_dev(gr.top_block):
         try: meta_samp_rate = self._meta_samp_rate_config.getint('main', 'samp_rate')
         except: meta_samp_rate = 128000
         self.meta_samp_rate = meta_samp_rate
-        self.start_time = start_time = time.time()
         self.samp_rate = samp_rate = meta_samp_rate
         self._meta_time_config = ConfigParser.ConfigParser()
         self._meta_time_config.read(config_file)
@@ -71,39 +68,37 @@ class receiver_nogui_dev(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.satnogs_waterfall_sink_0 = satnogs.waterfall_sink(meta_samp_rate, 0.0, 15, 2048, splitext(config_file)[0] + ".wf", 1)
+        self.time_tagger = time_tagger.blk(rate=meta_samp_rate)
+        self.src = osmosdr.source( args="numchan=" + str(1) + " " + meta_dev )
+        self.src.set_sample_rate(meta_samp_rate_dev)
+        self.src.set_center_freq(meta_freq, 0)
+        self.src.set_freq_corr(0, 0)
+        self.src.set_dc_offset_mode(0, 0)
+        self.src.set_iq_balance_mode(1, 0)
+        self.src.set_gain_mode(False, 0)
+        self.src.set_gain(meta_gain, 0)
+        self.src.set_if_gain(20, 0)
+        self.src.set_bb_gain(20, 0)
+        self.src.set_antenna('', 0)
+        self.src.set_bandwidth(bandwidth_rtlsdr, 0)
+
         self.rational_resampler_xxx_0_0 = filter.rational_resampler_ccc(
                 interpolation=1,
                 decimation=int(meta_samp_rate_dev/samp_rate),
                 taps=None,
                 fractional_bw=None,
         )
-        self.osmosdr_source_0 = osmosdr.source( args="numchan=" + str(1) + " " + meta_dev )
-        self.osmosdr_source_0.set_sample_rate(meta_samp_rate_dev)
-        self.osmosdr_source_0.set_center_freq(meta_freq, 0)
-        self.osmosdr_source_0.set_freq_corr(0, 0)
-        self.osmosdr_source_0.set_dc_offset_mode(0, 0)
-        self.osmosdr_source_0.set_iq_balance_mode(1, 0)
-        self.osmosdr_source_0.set_gain_mode(False, 0)
-        self.osmosdr_source_0.set_gain(meta_gain, 0)
-        self.osmosdr_source_0.set_if_gain(20, 0)
-        self.osmosdr_source_0.set_bb_gain(20, 0)
-        self.osmosdr_source_0.set_antenna('', 0)
-        self.osmosdr_source_0.set_bandwidth(bandwidth_rtlsdr, 0)
-          
-        self.blocks_tags_strobe_0 = blocks.tags_strobe(gr.sizeof_gr_complex*1, pmt.intern(str(time.time())), meta_samp_rate, pmt.intern("time"))
         self.blocks_file_meta_sink_0 = blocks.file_meta_sink(gr.sizeof_gr_complex*1, meta_output_file, samp_rate, 1, blocks.GR_FILE_FLOAT, True, 1000000, "", False)
         self.blocks_file_meta_sink_0.set_unbuffered(False)
-        self.blocks_add_xx_0 = blocks.add_vcc(1)
+
+
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_add_xx_0, 0), (self.blocks_file_meta_sink_0, 0))    
-        self.connect((self.blocks_add_xx_0, 0), (self.satnogs_waterfall_sink_0, 0))    
-        self.connect((self.blocks_tags_strobe_0, 0), (self.blocks_add_xx_0, 1))    
-        self.connect((self.osmosdr_source_0, 0), (self.rational_resampler_xxx_0_0, 0))    
-        self.connect((self.rational_resampler_xxx_0_0, 0), (self.blocks_add_xx_0, 0))    
+        self.connect((self.rational_resampler_xxx_0_0, 0), (self.time_tagger, 0))
+        self.connect((self.src, 0), (self.rational_resampler_xxx_0_0, 0))
+        self.connect((self.time_tagger, 0), (self.blocks_file_meta_sink_0, 0))
 
     def get_config_file(self):
         return self.config_file
@@ -139,7 +134,7 @@ class receiver_nogui_dev(gr.top_block):
         self._meta_time_config.read(self.config_file)
         if not self._meta_time_config.has_section('main'):
         	self._meta_time_config.add_section('main')
-        self._meta_time_config.set('main', 'time', str(self.start_time))
+        self._meta_time_config.set('main', 'time', str(None))
         self._meta_time_config.write(open(self.config_file, 'w'))
 
     def get_meta_dev(self):
@@ -153,7 +148,7 @@ class receiver_nogui_dev(gr.top_block):
 
     def set_meta_samp_rate_dev(self, meta_samp_rate_dev):
         self.meta_samp_rate_dev = meta_samp_rate_dev
-        self.osmosdr_source_0.set_sample_rate(self.meta_samp_rate_dev)
+        self.src.set_sample_rate(self.meta_samp_rate_dev)
 
     def get_meta_samp_rate(self):
         return self.meta_samp_rate
@@ -161,19 +156,7 @@ class receiver_nogui_dev(gr.top_block):
     def set_meta_samp_rate(self, meta_samp_rate):
         self.meta_samp_rate = meta_samp_rate
         self.set_samp_rate(self.meta_samp_rate)
-        self.blocks_tags_strobe_0.set_nsamps(self.meta_samp_rate)
-
-    def get_start_time(self):
-        return self.start_time
-
-    def set_start_time(self, start_time):
-        self.start_time = start_time
-        self._meta_time_config = ConfigParser.ConfigParser()
-        self._meta_time_config.read(self.config_file)
-        if not self._meta_time_config.has_section('main'):
-        	self._meta_time_config.add_section('main')
-        self._meta_time_config.set('main', 'time', str(self.start_time))
-        self._meta_time_config.write(open(self.config_file, 'w'))
+        self.time_tagger.rate = self.meta_samp_rate
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -199,27 +182,27 @@ class receiver_nogui_dev(gr.top_block):
 
     def set_meta_gain(self, meta_gain):
         self.meta_gain = meta_gain
-        self.osmosdr_source_0.set_gain(self.meta_gain, 0)
+        self.src.set_gain(self.meta_gain, 0)
 
     def get_meta_freq(self):
         return self.meta_freq
 
     def set_meta_freq(self, meta_freq):
         self.meta_freq = meta_freq
-        self.osmosdr_source_0.set_center_freq(self.meta_freq, 0)
+        self.src.set_center_freq(self.meta_freq, 0)
 
     def get_bandwidth_rtlsdr(self):
         return self.bandwidth_rtlsdr
 
     def set_bandwidth_rtlsdr(self, bandwidth_rtlsdr):
         self.bandwidth_rtlsdr = bandwidth_rtlsdr
-        self.osmosdr_source_0.set_bandwidth(self.bandwidth_rtlsdr, 0)
+        self.src.set_bandwidth(self.bandwidth_rtlsdr, 0)
 
 
 def argument_parser():
     parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
     parser.add_option(
-        "", "--config-file", dest="config_file", type="string", default='./default.ini',
+        "", "--config-file", dest="config_file", type="string", default='./default.meta',
         help="Set config_file [default=%default]")
     parser.add_option(
         "", "--meta-dev", dest="meta_dev", type="string", default='rtl=0',
@@ -236,11 +219,6 @@ def main(top_block_cls=receiver_nogui_dev, options=None):
 
     tb = top_block_cls(config_file=options.config_file, meta_dev=options.meta_dev, meta_samp_rate_dev=options.meta_samp_rate_dev)
     tb.start()
-    try:
-        raw_input('Press Enter to quit: ')
-    except EOFError:
-        pass
-    tb.stop()
     tb.wait()
 
 
