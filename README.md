@@ -32,6 +32,8 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [rtl-sdr](https://git.osmocom.org/rtl-sdr)
         - [rtl-mus](https://github.com/simonyiszk/rtl_mus)
     - importer: Imports IQ files recorded by other tools (e.g. SDR#)
+        - [SDR#](https://airspy.com/download/)
+        - [SDR# IF Recorder](http://www.rtl-sdr.ru/page/dobavlen-novyj-plagin-if-recorder)
     - decoder: Decodes a saved signal into usable data (weather maps or telemetry dumps)
         - [SatNOGS GNU Radio Blocks](https://gitlab.com/librespacefoundation/satnogs)
         - [libFEC](https://github.com/quiet/libfec)
