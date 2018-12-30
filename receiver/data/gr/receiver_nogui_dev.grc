@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.13'?>
+<?grc format='1' created='3.7.9'?>
 <flow_graph>
   <timestamp>Wed Dec 26 06:35:58 2018</timestamp>
   <block>
@@ -73,20 +73,12 @@
       <value>True</value>
     </param>
     <param>
-      <key>sizing_mode</key>
-      <value>fixed</value>
-    </param>
-    <param>
       <key>thread_safe_setters</key>
       <value></value>
     </param>
     <param>
       <key>title</key>
       <value>REDSAT receiver (device)</value>
-    </param>
-    <param>
-      <key>placement</key>
-      <value>(0,0)</value>
     </param>
   </block>
   <block>
@@ -480,10 +472,6 @@
       <value></value>
     </param>
     <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
       <key>type</key>
       <value>string</value>
     </param>
@@ -620,10 +608,6 @@
       <value></value>
     </param>
     <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
       <key>type</key>
       <value>string</value>
     </param>
@@ -665,10 +649,6 @@
     <param>
       <key>short_id</key>
       <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
     </param>
     <param>
       <key>type</key>
@@ -745,12 +725,28 @@
       <value></value>
     </param>
     <param>
+      <key>center_freq</key>
+      <value>0.0</value>
+    </param>
+    <param>
       <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
       <value></value>
     </param>
     <param>
       <key>_enabled</key>
       <value>1</value>
+    </param>
+    <param>
+      <key>fft_size</key>
+      <value>2048</value>
+    </param>
+    <param>
+      <key>filename</key>
+      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -763,22 +759,6 @@
     <param>
       <key>id</key>
       <value>satnogs_waterfall_sink_0</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>center_freq</key>
-      <value>0.0</value>
-    </param>
-    <param>
-      <key>fft_size</key>
-      <value>2048</value>
-    </param>
-    <param>
-      <key>filename</key>
-      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>mode</key>
