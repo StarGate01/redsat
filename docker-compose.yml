@@ -17,6 +17,13 @@ services:
     volumes:
       - ./persistent-data/TLE:/app/TLE
 
+  importer:
+    build: ./importer
+    volumes:
+      - ./persistent-data/TLE:/app/TLE
+      - ./persistent-data/import:/app/import
+      - ./persistent-data/input:/app/input
+
   receiver:
     build: ./receiver
     ports:

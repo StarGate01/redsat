@@ -1,1 +1,1 @@
-```capture.wav``` will be placed in this directory
+```capture.raw``` and ```capture.meta``` will be placed in this directory

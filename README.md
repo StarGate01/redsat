@@ -31,6 +31,7 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [Gpredict Doppler GNU Radio Blocks](https://github.com/wnagele/gr-gpredict-doppler)
         - [rtl-sdr](https://git.osmocom.org/rtl-sdr)
         - [rtl-mus](https://github.com/simonyiszk/rtl_mus)
+    - importer: Imports IQ files recorded by other tools (e.g. SDR#)
     - decoder: Decodes a saved signal into usable data (weather maps or telemetry dumps)
         - [SatNOGS GNU Radio Blocks](https://gitlab.com/librespacefoundation/satnogs)
         - [libFEC](https://github.com/quiet/libfec)

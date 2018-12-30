@@ -1,4 +1,5 @@
 *.meta
 *.raw
+*.wav
 decode.log
 portainer
