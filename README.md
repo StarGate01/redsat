@@ -12,7 +12,7 @@ Raspberry Pi satellite SDR base station for weather &amp; telemetry.
     - MOVE-II
 
 ## Configuration
-Edit ```persistent-data/TLE/station.config``` to configure your groundstation.
+Edit ```persistent-data/TLE/station.config``` to configure your ground station.
 
 Edit ```persistent-data/TLE/sats.list``` and ```persistent-data/TLE/sources.list``` to configure satellites and TLE sources.
 
@@ -23,7 +23,7 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
 
 ## Containers and their sources
 - Radio
-    - gnuradio: Base image for radio related software, builds gnuradio from source.
+    - gnuradio: Base image for radio related software, builds GNU Radio from source.
         - [GNU Radio](https://www.gnuradio.org/)
         - [Boost](https://www.boost.org/)
     - receiver: Receives a signal from a SDR device or an audio interface (useful for piping a stream across system boundaries) and saves it to a file, along with TLE and geodata.

@@ -1,0 +1,61 @@
+version: '3'
+
+volumes:
+  portainer_data:
+
+networks:
+  monitor:
+    external:
+      name: monitor
+
+services:
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock --no-auth
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - portainer_data:/data:rw
+    restart: always
+    expose:
+      - "9000"
+    networks:
+      - monitor
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - prometheus_node
+      - cadvisor
+    restart: always
+    expose:
+      - "9090"
+    networks:
+      - monitor
+
+  prometheus_node:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+#    command: [-collector.procfs, /host/proc, -collector.sysfs, /host/proc, -collector.filesystem.ignored-mount-points, '^/(sys|proc|dev|host|etc)($$|/)']
+    restart: always
+    expose:
+      - "9100"
+    networks:
+      - monitor
+
+  cadvisor:
+    image: google/cadvisor:latest
+    volumes:
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    expose:
+      - "8080"
+    networks:
+      - monitor

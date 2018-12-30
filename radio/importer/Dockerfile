@@ -1,4 +1,4 @@
-FROM redsat_gnuradio:latest
+FROM radio_gnuradio:latest
 
 # GNURadio flowcharts
 
