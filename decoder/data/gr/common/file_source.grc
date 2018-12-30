@@ -234,6 +234,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>p_offset</key>
+      <value>p_offset</value>
+    </param>
+    <param>
       <key>p_realtime</key>
       <value>p_realtime</value>
     </param>
@@ -357,6 +361,49 @@
     <param>
       <key>value</key>
       <value>""</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(192, 231)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>p_offset</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Offset</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0</value>
     </param>
   </block>
   <block>

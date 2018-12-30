@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Create Waterfall
-# Generated: Thu Dec 27 14:01:36 2018
+# Generated: Sun Dec 30 14:11:09 2018
 ##################################################
 
 import os
@@ -50,23 +50,25 @@ class create_waterfall(gr.top_block):
         self.satnogs_waterfall_sink_0_0 = satnogs.waterfall_sink(meta_samp_rate, 0.0, 15, 4096, filename_base + ".d.wf", 1)
         self.satnogs_waterfall_sink_0 = satnogs.waterfall_sink(meta_samp_rate, 0.0, 15, 4096, filename_base + ".nd.wf", 1)
         self.range_selector_0_0 = range_selector(
+            keep=keep,
             samp_rate=meta_samp_rate,
             skip=skip,
-            keep=keep,
         )
         self.range_selector_0 = range_selector(
+            keep=keep,
             samp_rate=meta_samp_rate,
             skip=skip,
-            keep=keep,
         )
         self.file_source_0_0 = file_source(
             p_doppler_correct=0,
             p_meta_file=filename,
+            p_offset=0,
             p_realtime=False,
         )
         self.file_source_0 = file_source(
             p_doppler_correct=10,
             p_meta_file=filename,
+            p_offset=0,
             p_realtime=False,
         )
 

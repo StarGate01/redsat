@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Convert To Wav
-# Generated: Thu Dec 27 14:31:42 2018
+# Generated: Sun Dec 30 12:53:00 2018
 ##################################################
 
 import os
@@ -24,7 +24,7 @@ import ConfigParser
 
 class convert_to_wav(gr.top_block):
 
-    def __init__(self, filename="", keep=0, skip=0):
+    def __init__(self, filename="", keep=0, skip=0, freq_offset=10e3):
         gr.top_block.__init__(self, "Convert To Wav")
 
         ##################################################
@@ -33,13 +33,14 @@ class convert_to_wav(gr.top_block):
         self.filename = filename
         self.keep = keep
         self.skip = skip
+        self.freq_offset = freq_offset
 
         ##################################################
         # Variables
         ##################################################
         self._meta_samp_rate_config = ConfigParser.ConfigParser()
         self._meta_samp_rate_config.read(filename)
-        try: meta_samp_rate = self._meta_samp_rate_config.getfloat('main', 'samp_rate')
+        try: meta_samp_rate = self._meta_samp_rate_config.getfloat("main", "samp_rate")
         except: meta_samp_rate = 0
         self.meta_samp_rate = meta_samp_rate
         self.filename_base = filename_base = splitext(filename)[0]
@@ -55,33 +56,32 @@ class convert_to_wav(gr.top_block):
         self.file_source_0 = file_source(
             p_doppler_correct=10,
             p_meta_file=filename,
+            p_offset=freq_offset,
             p_realtime=False,
         )
         self.blocks_wavfile_sink_0 = blocks.wavfile_sink(filename_base + ".wav", 2, int(meta_samp_rate), 8)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
 
-
-
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_complex_to_float_0, 1), (self.blocks_wavfile_sink_0, 1))
-        self.connect((self.blocks_complex_to_float_0, 0), (self.blocks_wavfile_sink_0, 0))
-        self.connect((self.file_source_0, 0), (self.range_selector_0, 0))
-        self.connect((self.range_selector_0, 0), (self.blocks_complex_to_float_0, 0))
+        self.connect((self.blocks_complex_to_float_0, 1), (self.blocks_wavfile_sink_0, 1))    
+        self.connect((self.blocks_complex_to_float_0, 0), (self.blocks_wavfile_sink_0, 0))    
+        self.connect((self.file_source_0, 0), (self.range_selector_0, 0))    
+        self.connect((self.range_selector_0, 0), (self.blocks_complex_to_float_0, 0))    
 
     def get_filename(self):
         return self.filename
 
     def set_filename(self, filename):
         self.filename = filename
+        self.set_filename_base(splitext(self.filename)[0])
         self._meta_samp_rate_config = ConfigParser.ConfigParser()
         self._meta_samp_rate_config.read(self.filename)
-        if not self._meta_samp_rate_config.has_section('main'):
-        	self._meta_samp_rate_config.add_section('main')
-        self._meta_samp_rate_config.set('main', 'samp_rate', str(None))
+        if not self._meta_samp_rate_config.has_section("main"):
+        	self._meta_samp_rate_config.add_section("main")
+        self._meta_samp_rate_config.set("main", "samp_rate", str(None))
         self._meta_samp_rate_config.write(open(self.filename, 'w'))
-        self.set_filename_base(splitext(self.filename)[0])
         self.file_source_0.set_p_meta_file(self.filename)
 
     def get_keep(self):
@@ -97,6 +97,13 @@ class convert_to_wav(gr.top_block):
     def set_skip(self, skip):
         self.skip = skip
         self.range_selector_0.set_skip(self.skip)
+
+    def get_freq_offset(self):
+        return self.freq_offset
+
+    def set_freq_offset(self, freq_offset):
+        self.freq_offset = freq_offset
+        self.file_source_0.set_p_offset(self.freq_offset)
 
     def get_meta_samp_rate(self):
         return self.meta_samp_rate
@@ -114,7 +121,7 @@ class convert_to_wav(gr.top_block):
 
 
 def argument_parser():
-    parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
+    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
     parser.add_option(
         "-f", "--filename", dest="filename", type="string", default="",
         help="Set filename [default=%default]")
@@ -124,6 +131,9 @@ def argument_parser():
     parser.add_option(
         "-s", "--skip", dest="skip", type="intx", default=0,
         help="Set skip [default=%default]")
+    parser.add_option(
+        "-o", "--freq-offset", dest="freq_offset", type="eng_float", default=eng_notation.num_to_str(10e3),
+        help="Set Freq Offset [default=%default]")
     return parser
 
 
@@ -131,7 +141,7 @@ def main(top_block_cls=convert_to_wav, options=None):
     if options is None:
         options, _ = argument_parser().parse_args()
 
-    tb = top_block_cls(filename=options.filename, keep=options.keep, skip=options.skip)
+    tb = top_block_cls(filename=options.filename, keep=options.keep, skip=options.skip, freq_offset=options.freq_offset)
     tb.start()
     tb.wait()
 

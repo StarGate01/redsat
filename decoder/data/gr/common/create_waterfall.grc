@@ -202,6 +202,10 @@
       <value>0</value>
     </param>
     <param>
+      <key>p_offset</key>
+      <value>0</value>
+    </param>
+    <param>
       <key>p_realtime</key>
       <value>False</value>
     </param>
@@ -250,6 +254,10 @@
     </param>
     <param>
       <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>p_offset</key>
       <value>0</value>
     </param>
     <param>

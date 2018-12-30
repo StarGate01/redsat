@@ -359,7 +359,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(592, 350)</value>
+      <value>(592, 343)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -379,6 +379,10 @@
     </param>
     <param>
       <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>p_offset</key>
       <value>0</value>
     </param>
     <param>
@@ -431,6 +435,49 @@
     <param>
       <key>value</key>
       <value>""</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(448, 151)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>freq_offset</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Freq Offset</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>o</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>10e3</value>
     </param>
   </block>
   <block>
