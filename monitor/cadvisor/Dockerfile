@@ -7,11 +7,4 @@ RUN go get github.com/google/cadvisor && \
     cd $GOPATH/src/github.com/google/cadvisor &&\
     make build
 
-# Final Image
-
-FROM alpine:latest
-
-WORKDIR /bin/
-COPY --from=build /go/src/github.com/google/cadvisor/cadvisor .
-
-ENTRYPOINT ["/bin/cadvisor"]
+ENTRYPOINT ["/go/src/github.com/google/cadvisor/cadvisor"]

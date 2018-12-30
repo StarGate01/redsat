@@ -13,10 +13,10 @@ if [ "$1" == "up" ]; then
     cd frontend && docker-compose up -d && cd ..
     WSL=`uname -r | grep "Microsoft"`
     if [ -z "$WSL" ]; then
-        echo "Building monitoring for $ARCH"
+        echo "Starting monitoring stack"
         cd monitor && docker-compose up -d && cd ..
     else
-        echo "Building monitoring for $ARCH (WSL)"
+        echo "Starting monitoring stack (WSL)"
         cd monitor && docker-compose -f docker-compose-wsl.yml up -d && cd ..
     fi
     cd radio && docker-compose up -d scheduler && cd ..
