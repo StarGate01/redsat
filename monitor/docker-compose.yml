@@ -64,7 +64,7 @@ services:
       - monitor
 
   cadvisor:
-    image: google/cadvisor:latest
+    build: ./cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
