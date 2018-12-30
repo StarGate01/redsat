@@ -7,8 +7,6 @@ STACKS="frontend monitor radio"
 
 if [ "$1" == "up" ]; then
     echo "Starting REDSAT"
-    echo "Pulling latest TLEs"
-    cd radio && docker-compose run --rm tlesync /app/run.sh && cd ..
     echo "Creating networks"
     for NETWORK in $NETWORKS; do docker network create $NETWORK; done
     echo "Starting stacks"
