@@ -2,6 +2,7 @@ version: '3'
 
 volumes:
   portainer_data:
+  grafana_data:
 
 networks:
   monitor:
@@ -18,6 +19,20 @@ services:
     restart: always
     expose:
       - "9000"
+    networks:
+      - monitor
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/config.ini:/etc/grafana/config.ini:rw
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:rw
+      - ./grafana/provisioning:/etc/grafana/provisioning:rw
+    depends_on:
+      - prometheus
+    restart: always
+    expose:
+      - "3000"
     networks:
       - monitor
 
@@ -41,7 +56,7 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-#    command: [-collector.procfs, /host/proc, -collector.sysfs, /host/proc, -collector.filesystem.ignored-mount-points, '^/(sys|proc|dev|host|etc)($$|/)']
+      - /:/rootfs:ro
     restart: always
     expose:
       - "9100"
@@ -51,6 +66,7 @@ services:
   cadvisor:
     image: google/cadvisor:latest
     volumes:
+      - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro

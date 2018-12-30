@@ -22,7 +22,7 @@ Run ```docker-compose up tlesync``` to pull fresh TLE data from the internet.
 Run ```docker-compose build``` to build and ```docker-compose up -d``` to run the full stack.
 
 ## Containers and their sources
-- Radio
+- Radio stack
     - gnuradio: Base image for radio related software, builds GNU Radio from source.
         - [GNU Radio](https://www.gnuradio.org/)
         - [Boost](https://www.boost.org/)
@@ -42,7 +42,11 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [PyEphem](https://rhodesmill.org/pyephem/)
     - tlesync: Loads the newest TLEs from the internet
         - [Celestrak NORAD](https://www.celestrak.com)
-- Frontend
+- Frontend stack
     - [nginx](https://www.nginx.com/): Front-facing reverse proxy
     - [apache](https://httpd.apache.org/): Front-facing web server
-    - [portainer](https://www.portainer.io/): Internal docker monitoring
+- Monitoring stack
+    - [portainer](https://www.portainer.io/): Internal docker management
+    - [prometheus](https://prometheus.io/): Metrics aggregator
+    - [node-exporter](https://github.com/prometheus/node_exporter): System info for Prometheus
+    - [cadvisor](https://github.com/google/cadvisor): Docker info for Prometheus
