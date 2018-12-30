@@ -12,6 +12,6 @@ RUN go get github.com/google/cadvisor && \
 FROM alpine:latest
 
 WORKDIR /bin/
-COPY --from=build src/github.com/google/cadvisor/cadvisor  .
+COPY --from=build /go/src/github.com/google/cadvisor/cadvisor .
 
 ENTRYPOINT ["/bin/cadvisor"]
