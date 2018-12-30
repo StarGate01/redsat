@@ -17,9 +17,9 @@ Edit ```persistent-data/TLE/station.config``` to configure your ground station.
 Edit ```persistent-data/TLE/sats.list``` and ```persistent-data/TLE/sources.list``` to configure satellites and TLE sources.
 
 ## Setup
-Run ```docker-compose up tlesync``` to pull fresh TLE data from the internet.
+Run ```./app.sh radio tlesync``` to pull fresh TLE data from the internet.
 
-Run ```docker-compose build``` to build and ```docker-compose up -d``` to run the full stack.
+Run ```./app.sh build``` to build and ```./app.sh up``` to run the full stack.
 
 ## Containers and their sources
 - Radio stack
