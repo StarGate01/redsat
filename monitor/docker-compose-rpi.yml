@@ -37,7 +37,7 @@ services:
       - monitor
 
   prometheus:
-    image: prom/prometheus:latest
+    image: napnap75/rpi-prometheus:prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     volumes:
@@ -52,10 +52,11 @@ services:
       - monitor
 
   prometheus_node:
-    image: prom/node-exporter:latest
+    image: napnap75/rpi-prometheus:node_exporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+      - /:/rootfs:ro
     restart: always
     expose:
       - "9100"
@@ -63,8 +64,9 @@ services:
       - monitor
 
   cadvisor:
-    image: google/cadvisor:latest
+    image: budry/cadvisor-arm:latest
     volumes:
+      - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro

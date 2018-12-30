@@ -52,7 +52,7 @@ services:
       - monitor
 
   prometheus_node:
-    build: ./node-exporter
+    image: prom/node-exporter:latest
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -64,12 +64,13 @@ services:
       - monitor
 
   cadvisor:
-    build: ./cadvisor
+    image: google/cadvisor:latest
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
     restart: always
     expose:
       - "8080"
