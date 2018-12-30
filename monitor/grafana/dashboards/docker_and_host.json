@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": 179,
   "graphTooltip": 1,
-  "iteration": 1546165508722,
+  "iteration": 1546170129862,
   "links": [],
   "panels": [
     {
@@ -706,7 +706,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_cpu_load_average_10s{image!=\"\"}",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{image!=\"\"}[$interval])) by (name) * 100",
           "format": "time_series",
           "interval": "10s",
           "intervalFactor": 1,
@@ -737,7 +737,7 @@
       },
       "yaxes": [
         {
-          "format": "percentunit",
+          "format": "percent",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -804,7 +804,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_memory_max_usage_bytes{image!=\"\"}",
+          "expr": "container_memory_usage_bytes{image!=\"\"}",
           "format": "time_series",
           "interval": "10s",
           "intervalFactor": 1,
