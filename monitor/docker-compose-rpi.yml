@@ -23,7 +23,7 @@ services:
       - monitor
 
   grafana:
-    image: grafana/grafana:latest
+    image: raymondmm/grafana:latest
     volumes:
       - ./grafana/config.ini:/etc/grafana/config.ini:rw
       - ./grafana/dashboards:/var/lib/grafana/dashboards:rw
