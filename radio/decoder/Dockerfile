@@ -1,4 +1,4 @@
-FROM redsat_gnuradio:latest
+FROM radio_gnuradio:latest
 
 # Library dependencies
 
@@ -24,6 +24,10 @@ RUN ldconfig
 COPY data/gr/ /app/gr/
 
 COPY data/ /app/data-temp/
+
+# Fake MOVEII server (local blackhole)
+
+COPY data/fakeserver/ /app/fakeserver/
 
 # Entrypoint
 

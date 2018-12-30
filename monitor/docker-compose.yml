@@ -1,0 +1,23 @@
+version: '3'
+
+volumes:
+  portainer_data:
+  grafana_data:
+
+networks:
+  monitor:
+    external:
+      name: monitor
+
+services:
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock --no-auth
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - portainer_data:/data:rw
+    restart: always
+    expose:
+      - "9000"
+    networks:
+      - monitor

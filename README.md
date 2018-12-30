@@ -12,18 +12,18 @@ Raspberry Pi satellite SDR base station for weather &amp; telemetry.
     - MOVE-II
 
 ## Configuration
-Edit ```persistent-data/TLE/station.config``` to configure your groundstation.
+Edit ```persistent-data/TLE/station.config``` to configure your ground station.
 
 Edit ```persistent-data/TLE/sats.list``` and ```persistent-data/TLE/sources.list``` to configure satellites and TLE sources.
 
 ## Setup
-Run ```docker-compose up tlesync``` to pull fresh TLE data from the internet.
+Run ```./app.sh radio tlesync``` to pull fresh TLE data from the internet.
 
-Run ```docker-compose build``` to build and ```docker-compose up -d``` to run the full stack.
+Run ```./app.sh build``` to build and ```./app.sh up``` to run the full stack.
 
 ## Containers and their sources
-- Radio
-    - gnuradio: Base image for radio related software, builds gnuradio from source.
+- Radio stack
+    - gnuradio: Base image for radio related software, builds GNU Radio from source.
         - [GNU Radio](https://www.gnuradio.org/)
         - [Boost](https://www.boost.org/)
     - receiver: Receives a signal from a SDR device or an audio interface (useful for piping a stream across system boundaries) and saves it to a file, along with TLE and geodata.
@@ -31,6 +31,9 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [Gpredict Doppler GNU Radio Blocks](https://github.com/wnagele/gr-gpredict-doppler)
         - [rtl-sdr](https://git.osmocom.org/rtl-sdr)
         - [rtl-mus](https://github.com/simonyiszk/rtl_mus)
+    - importer: Imports IQ files recorded by other tools (e.g. SDR#)
+        - [SDR#](https://airspy.com/download/)
+        - [SDR# IF Recorder](http://www.rtl-sdr.ru/page/dobavlen-novyj-plagin-if-recorder)
     - decoder: Decodes a saved signal into usable data (weather maps or telemetry dumps)
         - [SatNOGS GNU Radio Blocks](https://gitlab.com/librespacefoundation/satnogs)
         - [libFEC](https://github.com/quiet/libfec)
@@ -39,7 +42,8 @@ Run ```docker-compose build``` to build and ```docker-compose up -d``` to run th
         - [PyEphem](https://rhodesmill.org/pyephem/)
     - tlesync: Loads the newest TLEs from the internet
         - [Celestrak NORAD](https://www.celestrak.com)
-- Frontend
+- Frontend stack
     - [nginx](https://www.nginx.com/): Front-facing reverse proxy
     - [apache](https://httpd.apache.org/): Front-facing web server
-    - [portainer](https://www.portainer.io/): Internal docker monitoring
+- Monitoring stack
+    - [portainer](https://www.portainer.io/): Internal docker management

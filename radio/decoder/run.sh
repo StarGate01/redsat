@@ -3,8 +3,8 @@
 source /app/TLE/station.config
 
 if [ -z "$1" ]; then
-    SAT="move2"
-    echo "Warning: No kind specified, defaulting to move2"
+    SAT="MOVEII"
+    echo "Warning: No satellite specified, defaulting to MOVE-II"
 else
     SAT=$1
 fi
@@ -18,6 +18,11 @@ fi
 
 # OUTPUT=${INPUT_BASE}_$(date +%s)
 # mkdir -p /app/output/$KIND/$OUTPUT
+
+if [ "$SAT" == "MOVEII" ]; then
+    echo "Starting MOVE-II fake server (local blackhole)"
+    python /app/fakeserver/server.py &
+fi
 
 gnuradio-companion
 

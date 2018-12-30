@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  gnuradio:
+    build: ./gnuradio
+
+  tlesync:
+    build: ./tlesync
+    volumes:
+      - ../persistent-data/TLE:/app/TLE:rw
+
+  scheduler:
+    build: ./scheduler
+    volumes:
+      - ../persistent-data/TLE:/app/TLE:ro
+
+  importer:
+    build: ./importer
+    depends_on:
+      - gnuradio
+    volumes:
+      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/import:/app/import:ro
+      - ../persistent-data/input:/app/input:rw
+
+  receiver:
+    build: ./receiver
+    depends_on:
+      - gnuradio
+    ports:
+      - "7373:7373"
+    volumes:
+      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/input:/app/input:rw
+
+  decoder:
+    build: ./decoder
+    depends_on:
+      - gnuradio
+    volumes:
+      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/input:/app/input:ro
+      - ../persistent-data/output:/app/output:rw

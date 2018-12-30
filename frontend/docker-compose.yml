@@ -1,0 +1,33 @@
+version: '3'
+
+networks:
+  frontend:
+    external:
+      name: frontend
+
+  monitor:
+    external:
+      name: monitor
+
+services:
+  nginx:
+    image: "nginx:latest"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "8081:8081"
+    restart: always
+    networks:
+      - frontend
+      - monitor
+
+  apache:
+    image: "httpd:latest"
+    volumes:
+      - ./httpd/htdocs:/usr/local/apache2/htdocs/:ro
+    restart: always
+    expose:
+      - "80"
+    networks:
+      - frontend
