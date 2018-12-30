@@ -47,7 +47,3 @@ Run ```./app.sh build``` to build and ```./app.sh up``` to run the full stack.
     - [apache](https://httpd.apache.org/): Front-facing web server
 - Monitoring stack
     - [portainer](https://www.portainer.io/): Internal docker management
-    - [prometheus](https://prometheus.io/): Metrics aggregator
-    - [node-exporter](https://github.com/prometheus/node_exporter): System info for Prometheus
-    - [cadvisor](https://github.com/google/cadvisor): Docker info for Prometheus
-    - [grafana](https://grafana.com/): Visualization of Prometheus data
