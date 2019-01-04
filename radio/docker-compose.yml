@@ -32,6 +32,8 @@ services:
     volumes:
       - ../persistent-data/TLE:/app/TLE:ro
       - ../persistent-data/input:/app/input:rw
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
 
   decoder:
     build: ./decoder
