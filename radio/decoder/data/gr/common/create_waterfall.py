@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Create Waterfall
-# Generated: Sun Dec 30 14:11:09 2018
+# Generated: Fri Jan  4 18:15:06 2019
 ##################################################
 
 import os
@@ -24,13 +24,14 @@ import satnogs
 
 class create_waterfall(gr.top_block):
 
-    def __init__(self, filename="", keep=0, skip=0):
+    def __init__(self, filename="", freq_offset=10e3, keep=0, skip=0):
         gr.top_block.__init__(self, "Create Waterfall")
 
         ##################################################
         # Parameters
         ##################################################
         self.filename = filename
+        self.freq_offset = freq_offset
         self.keep = keep
         self.skip = skip
 
@@ -39,7 +40,7 @@ class create_waterfall(gr.top_block):
         ##################################################
         self._meta_samp_rate_config = ConfigParser.ConfigParser()
         self._meta_samp_rate_config.read(filename)
-        try: meta_samp_rate = self._meta_samp_rate_config.getfloat("main", "samp_rate")
+        try: meta_samp_rate = self._meta_samp_rate_config.getfloat('main', 'samp_rate')
         except: meta_samp_rate = 0
         self.meta_samp_rate = meta_samp_rate
         self.filename_base = filename_base = splitext(filename)[0]
@@ -62,62 +63,72 @@ class create_waterfall(gr.top_block):
         self.file_source_0_0 = file_source(
             p_doppler_correct=0,
             p_meta_file=filename,
-            p_offset=0,
+            p_offset=freq_offset,
             p_realtime=False,
         )
         self.file_source_0 = file_source(
             p_doppler_correct=10,
             p_meta_file=filename,
-            p_offset=0,
+            p_offset=freq_offset,
             p_realtime=False,
         )
+
+
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.file_source_0, 0), (self.range_selector_0, 0))    
-        self.connect((self.file_source_0_0, 0), (self.range_selector_0_0, 0))    
-        self.connect((self.range_selector_0, 0), (self.satnogs_waterfall_sink_0_0, 0))    
-        self.connect((self.range_selector_0_0, 0), (self.satnogs_waterfall_sink_0, 0))    
+        self.connect((self.file_source_0, 0), (self.range_selector_0, 0))
+        self.connect((self.file_source_0_0, 0), (self.range_selector_0_0, 0))
+        self.connect((self.range_selector_0, 0), (self.satnogs_waterfall_sink_0_0, 0))
+        self.connect((self.range_selector_0_0, 0), (self.satnogs_waterfall_sink_0, 0))
 
     def get_filename(self):
         return self.filename
 
     def set_filename(self, filename):
         self.filename = filename
-        self.set_filename_base(splitext(self.filename)[0])
         self._meta_samp_rate_config = ConfigParser.ConfigParser()
         self._meta_samp_rate_config.read(self.filename)
-        if not self._meta_samp_rate_config.has_section("main"):
-        	self._meta_samp_rate_config.add_section("main")
-        self._meta_samp_rate_config.set("main", "samp_rate", str(None))
+        if not self._meta_samp_rate_config.has_section('main'):
+        	self._meta_samp_rate_config.add_section('main')
+        self._meta_samp_rate_config.set('main', 'samp_rate', str(None))
         self._meta_samp_rate_config.write(open(self.filename, 'w'))
-        self.file_source_0.set_p_meta_file(self.filename)
+        self.set_filename_base(splitext(self.filename)[0])
         self.file_source_0_0.set_p_meta_file(self.filename)
+        self.file_source_0.set_p_meta_file(self.filename)
+
+    def get_freq_offset(self):
+        return self.freq_offset
+
+    def set_freq_offset(self, freq_offset):
+        self.freq_offset = freq_offset
+        self.file_source_0_0.set_p_offset(self.freq_offset)
+        self.file_source_0.set_p_offset(self.freq_offset)
 
     def get_keep(self):
         return self.keep
 
     def set_keep(self, keep):
         self.keep = keep
-        self.range_selector_0.set_keep(self.keep)
         self.range_selector_0_0.set_keep(self.keep)
+        self.range_selector_0.set_keep(self.keep)
 
     def get_skip(self):
         return self.skip
 
     def set_skip(self, skip):
         self.skip = skip
-        self.range_selector_0.set_skip(self.skip)
         self.range_selector_0_0.set_skip(self.skip)
+        self.range_selector_0.set_skip(self.skip)
 
     def get_meta_samp_rate(self):
         return self.meta_samp_rate
 
     def set_meta_samp_rate(self, meta_samp_rate):
         self.meta_samp_rate = meta_samp_rate
-        self.range_selector_0.set_samp_rate(self.meta_samp_rate)
         self.range_selector_0_0.set_samp_rate(self.meta_samp_rate)
+        self.range_selector_0.set_samp_rate(self.meta_samp_rate)
 
     def get_filename_base(self):
         return self.filename_base
@@ -127,10 +138,13 @@ class create_waterfall(gr.top_block):
 
 
 def argument_parser():
-    parser = OptionParser(option_class=eng_option, usage="%prog: [options]")
+    parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
     parser.add_option(
         "-f", "--filename", dest="filename", type="string", default="",
         help="Set filename [default=%default]")
+    parser.add_option(
+        "-o", "--freq-offset", dest="freq_offset", type="eng_float", default=eng_notation.num_to_str(10e3),
+        help="Set Freq Offset [default=%default]")
     parser.add_option(
         "-k", "--keep", dest="keep", type="intx", default=0,
         help="Set keep [default=%default]")
@@ -144,7 +158,7 @@ def main(top_block_cls=create_waterfall, options=None):
     if options is None:
         options, _ = argument_parser().parse_args()
 
-    tb = top_block_cls(filename=options.filename, keep=options.keep, skip=options.skip)
+    tb = top_block_cls(filename=options.filename, freq_offset=options.freq_offset, keep=options.keep, skip=options.skip)
     tb.start()
     tb.wait()
 
