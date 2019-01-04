@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <?grc format='1' created='3.7.13'?>
 <flow_graph>
-  <timestamp>Wed Dec 26 18:21:00 2018</timestamp>
+  <timestamp>Sun Dec 23 22:14:04 2018</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -14,7 +14,7 @@
     </param>
     <param>
       <key>category</key>
-      <value>RedSat</value>
+      <value>Custom</value>
     </param>
     <param>
       <key>comment</key>
@@ -38,7 +38,7 @@
     </param>
     <param>
       <key>generate_options</key>
-      <value>hb</value>
+      <value>no_gui</value>
     </param>
     <param>
       <key>hier_block_src_path</key>
@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>file_source</value>
+      <value>convert_to_wav</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -66,7 +66,7 @@
     </param>
     <param>
       <key>run_options</key>
-      <value>prompt</value>
+      <value>run</value>
     </param>
     <param>
       <key>run</key>
@@ -90,6 +90,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(184, 253)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>filename_base</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>splitext(filename)[0]</value>
+    </param>
+  </block>
+  <block>
     <key>variable_config</key>
     <param>
       <key>comment</key>
@@ -97,11 +124,11 @@
     </param>
     <param>
       <key>config_file</key>
-      <value>p_meta_file</value>
+      <value>filename</value>
     </param>
     <param>
       <key>value</key>
-      <value>splitext(p_meta_file)[0] + ".raw"</value>
+      <value>0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -109,7 +136,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(304, 10)</value>
+      <value>(24, 154)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -117,11 +144,11 @@
     </param>
     <param>
       <key>id</key>
-      <value>meta_output_file</value>
+      <value>meta_samp_rate</value>
     </param>
     <param>
       <key>option</key>
-      <value>output_file</value>
+      <value>samp_rate</value>
     </param>
     <param>
       <key>section</key>
@@ -129,7 +156,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>string</value>
+      <value>real</value>
     </param>
     <param>
       <key>writeback</key>
@@ -137,7 +164,7 @@
     </param>
   </block>
   <block>
-    <key>blocks_file_meta_source</key>
+    <key>blocks_complex_to_float</key>
     <param>
       <key>alias</key>
       <value></value>
@@ -151,32 +178,20 @@
       <value></value>
     </param>
     <param>
-      <key>detached</key>
-      <value>False</value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>file</key>
-      <value>meta_output_file</value>
-    </param>
-    <param>
       <key>_coordinate</key>
-      <value>(32, 423)</value>
+      <value>(504, 416)</value>
     </param>
     <param>
       <key>_rotation</key>
       <value>0</value>
     </param>
     <param>
-      <key>hdr_file</key>
-      <value></value>
-    </param>
-    <param>
       <key>id</key>
-      <value>blocks_file_meta_source_0</value>
+      <value>blocks_complex_to_float_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
@@ -185,14 +200,6 @@
     <param>
       <key>minoutbuf</key>
       <value>0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>repeat</key>
-      <value>False</value>
     </param>
     <param>
       <key>vlen</key>
@@ -200,7 +207,11 @@
     </param>
   </block>
   <block>
-    <key>doppler_correction</key>
+    <key>blocks_wavfile_sink</key>
+    <param>
+      <key>bits_per_sample</key>
+      <value>8</value>
+    </param>
     <param>
       <key>alias</key>
       <value></value>
@@ -218,12 +229,12 @@
       <value>True</value>
     </param>
     <param>
-      <key>p_offset</key>
-      <value>p_offset</value>
+      <key>file</key>
+      <value>filename_base + ".wav"</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(248, 420)</value>
+      <value>(704, 412)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -231,15 +242,62 @@
     </param>
     <param>
       <key>id</key>
-      <value>doppler_correction_0</value>
+      <value>blocks_wavfile_sink_0</value>
+    </param>
+    <param>
+      <key>nchan</key>
+      <value>2</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>int(meta_samp_rate)</value>
+    </param>
+  </block>
+  <block>
+    <key>file_source</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>p_doppler_correct</key>
+      <value>10</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>p_offset</key>
+      <value>freq_offset</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(32, 412)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>file_source_0</value>
     </param>
     <param>
       <key>maxoutbuf</key>
       <value>0</value>
     </param>
     <param>
-      <key>v_meta_file</key>
-      <value>p_meta_file</value>
+      <key>p_meta_file</key>
+      <value>filename</value>
     </param>
     <param>
       <key>minoutbuf</key>
@@ -247,89 +305,7 @@
     </param>
     <param>
       <key>p_realtime</key>
-      <value>p_realtime</value>
-    </param>
-    <param>
-      <key>p_doppler_correct</key>
-      <value>p_doppler_correct</value>
-    </param>
-  </block>
-  <block>
-    <key>import</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(16, 84)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>import_0_1</value>
-    </param>
-    <param>
-      <key>import</key>
-      <value>from os.path import splitext</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value>doppler correction update rate, set to 0 to disable</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(16, 231)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>p_doppler_correct</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>Doppler Correction Update Rate</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>100</value>
+      <value>False</value>
     </param>
   </block>
   <block>
@@ -348,7 +324,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(16, 135)</value>
+      <value>(184, 159)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -356,15 +332,15 @@
     </param>
     <param>
       <key>id</key>
-      <value>p_meta_file</value>
+      <value>filename</value>
     </param>
     <param>
       <key>label</key>
-      <value>Metafile</value>
+      <value>filename</value>
     </param>
     <param>
       <key>short_id</key>
-      <value></value>
+      <value>f</value>
     </param>
     <param>
       <key>hide</key>
@@ -395,7 +371,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(192, 231)</value>
+      <value>(472, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -403,7 +379,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>p_offset</value>
+      <value>freq_offset</value>
     </param>
     <param>
       <key>label</key>
@@ -411,7 +387,7 @@
     </param>
     <param>
       <key>short_id</key>
-      <value></value>
+      <value>o</value>
     </param>
     <param>
       <key>hide</key>
@@ -423,7 +399,38 @@
     </param>
     <param>
       <key>value</key>
+      <value>10e3</value>
+    </param>
+  </block>
+  <block>
+    <key>import</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(200, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>import_0</value>
+    </param>
+    <param>
+      <key>import</key>
+      <value>from os.path import splitext</value>
     </param>
   </block>
   <block>
@@ -442,7 +449,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(120, 135)</value>
+      <value>(376, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -450,15 +457,15 @@
     </param>
     <param>
       <key>id</key>
-      <value>p_realtime</value>
+      <value>keep</value>
     </param>
     <param>
       <key>label</key>
-      <value>Realtime</value>
+      <value>keep</value>
     </param>
     <param>
       <key>short_id</key>
-      <value></value>
+      <value>k</value>
     </param>
     <param>
       <key>hide</key>
@@ -470,11 +477,66 @@
     </param>
     <param>
       <key>value</key>
-      <value>False</value>
+      <value>0</value>
     </param>
   </block>
   <block>
-    <key>pad_sink</key>
+    <key>range_selector</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(328, 412)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>range_selector_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>keep</key>
+      <value>keep</value>
+    </param>
+    <param>
+      <key>samp_rate</key>
+      <value>meta_samp_rate</value>
+    </param>
+    <param>
+      <key>skip</key>
+      <value>skip</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
     <param>
       <key>comment</key>
       <value></value>
@@ -485,7 +547,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(512, 444)</value>
+      <value>(288, 160)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -493,38 +555,50 @@
     </param>
     <param>
       <key>id</key>
-      <value>pad_sink_0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
+      <value>skip</value>
     </param>
     <param>
       <key>label</key>
-      <value>source</value>
+      <value>skip</value>
     </param>
     <param>
-      <key>num_streams</key>
-      <value>1</value>
+      <key>short_id</key>
+      <value>s</value>
     </param>
     <param>
-      <key>optional</key>
-      <value>False</value>
+      <key>hide</key>
+      <value>none</value>
     </param>
     <param>
-      <key>vlen</key>
-      <value>1</value>
+      <key>type</key>
+      <value>intx</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0</value>
     </param>
   </block>
   <connection>
-    <source_block_id>blocks_file_meta_source_0</source_block_id>
-    <sink_block_id>doppler_correction_0</sink_block_id>
+    <source_block_id>blocks_complex_to_float_0</source_block_id>
+    <sink_block_id>blocks_wavfile_sink_0</sink_block_id>
+    <source_key>1</source_key>
+    <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_complex_to_float_0</source_block_id>
+    <sink_block_id>blocks_wavfile_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>doppler_correction_0</source_block_id>
-    <sink_block_id>pad_sink_0</sink_block_id>
+    <source_block_id>file_source_0</source_block_id>
+    <sink_block_id>range_selector_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>range_selector_0</source_block_id>
+    <sink_block_id>blocks_complex_to_float_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>

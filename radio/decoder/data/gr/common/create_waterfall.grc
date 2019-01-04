@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.9'?>
+<?grc format='1' created='3.7.13'?>
 <flow_graph>
   <timestamp>Tue Dec 25 10:59:40 2018</timestamp>
   <block>
@@ -73,12 +73,20 @@
       <value>True</value>
     </param>
     <param>
+      <key>sizing_mode</key>
+      <value>fixed</value>
+    </param>
+    <param>
       <key>thread_safe_setters</key>
       <value></value>
     </param>
     <param>
       <key>title</key>
       <value></value>
+    </param>
+    <param>
+      <key>placement</key>
+      <value>(0,0)</value>
     </param>
   </block>
   <block>
@@ -178,6 +186,10 @@
       <value>True</value>
     </param>
     <param>
+      <key>p_offset</key>
+      <value>freq_offset</value>
+    </param>
+    <param>
       <key>_coordinate</key>
       <value>(16, 366)</value>
     </param>
@@ -199,10 +211,6 @@
     </param>
     <param>
       <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>p_offset</key>
       <value>0</value>
     </param>
     <param>
@@ -233,6 +241,10 @@
       <value>1</value>
     </param>
     <param>
+      <key>p_offset</key>
+      <value>freq_offset</value>
+    </param>
+    <param>
       <key>_coordinate</key>
       <value>(16, 510)</value>
     </param>
@@ -254,10 +266,6 @@
     </param>
     <param>
       <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>p_offset</key>
       <value>0</value>
     </param>
     <param>
@@ -300,12 +308,63 @@
       <value>f</value>
     </param>
     <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
       <key>type</key>
       <value>string</value>
     </param>
     <param>
       <key>value</key>
       <value>""</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(464, 156)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>freq_offset</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Freq Offset</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value>o</value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>10e3</value>
     </param>
   </block>
   <block>
@@ -372,6 +431,10 @@
     <param>
       <key>short_id</key>
       <value>k</value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
     </param>
     <param>
       <key>type</key>
@@ -491,28 +554,12 @@
       <value></value>
     </param>
     <param>
-      <key>center_freq</key>
-      <value>0.0</value>
-    </param>
-    <param>
       <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
       <value></value>
     </param>
     <param>
       <key>_enabled</key>
       <value>1</value>
-    </param>
-    <param>
-      <key>fft_size</key>
-      <value>4096</value>
-    </param>
-    <param>
-      <key>filename</key>
-      <value>filename_base + ".nd.wf"</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -525,6 +572,22 @@
     <param>
       <key>id</key>
       <value>satnogs_waterfall_sink_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>center_freq</key>
+      <value>0.0</value>
+    </param>
+    <param>
+      <key>fft_size</key>
+      <value>4096</value>
+    </param>
+    <param>
+      <key>filename</key>
+      <value>filename_base + ".nd.wf"</value>
     </param>
     <param>
       <key>mode</key>
@@ -546,28 +609,12 @@
       <value></value>
     </param>
     <param>
-      <key>center_freq</key>
-      <value>0.0</value>
-    </param>
-    <param>
       <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
       <value></value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
-    </param>
-    <param>
-      <key>fft_size</key>
-      <value>4096</value>
-    </param>
-    <param>
-      <key>filename</key>
-      <value>filename_base + ".d.wf"</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -580,6 +627,22 @@
     <param>
       <key>id</key>
       <value>satnogs_waterfall_sink_0_0</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>center_freq</key>
+      <value>0.0</value>
+    </param>
+    <param>
+      <key>fft_size</key>
+      <value>4096</value>
+    </param>
+    <param>
+      <key>filename</key>
+      <value>filename_base + ".d.wf"</value>
     </param>
     <param>
       <key>mode</key>
@@ -627,6 +690,10 @@
     <param>
       <key>short_id</key>
       <value>s</value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
     </param>
     <param>
       <key>type</key>
