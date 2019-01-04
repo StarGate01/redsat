@@ -10,6 +10,7 @@ from gnuradio import gr
 import pmt
 import ephem
 from time import gmtime, strftime
+from math import floor
 
 class doppler_calculator(gr.sync_block):
     C = 299792458. # light speed
@@ -20,8 +21,8 @@ class doppler_calculator(gr.sync_block):
         samp_rate=0., 
         tle="", 
         location=None,
+        #interpolated=True,
         dbg=True):
-        #lat=0., lon=0., elv=0.): 
         gr.sync_block.__init__(
             self,
             name='Doppler calculator',
@@ -46,8 +47,11 @@ class doppler_calculator(gr.sync_block):
         else:
             pass
 
-        if time != 0.:
-            self.last_freq = self.get_doppler_freq(0)
+        self.interpolated = True # interpolated
+
+        self.current_time = None
+        if time != 0.: # avoid exception at design time
+            self.last_freq = self.get_doppler_freq_intp(0)
         else:
             self.last_freq = freq
 
@@ -67,24 +71,36 @@ class doppler_calculator(gr.sync_block):
 
         output_items[0][:] = self.last_freq
         if len(tags) > 0:
-            for tag in tags:            
-                i = tag.offset - nread
-                d_f = self.get_doppler_freq(tag.offset)
+            d_f = None
+            for tag in tags:
+                #if tag.key == pmt.intern("DopplerUpdate"):         
+                i = tag.offset - nread                
+                d_f = self.get_doppler_freq_intp(tag.offset) #if self.interpolated else self.get_doppler_freq(tag.offset)
                 output_items[0][i:] = d_f
                 
                 if self.dbg:
-                    print(gmtime(self.time + tag.offset/self.samp_rate), d_f)
+                    print("n", gmtime(self.time + tag.offset/self.samp_rate), d_f)
 
-                #print pmt.pmt_symbol_to_string(tag.key)
-                #print pmt.pmt_symbol_to_string(tag.value)
-                #self.key = pmt.pmt_symbol_to_string(tag.key)    
-
-            self.last_freq = self.get_doppler_freq(tags[-1].offset)
+            self.last_freq = d_f
         
         return num_input_items
 
-    def get_doppler_freq(self, offset):        
-        self.obs.date = strftime('%Y/%m/%d %H:%M:%S', gmtime(self.time + offset/self.samp_rate))
+    def get_doppler_freq(self, time):
+        self.obs.date = strftime('%Y/%m/%d %H:%M:%S', gmtime(time))
         self.sat.compute(self.obs)
         doppler = (self.freq - self.sat.range_velocity * self.freq / self.C)
         return doppler
+
+    # linear interpolation between full seconds
+    def get_doppler_freq_intp(self, offset):
+        new_time = self.time + float(offset)/float(self.samp_rate)
+
+        if self.current_time is None or floor(new_time) != self.current_time:
+            self.current_time = floor(new_time)
+
+            self.current_doppler = self.get_doppler_freq(self.current_time)
+            self.next_doppler = self.get_doppler_freq(self.current_time + 1)
+
+        return self.current_doppler + (self.next_doppler - self.current_doppler) * (new_time - self.current_time)
+
+        
