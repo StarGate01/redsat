@@ -1207,7 +1207,6 @@ class doppler_calculator(gr.sync_block):
         samp_rate=0., 
         tle="", 
         location=None,
-        #interpolated=True,
         dbg=True):
         gr.sync_block.__init__(
             self,
@@ -1232,9 +1231,7 @@ class doppler_calculator(gr.sync_block):
             raise ValueError("TLE string should have three entries separated by commas")
         else:
             pass
-
-        self.interpolated = True # interpolated
-
+        
         self.current_time = None
         if time != 0.: # avoid exception at design time
             self.last_freq = self.get_doppler_freq_intp(0)
@@ -1259,13 +1256,13 @@ class doppler_calculator(gr.sync_block):
         if len(tags) &gt; 0:
             d_f = None
             for tag in tags:
-                #if tag.key == pmt.intern("DopplerUpdate"):         
-                i = tag.offset - nread                
-                d_f = self.get_doppler_freq_intp(tag.offset) #if self.interpolated else self.get_doppler_freq(tag.offset)
-                output_items[0][i:] = d_f
-                
-                if self.dbg:
-                    print("n", gmtime(self.time + tag.offset/self.samp_rate), d_f)
+                if pmt.eqv(tag.key, pmt.intern("DopplerUpdate")):
+                    i = tag.offset - nread                
+                    d_f = self.get_doppler_freq_intp(tag.offset)
+                    output_items[0][i:] = d_f
+                    
+                    if self.dbg:
+                        print(gmtime(self.time + tag.offset/self.samp_rate), d_f)
 
             self.last_freq = d_f
         
@@ -1289,7 +1286,8 @@ class doppler_calculator(gr.sync_block):
 
         return self.current_doppler + (self.next_doppler - self.current_doppler) * (new_time - self.current_time)
 
-        </value>
+        
+</value>
     </param>
     <param>
       <key>comment</key>
@@ -1297,7 +1295,7 @@ class doppler_calculator(gr.sync_block):
     </param>
     <param>
       <key>dbg</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>_enabled</key>
