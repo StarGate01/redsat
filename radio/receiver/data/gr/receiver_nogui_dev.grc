@@ -117,6 +117,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(480, 172)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gain</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>meta_gain</value>
+    </param>
+  </block>
+  <block>
     <key>variable_config</key>
     <param>
       <key>comment</key>
@@ -446,6 +473,61 @@
     </param>
   </block>
   <block>
+    <key>blocks_udp_sink</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>ipaddr</key>
+      <value>127.0.0.1</value>
+    </param>
+    <param>
+      <key>port</key>
+      <value>4321</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(744, 660)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_udp_sink_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>psize</key>
+      <value>1472</value>
+    </param>
+    <param>
+      <key>eof</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
     <key>parameter</key>
     <param>
       <key>alias</key>
@@ -601,7 +683,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(408, 16)</value>
+      <value>(400, 20)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -629,7 +711,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>rtl=0</value>
+      <value>rtl_tcp=10.0.0.219:1234</value>
     </param>
   </block>
   <block>
@@ -745,12 +827,28 @@
       <value></value>
     </param>
     <param>
+      <key>center_freq</key>
+      <value>0.0</value>
+    </param>
+    <param>
       <key>comment</key>
       <value></value>
     </param>
     <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
+    </param>
+    <param>
+      <key>fft_size</key>
+      <value>2048</value>
+    </param>
+    <param>
+      <key>filename</key>
+      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -763,22 +861,6 @@
     <param>
       <key>id</key>
       <value>satnogs_waterfall_sink_0</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>center_freq</key>
-      <value>0.0</value>
-    </param>
-    <param>
-      <key>fft_size</key>
-      <value>2048</value>
-    </param>
-    <param>
-      <key>filename</key>
-      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>mode</key>
@@ -837,7 +919,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>meta_gain</value>
+      <value>gain</value>
     </param>
     <param>
       <key>ant10</key>
@@ -2299,6 +2381,41 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
       <value>meta_samp_rate</value>
     </param>
   </block>
+  <block>
+    <key>xmlrpc_server</key>
+    <param>
+      <key>addr</key>
+      <value>localhost</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(32, 564)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>xmlrpc_server_0</value>
+    </param>
+    <param>
+      <key>port</key>
+      <value>8080</value>
+    </param>
+  </block>
   <connection>
     <source_block_id>rational_resampler_xxx_0_0</source_block_id>
     <sink_block_id>time_tagger</sink_block_id>
@@ -2314,6 +2431,12 @@ class blk(gr.sync_block):  # other base classes are basic_block, decim_block, in
   <connection>
     <source_block_id>time_tagger</source_block_id>
     <sink_block_id>blocks_file_meta_sink_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>time_tagger</source_block_id>
+    <sink_block_id>blocks_udp_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
