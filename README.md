@@ -12,9 +12,9 @@ Raspberry Pi satellite SDR base station for weather &amp; telemetry.
     - MOVE-II
 
 ## Configuration
-Edit ```persistent-data/TLE/station.config``` to configure your ground station.
+Edit ```persistent-data/config/station.config``` to configure your ground station.
 
-Edit ```persistent-data/TLE/sats.list``` and ```persistent-data/TLE/sources.list``` to configure satellites and TLE sources.
+Edit ```persistent-data/config/sats.list``` and ```persistent-data/config/sources.list``` to configure satellites and TLE sources.
 
 ## Setup
 Run ```./app.sh radio tlesync``` to pull fresh TLE data from the internet.

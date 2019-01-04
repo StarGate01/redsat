@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source /app/TLE/station.config
+source /app/config/station.config
 
 python /app/predict.py

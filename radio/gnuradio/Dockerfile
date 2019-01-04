@@ -73,6 +73,6 @@ RUN make install
 
 # Audio
 
-COPY data/.asoundrc /home/root/.asoundrc
+COPY gnuradio/data/.asoundrc /home/root/.asoundrc
 
 RUN ldconfig
