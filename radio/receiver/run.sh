@@ -86,7 +86,7 @@ TLEALL=`cat "$TLE" | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
 cat > $META <<-EOF
 [main]
-creation_time=$(date +%s)
+time=$(date +%s)
 samp_rate=$SDRSAMP
 freq=$FREQ
 gain=$SDRGAIN
