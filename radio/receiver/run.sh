@@ -81,7 +81,7 @@ fi
 
 FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
 TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
-TLEALL=`cat "$TLE" | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
+TLEALL=`cat "$TLE" | paste -sd "," -`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
 cat > $META <<-EOF
