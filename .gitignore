@@ -1,2 +1,4 @@
 *.raw
 *.meta
+*.pyc
+

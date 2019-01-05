@@ -8,13 +8,13 @@
 #   tcp|notcp: Enable/disable rtl_tcp on port 7373
 # Note: This script respects device "rtl_tcp" and "audio" in station.config 
 
-: "${REDSAT_TLE_DIR:=/app/TLE}"
+: "${REDSAT_CONFIG_DIR:=/app/config}"
 : "${REDSAT_INPUT_DIR:=/app/input}"
 : "${REDSAT_GR_DIR:=/app/gr}"
 : "${REDSAT_DEPS_DIR:=/app/deps}"
 : "${REDSAT_OS:=linux}"
 
-source ${REDSAT_TLE_DIR}/station.config
+source ${REDSAT_CONFIG_DIR}/station.config
 
 if [ -z "$1" ]; then
     SAT="MOVEII"
@@ -31,8 +31,8 @@ else
 fi
 
 if [ -z "$3" ]; then
-    KIND="gui"
-    echo "Info: No gui flag specified, defaulting to QT GUI"
+    KIND="nogui"
+    echo "Info: No gui flag specified, defaulting to no GUI"
 else
     KIND="$3"
 fi
@@ -79,8 +79,8 @@ else
     echo "Info: Using $SDRDEV via $GRDEV"
 fi
 
-FREQ=`grep "$SAT" "$REDSAT_TLE_DIR/sats.list" | cut -d, -f3`
-TLE="$REDSAT_TLE_DIR/elements/$SAT.txt"
+FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
+TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
 TLEALL=`cat "$TLE" | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta

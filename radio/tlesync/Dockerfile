@@ -10,7 +10,7 @@ RUN apt-get -y install wget
 
 # Entrypoint
 
-COPY run.sh /app/
+COPY tlesync/run.sh /app/
 RUN chmod +x /app/run.sh
 WORKDIR /app
 CMD ["/app/run.sh"]

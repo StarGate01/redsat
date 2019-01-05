@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /app/TLE/station.config
+source /app/config/station.config
 
 if [ -z "$1" ]; then
     SAT="MOVEII"

@@ -2,42 +2,56 @@ version: '3'
 
 services:
   gnuradio:
-    build: ./gnuradio
+    build: 
+      context: .
+      dockerfile: ./gnuradio/Dockerfile
 
   tlesync:
-    build: ./tlesync
+    build: 
+      context: .
+      dockerfile: ./tlesync/Dockerfile
     volumes:
-      - ../persistent-data/TLE:/app/TLE:rw
+      - ../persistent-data/config:/app/config:rw
 
   scheduler:
-    build: ./scheduler
+    build: 
+      context: .
+      dockerfile: ./scheduler/Dockerfile
     volumes:
-      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/config:/app/config:ro
 
   importer:
-    build: ./importer
+    build: 
+      context: .
+      dockerfile: ./importer/Dockerfile
     depends_on:
       - gnuradio
     volumes:
-      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/config:/app/config:ro
       - ../persistent-data/import:/app/import:ro
       - ../persistent-data/input:/app/input:rw
 
   receiver:
-    build: ./receiver
+    build: 
+      context: .
+      dockerfile: ./receiver/Dockerfile
     depends_on:
       - gnuradio
     ports:
       - "7373:7373"
     volumes:
-      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/config:/app/config:ro
       - ../persistent-data/input:/app/input:rw
+    # devices:
+    #   - /dev/bus/usb:/dev/bus/usb
 
   decoder:
-    build: ./decoder
+    build: 
+      context: .
+      dockerfile: ./decoder/Dockerfile
     depends_on:
       - gnuradio
     volumes:
-      - ../persistent-data/TLE:/app/TLE:ro
+      - ../persistent-data/config:/app/config:ro
       - ../persistent-data/input:/app/input:ro
       - ../persistent-data/output:/app/output:rw

@@ -12,11 +12,11 @@ RUN pip install pyephem
 
 # Python script
 
-COPY data/predict.py /app/predict.py
+COPY scheduler/data/predict.py /app/predict.py
 
 # Entrypoint
 
-COPY run.sh /app/
+COPY scheduler/run.sh /app/
 RUN chmod +x /app/run.sh
 WORKDIR /app
 CMD ["/app/run.sh"]
