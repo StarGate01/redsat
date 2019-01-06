@@ -41,16 +41,6 @@ RUN make install
 
 # GNURadio Plugins
 
-WORKDIR /app/deps/gr-osmosdr
-RUN git clone https://github.com/osmocom/gr-osmosdr
-WORKDIR /app/deps/gr-osmosdr/gr-osmosdr
-RUN git checkout v0.1.4
-RUN git reset --hard
-WORKDIR /app/deps/gr-osmosdr/gr-osmosdr/build
-RUN cmake ..
-RUN make
-RUN make install
-
 WORKDIR /app/deps/gr-satnogs
 RUN git clone https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
 WORKDIR /app/deps/gr-satnogs/gr-satnogs
