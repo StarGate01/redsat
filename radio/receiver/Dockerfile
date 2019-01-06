@@ -23,7 +23,7 @@ RUN ldconfig
 # GNURadio flowcharts
 
 COPY common/data/gr/ /app/gr-common/
-COPY decoder/data/gr/ /app/gr/
+COPY receiver/data/gr/ /app/gr/
 
 # Compile flowcharts
 
