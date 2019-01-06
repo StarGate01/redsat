@@ -67,7 +67,7 @@ else
             echo "Info: Attaching to $HOST:$PORT"
             cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py config_rtl_custom &
         else
-            rtl_tcp -a 127.0.0.1 &
+            rtl_tcp -a 127.0.0.1 -s $SDRSAMPDEV -g $SDRGAIN &
             echo "starting rtl mus"
             cd $REDSAT_DEPS_DIR/rtl_mus/rtl_mus && python rtl_mus.py &
         fi
