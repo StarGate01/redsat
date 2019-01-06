@@ -42,8 +42,8 @@ services:
     volumes:
       - ../persistent-data/config:/app/config:ro
       - ../persistent-data/input:/app/input:rw
-    # devices:
-    #   - /dev/bus/usb:/dev/bus/usb
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
 
   decoder:
     build: 
