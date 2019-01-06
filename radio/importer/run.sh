@@ -1,9 +1,9 @@
 #!/bin/bash
 
-: "${REDSAT_TLE_DIR:=/app/TLE}"
+: "${REDSAT_CONFIG_DIR:=/app/config}"
 : "${REDSAT_INPUT_DIR:=/app/input}"
 
-source ${REDSAT_TLE_DIR}/station.config
+source ${REDSAT_CONFIG_DIR}/station.config
 
 if [ -z "$1" ]; then
     SAT="MOVEII"
@@ -26,8 +26,8 @@ else
     OUTPUT_BASE=$3
 fi
 
-FREQ=`grep "$SAT" "$REDSAT_TLE_DIR/sats.list" | cut -d, -f3`
-TLE="$REDSAT_TLE_DIR/elements/$SAT.txt"
+FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
+TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
 TLEALL=`cat "$TLE" | sed 's/\r$//' | awk '{$1=$1};1' | paste -sd "," -`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta

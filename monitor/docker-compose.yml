@@ -2,7 +2,6 @@ version: '3'
 
 volumes:
   portainer_data:
-  grafana_data:
 
 networks:
   monitor:

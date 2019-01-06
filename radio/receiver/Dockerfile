@@ -12,6 +12,16 @@ RUN cmake ..
 RUN make
 RUN make install
 
+WORKDIR /app/deps/gr-osmosdr
+RUN git clone https://github.com/osmocom/gr-osmosdr
+WORKDIR /app/deps/gr-osmosdr/gr-osmosdr
+RUN git checkout v0.1.4
+RUN git reset --hard
+WORKDIR /app/deps/gr-osmosdr/gr-osmosdr/build
+RUN cmake ..
+RUN make
+RUN make install
+
 WORKDIR /app/deps/rtl_mus
 RUN git clone https://github.com/simonyiszk/rtl_mus
 WORKDIR /app/deps/rtl_mus/rtl_mus
@@ -22,11 +32,19 @@ RUN ldconfig
 
 # GNURadio flowcharts
 
-COPY data/gr/ /app/gr/
+COPY common/data/gr/ /app/gr-common/
+COPY receiver/data/gr/ /app/gr/
+
+# Compile flowcharts
+
+COPY common/scripts/compile_grc.sh /tmp/
+RUN chmod +x /tmp/compile_grc.sh
+RUN /tmp/compile_grc.sh /app/gr-common
+RUN /tmp/compile_grc.sh /app/gr
 
 # Entrypoint
 
-COPY run.sh /app/
+COPY receiver/run.sh /app/
 RUN chmod +x /app/run.sh
 WORKDIR /app
 CMD ["/app/run.sh"]

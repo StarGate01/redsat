@@ -41,16 +41,6 @@ RUN make install
 
 # GNURadio Plugins
 
-WORKDIR /app/deps/gr-osmosdr
-RUN git clone https://github.com/osmocom/gr-osmosdr
-WORKDIR /app/deps/gr-osmosdr/gr-osmosdr
-RUN git checkout v0.1.4
-RUN git reset --hard
-WORKDIR /app/deps/gr-osmosdr/gr-osmosdr/build
-RUN cmake ..
-RUN make
-RUN make install
-
 WORKDIR /app/deps/gr-satnogs
 RUN git clone https://gitlab.com/librespacefoundation/satnogs/gr-satnogs
 WORKDIR /app/deps/gr-satnogs/gr-satnogs
@@ -61,18 +51,8 @@ RUN cmake ..
 RUN make
 RUN make install
 
-WORKDIR /app/deps/gr-gpredict-doppler
-RUN git clone https://github.com/wnagele/gr-gpredict-doppler
-WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler
-RUN git checkout 8392f6442fd1fbeb307a315474c83688f29817a7
-RUN git reset --hard
-WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler/build
-RUN cmake ..
-RUN make
-RUN make install
-
 # Audio
 
-COPY data/.asoundrc /home/root/.asoundrc
+COPY gnuradio/data/.asoundrc /home/root/.asoundrc
 
 RUN ldconfig

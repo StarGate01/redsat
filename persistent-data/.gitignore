@@ -1,5 +1,5 @@
 *.meta
 *.raw
 *.wav
-decode.log
-portainer
+*.log
+*.wf

@@ -15,7 +15,7 @@ myloc.lon = os.environ['LON']
 myloc.lat = os.environ['LAT']
 myloc.elevation = int(os.environ['ELV'])
 
-for subdir, dirs, files in os.walk('/app/TLE/elements'):
+for subdir, dirs, files in os.walk('/app/config/elements'):
     for file in files:
         print file
         with open(os.path.join(subdir, file), 'r') as f:

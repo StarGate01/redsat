@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>convert_to_wav</value>
+      <value>raw_to_wav</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -264,20 +264,8 @@
       <value></value>
     </param>
     <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>p_doppler_correct</key>
-      <value>10</value>
-    </param>
-    <param>
       <key>_enabled</key>
       <value>True</value>
-    </param>
-    <param>
-      <key>p_offset</key>
-      <value>freq_offset</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -292,16 +280,28 @@
       <value>file_source_0</value>
     </param>
     <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
       <key>maxoutbuf</key>
       <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>p_doppler_correct</key>
+      <value>10</value>
     </param>
     <param>
       <key>p_meta_file</key>
       <value>filename</value>
     </param>
     <param>
-      <key>minoutbuf</key>
-      <value>0</value>
+      <key>p_offset</key>
+      <value>freq_offset</value>
     </param>
     <param>
       <key>p_realtime</key>

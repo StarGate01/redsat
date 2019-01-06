@@ -13,25 +13,33 @@ RUN make install
 
 # Nonfree blobs
 
-COPY data/nonfree/AR4JA_r12_k1024n.a /tmp/
-COPY data/nonfree/lib/* /usr/local/lib/
-COPY data/nonfree/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
-COPY data/nonfree/blocks/* /usr/local/share/gnuradio/grc/blocks/
+COPY decoder/data/nonfree/AR4JA_r12_k1024n.a /tmp/
+COPY decoder/data/nonfree/lib/* /usr/local/lib/
+COPY decoder/data/nonfree/ccsds/* /usr/local/lib/python2.7/dist-packages/ccsds/
+COPY decoder/data/nonfree/blocks/* /usr/local/share/gnuradio/grc/blocks/
 RUN ldconfig
 
-# GNURadio flowcharts and scripts
+# GNURadio flowcharts
 
-COPY data/gr/ /app/gr/
+COPY common/data/gr/ /app/gr-common/
+COPY decoder/data/gr/ /app/gr/
 
-COPY data/ /app/data-temp/
+# Compile flowcharts
+
+COPY common/scripts/compile_grc.sh /tmp/
+RUN chmod +x /tmp/compile_grc.sh
+RUN /tmp/compile_grc.sh /app/gr-common
+RUN /tmp/compile_grc.sh /app/gr
+
+# COPY decoder/data/ /app/data-temp/
 
 # Fake MOVEII server (local blackhole)
 
-COPY data/fakeserver/ /app/fakeserver/
+COPY decoder/data/fakeserver/ /app/fakeserver/
 
 # Entrypoint
 
-COPY run.sh /app/
+COPY decoder/run.sh /app/
 RUN chmod +x /app/run.sh
 WORKDIR /app
 CMD ["/app/run.sh"]
