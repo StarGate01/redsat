@@ -61,16 +61,6 @@ RUN cmake ..
 RUN make
 RUN make install
 
-WORKDIR /app/deps/gr-gpredict-doppler
-RUN git clone https://github.com/wnagele/gr-gpredict-doppler
-WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler
-RUN git checkout 8392f6442fd1fbeb307a315474c83688f29817a7
-RUN git reset --hard
-WORKDIR /app/deps/gr-gpredict-doppler/gr-gpredict-doppler/build
-RUN cmake ..
-RUN make
-RUN make install
-
 # Audio
 
 COPY gnuradio/data/.asoundrc /home/root/.asoundrc
