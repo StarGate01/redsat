@@ -49,7 +49,7 @@ if [ -z "$5" ]; then
     CAL="nocal"
     echo "Warning: No calibration choice specified, defaulting to disabled"
 else
-    NETKIND=$5
+    CAL=$5
     # TODO check if we are using real device, kalibrate-rtl won't work with rtl_tcp and audio device
 fi
 
@@ -90,10 +90,12 @@ else
 fi
 
 if [ "$CAL" == "cal" ]; then
-KAL_OUTPUT=$(kal -c $SDRCALCH)
-echo "$KAL_OUTPUT"
-SDRFREQCORR=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
-echo "freq correction for this session is: $SDRFREQCORR"
+    KAL_OUTPUT=$(kal -c $SDRCALCH)
+    echo "$KAL_OUTPUT"
+    SDRFREQCORR=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
+    echo "freq correction for this session is: $SDRFREQCORR"
+else
+    SDRFREQCORR="0"
 fi
 
 FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
