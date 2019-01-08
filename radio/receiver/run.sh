@@ -6,6 +6,7 @@
 #   output_basename: Capture file base name
 #   gui|nogui: Enable/disable QT GUI
 #   tcp|notcp: Enable/disable rtl_tcp on port 7373
+#   cal|nocal: Enable/disable frequency calibration on start.
 # Note: This script respects device "rtl_tcp" and "audio" in station.config 
 
 : "${REDSAT_CONFIG_DIR:=/app/config}"
@@ -43,6 +44,15 @@ if [ -z "$4" ]; then
 else
     NETKIND=$4
 fi
+
+if [ -z "$5" ]; then
+    CAL="nocal"
+    echo "Warning: No calibration choice specified, defaulting to disabled"
+else
+    NETKIND=$5
+    # TODO check if we are using real device, kalibrate-rtl won't work with rtl_tcp and audio device
+fi
+
 if [[ $SDRDEV == *"audio"* ]]; then
     echo "Info: Using audio input"
     RECUDP="1"
@@ -79,6 +89,13 @@ else
     echo "Info: Using $SDRDEV via $GRDEV"
 fi
 
+if [ "$CAL" == "cal" ]; then
+KAL_OUTPUT=$(kal -c $SDRCALCH)
+echo "$KAL_OUTPUT"
+SDRFREQCORR=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
+echo "freq correction for this session is: $SDRFREQCORR"
+fi
+
 FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
 TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
 TLEALL=`cat "$TLE" | paste -sd "," -`
@@ -100,7 +117,7 @@ EOF
 
 if [ "$REDSAT_OS" == "linux" ]; then
     if [ "$RECUDP" == "0" ]; then
-        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV --meta-samp-rate-dev=$SDRSAMPDEV
+        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV --meta-samp-rate-dev=$SDRSAMPDEV --meta-freq-corr=$SDRFREQCORR
     else
         python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
     fi
@@ -108,7 +125,7 @@ else
     echo "Running native on windows..."
     META_WIN="${REDSAT_INPUT_DIR_WIN}\\${OUTPUT_BASE}.meta"
     if [ "$RECUDP" == "0" ]; then
-        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_dev.py\" --config-file=\"$META_WIN\" --meta-dev=\"$GRDEV\" --meta-samp-rate-dev=\"$SDRSAMPDEV\""
+        CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_dev.py\" --config-file=\"$META_WIN\" --meta-dev=\"$GRDEV\" --meta-samp-rate-dev=\"$SDRSAMPDEV\" --meta-freq-corr=\"$SDRFREQCORR\""
     else
         CMD_WIN="\"$REDSAT_GR_BIN_WIN\" \"$REDSAT_GR_DIR_WIN\\receiver_${KIND}_audio.py\" --config-file=\"$META_WIN\" --meta-rec-audio-dev=\"$RECADDR\""
     fi

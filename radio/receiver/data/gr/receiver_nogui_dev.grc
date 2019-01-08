@@ -648,6 +648,53 @@
     </param>
     <param>
       <key>_coordinate</key>
+      <value>(272, 92)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>meta_freq_corr</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>Freq. Corr. (ppm)</value>
+    </param>
+    <param>
+      <key>short_id</key>
+      <value></value>
+    </param>
+    <param>
+      <key>hide</key>
+      <value>none</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>eng_float</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>parameter</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
       <value>(272, 16)</value>
     </param>
     <param>
@@ -745,12 +792,28 @@
       <value></value>
     </param>
     <param>
+      <key>center_freq</key>
+      <value>0.0</value>
+    </param>
+    <param>
       <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
       <value></value>
     </param>
     <param>
       <key>_enabled</key>
       <value>1</value>
+    </param>
+    <param>
+      <key>fft_size</key>
+      <value>2048</value>
+    </param>
+    <param>
+      <key>filename</key>
+      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -763,22 +826,6 @@
     <param>
       <key>id</key>
       <value>satnogs_waterfall_sink_0</value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>center_freq</key>
-      <value>0.0</value>
-    </param>
-    <param>
-      <key>fft_size</key>
-      <value>2048</value>
-    </param>
-    <param>
-      <key>filename</key>
-      <value>splitext(config_file)[0] + ".wf"</value>
     </param>
     <param>
       <key>mode</key>
@@ -817,7 +864,7 @@
     </param>
     <param>
       <key>corr0</key>
-      <value>0</value>
+      <value>meta_freq_corr</value>
     </param>
     <param>
       <key>freq0</key>
