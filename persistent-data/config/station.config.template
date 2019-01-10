@@ -13,4 +13,9 @@ export SDRSAMPDEV="1536000"
 export SDRSAMP="30000"
 export SDRGAIN="30"
 
+# GSM channel for the kalibrate-rtl tool to calibrate frequency. 
+# Run kal -s [GSM Band] to determine best channel. The GSM Band to be used depends on your country.
+export SDRCALCH=""
+export SDRFREQCORR="0"
+
 export DISPLAY="host.docker.internal:0.0"
