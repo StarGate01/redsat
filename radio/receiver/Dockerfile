@@ -3,7 +3,7 @@ FROM radio_gnuradio:latest
 # Package dependencies
 
 RUN apt-get -y update
-RUN apt-get -y install automake libtool wget
+RUN apt-get -y install automake libtool wget coreutils
 
 # Library dependencies
 

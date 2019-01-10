@@ -90,12 +90,18 @@ else
 fi
 
 if [ "$CAL" == "cal" ]; then
-    KAL_OUTPUT=$(kal -c $SDRCALCH)
-    echo "$KAL_OUTPUT"
-    SDRFREQCORR=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
+    KAL_OUTPUT=$(timeout 15s kal -c $SDRCALCH) && echo "$KAL_OUTPUT"
+    KAL_RESULT=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
+    if [ "$KAL_RESULT" != "" ]; then
+    	SDRFREQCORR=$KAL_RESULT
+    else
+    	echo "Warning: calibration timed out. default value is used."
+    fi
     echo "freq correction for this session is: $SDRFREQCORR"
-else
-    SDRFREQCORR="0"
+fi
+
+if [ "$SDRFREQCORR" == "" ]; then
+	SDRFREQCORR="0"
 fi
 
 FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
@@ -108,6 +114,7 @@ cat > $META <<-EOF
 time=$(date +%s)
 samp_rate=$SDRSAMP
 freq=$FREQ
+freq_corr=$SDRFREQCORR
 gain=$SDRGAIN
 [tle]
 tle=$TLEALL
