@@ -26,4 +26,5 @@ elif [ "$1" == "radio" ]; then
 fi
 
 # ./app.sh radio tlesync
-# ./app.sh radio importer MOVEII 10-48-52_145950kHz.wav 1546080532
+# ./app.sh radio importer MOVEII 2018-29-12_10-48-52_145950kHz_move2.wav 1546080532
+# ./app.sh radio importer METEORM2 2018-04-12_10-55-01_137900kHz_lrpt.wav 1523523301

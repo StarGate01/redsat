@@ -90,7 +90,10 @@ else
 fi
 
 if [ "$CAL" == "cal" ]; then
-    KAL_OUTPUT=$(timeout 15s kal -c $SDRCALCH) && echo "$KAL_OUTPUT"
+    if [ -z "$SDRCALTIMEOUT" ]; then
+        SDRCALTIMEOUT="20"
+    fi
+    KAL_OUTPUT=$(timeout ${SDRCALTIMEOUT}s kal -c ${SDRCALCH}) && echo "${KAL_OUTPUT}"
     KAL_RESULT=$(echo "$KAL_OUTPUT" | grep "^average absolute error" | grep -oP "[-]?\d+.\d+")
     if [ "$KAL_RESULT" != "" ]; then
     	SDRFREQCORR=$KAL_RESULT

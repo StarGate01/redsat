@@ -3,7 +3,7 @@ FROM radio_gnuradio:latest
 # GNURadio flowcharts
 
 COPY common/data/gr/ /app/gr-common/
-COPY decoder/data/gr/ /app/gr/
+COPY importer/data/gr/ /app/gr/
 
 # Compile flowcharts
 
