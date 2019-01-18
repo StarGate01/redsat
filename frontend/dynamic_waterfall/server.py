@@ -28,9 +28,9 @@ if len(argv) >= 2:
         raise Error("Directory not found.")
 else:
     data_dir = '.'
-                 
+
 server = Server(
-    address=address, num_procs=1,
+    address=address, allow_websocket_origin=['*'], num_procs=1,
     applications={'/waterfall': partial(create_doc, data_dir=data_dir)}, extra_patterns=[('/', MainHandler)])
 server.start()
 
