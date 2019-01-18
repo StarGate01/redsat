@@ -20,7 +20,7 @@ import datashader.reductions as dsr
 from bokeh.plotting import curdoc
 
 from threading import Lock
-from os.path import splitext, join
+from os.path import splitext, join, basename
 from configparser import ConfigParser
 
 #hv.extension('bokeh')
@@ -106,7 +106,7 @@ def create_doc(doc, data_dir):
             p = default
         return p
 
-    file = get_param('file', '', str)
+    file = basename(get_param('file', '', str))
     offset = get_param('offset', 0, int)
 
     # low resolution for raspberry
