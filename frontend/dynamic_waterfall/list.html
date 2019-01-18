@@ -1,0 +1,13 @@
+<html>
+   <head>
+      <title>{{ title }}</title>
+   </head>
+   <body>
+       <!-- TODO add the additional options here: height and width, interoplation, datashade -->
+     <ul>
+       {% for item in items %}
+         <li><a href="waterfall?file={{ escape(item) }}">{{ escape(item) }}</a></li>
+       {% end %}
+     </ul>
+   </body>
+ </html>
