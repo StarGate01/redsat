@@ -95,7 +95,6 @@ def create_doc(doc, data_dir):
         return image
 
     def get_param(name, default, t=str):
-        print(doc.session_context.request.arguments)
         try:
             args = doc.session_context.request.arguments
             if t == str:            
@@ -116,9 +115,11 @@ def create_doc(doc, data_dir):
 
 
     if file.endswith(".meta"):
-        config = ConfigParser().read(file)
+        config = ConfigParser()
+        config.read(join(data_dir, file))
+        
         file = splitext(file)[0] + ".raw"
-        samp_rate = config['main']['samp_rate']
+        samp_rate = int(config['main']['samp_rate'])
     else:
         samp_rate = get_param('samp_rate', 128000, int)
 
