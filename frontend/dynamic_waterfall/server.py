@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+# Usage: server.py [path to data directory]
+
 from tornado.web import RequestHandler 
 from bokeh.server.server import Server
 from functools import partial
@@ -6,6 +10,9 @@ from os.path import isdir, join, basename
 from glob import glob
 
 from waterfall import create_doc
+
+## Options
+address = '0.0.0.0'
 
 class MainHandler(RequestHandler):
     def get(self):
@@ -22,10 +29,10 @@ else:
     data_dir = '.'
                  
 server = Server(
-    address='0.0.0.0', num_procs=1,
+    address=address, num_procs=1,
     applications={'/waterfall': partial(create_doc, data_dir=data_dir)}, extra_patterns=[('/', MainHandler)])
 server.start()
 
 if __name__ == '__main__':
-    print('Running at http://localhost:5006/')    
+    print('Running at http://{}:5006/'.format(address))    
     server.io_loop.start()
