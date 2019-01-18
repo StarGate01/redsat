@@ -18,6 +18,7 @@ class MainHandler(RequestHandler):
     def get(self):
         file_list = [glob(join(data_dir, pattern)) for pattern in ['*.meta', '*.raw', '*.raw2']]
         file_list = sum(file_list, []) # flatten list
+        file_list = sorted(file_list) # sort list
         self.render("list.html", title="Recordings", items=map(basename, file_list))
 
 if len(argv) >= 2:
