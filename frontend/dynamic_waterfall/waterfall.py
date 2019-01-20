@@ -92,22 +92,17 @@ def create_doc(doc, data_dir):
 
             print(image.shape)
 
-            if ds_enabled:
-                array = xr.DataArray(image, coords=[t,f[(x0 < f) & (f < x1)]], dims=['x','y'], name="z")
-                image = hv.Image(array, ['y','x'], 'z').redim.range(z=(z_min, z_max))
-            elif intp_enabled:
+            if intp_enabled:
                 ratio = np.array(image.shape, dtype=np.float) / np.array((height, width))
                 if np.min(ratio) < 1:
-                    scale = np.max(np.abs(image))
+                    scale = np.max(np.abs(image)) # normalization factor for image because rescale needs that
                     image = rescale(image / scale, 1. / np.min(ratio), order=1) * scale
 
-                image = np.flip(image,0)
-                print(image.shape)
-            else:
-                image = np.flip(image,0)
-
             del samples
-            image = hv.Image(image, bounds=(x0, y0, x1, y1)).redim.range(z=(z_min, z_max)) # TODO get exact values in bounds
+            #image = hv.Image(image, bounds=(x0, y0, x1, y1)).redim.range(z=(z_min, z_max)) # TODO get exact values in bounds
+            
+            array = xr.DataArray(image, coords=[t,f[(x0 < f) & (f < x1)]], dims=['x','y'], name="z")
+            image = hv.Image(array, ['y','x'], 'z').redim.range(z=(z_min, z_max))
         except Exception as e:
             print(e)
 
