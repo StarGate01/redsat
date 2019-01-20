@@ -1,14 +1,16 @@
 #!/bin/bash
 
-rm -rf /app/config/elements
-mkdir -p /app/config/elements
-cd /app/config/elements && wget -i /app/config/sources.list -O all.tmp
+: "${REDSAT_CONFIG_DIR:=/app/config}"
+
+rm -rf ${REDSAT_CONFIG_DIR}/elements
+mkdir -p $REDSAT_CONFIG_DIR/elements
+cd $REDSAT_CONFIG_DIR/elements && wget -i $REDSAT_CONFIG_DIR/sources.list -O all.tmp
 
 while read p; do
     SAT=`echo $p | cut -d, -f1`
     FNAME=`echo $p | cut -d, -f2`
-    sed -n "/$SAT\\s*$/{p;n;p;n;p;q}" /app/config/elements/all.tmp >> "/app/config/elements/$FNAME.txt"
-    cat "/app/config/elements/$FNAME.txt"
-done </app/config/sats.list
+    sed -n "/$SAT\\s*$/{p;n;p;n;p;q}" $REDSAT_CONFIG_DIR/elements/all.tmp >> "$REDSAT_CONFIG_DIR/elements/$FNAME.txt"
+    cat "$REDSAT_CONFIG_DIR/elements/$FNAME.txt"
+done <$REDSAT_CONFIG_DIR/sats.list
 
-rm /app/config/elements/all.tmp
+rm $REDSAT_CONFIG_DIR/elements/all.tmp
