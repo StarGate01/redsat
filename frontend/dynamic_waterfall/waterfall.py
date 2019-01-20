@@ -117,9 +117,9 @@ def create_doc(doc, data_dir):
         return p
 
     file = basename(get_param('file', '', str))
-    offset = get_param('offset', 0, int)
-    #length = get_param('length', None, int)
-
+    skip = get_param('skip', 0, int)
+    keep = get_param('keep', None, int)
+    
     # low resolution for raspberry
     width, height = get_param('width', 600, int), get_param('height', 500, int)
     ds_enabled = get_param('ds', 0, int) # datashade enable flap
@@ -135,7 +135,7 @@ def create_doc(doc, data_dir):
     else:
         samp_rate = get_param('samp_rate', 128000, int)
 
-    f,t,S,samples = get_spectrogram(s0=offset*samp_rate, size=width)
+    f,t,S,samples = get_spectrogram(s0=skip*samp_rate, s1=keep*samp_rate if keep else None, size=width)
     total_samples = len(samples)
     
     del samples
