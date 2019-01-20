@@ -26,7 +26,7 @@ from configparser import ConfigParser
 #hv.extension('bokeh')
 renderer = hv.renderer('bokeh').instance(mode='server')
 
-lock = Lock()
+lock = Lock() # lock to prevent concurrent calls to spectrogram, maybe put in create_doc though to not block out multiple users
 
 def next_power_of_2(x):
     return 1 if x == 0 else 2**np.ceil(np.log2(x))
@@ -34,8 +34,6 @@ def next_power_of_2(x):
 def create_doc(doc, data_dir):
 
     def get_spectrogram(s0=None, s1=None, size=1024, overlap=1./8, zfill=1):
-        #samples = np.memmap(join(data_dir, file), dtype='complex64', mode='r', offset=samp_rate * offset * np.dtype(np.complex64).itemsize) # shape=(samp_rate*300,)
-        
         if s1 is None and s0 is None:
             ds = None
         elif s1 is None:
@@ -63,8 +61,6 @@ def create_doc(doc, data_dir):
             return_onesided=False) # scaling='spectrum'
         
         return fftshift(f), t, 10*np.log10(fftshift(S, axes=(0,))).T, samples
-
-
     
     def get_spectrogram_img(z_min, z_max, tf_r, x_range, y_range, zfill, overlap):
         lock.acquire()
@@ -104,7 +100,7 @@ def create_doc(doc, data_dir):
             array = xr.DataArray(image, coords=[t,f[(x0 < f) & (f < x1)]], dims=['x','y'], name="z")
             image = hv.Image(array, ['y','x'], 'z').redim.range(z=(z_min, z_max))
         except Exception as e:
-            print(e)
+            print("Exception in image generation:", e)
 
         lock.release()
         return image
@@ -152,9 +148,9 @@ def create_doc(doc, data_dir):
 
     dmap = hv.DynamicMap(get_spectrogram_img, streams=[range_stream], kdims=[
         hv.Dimension('z_min', range=z_range, default=z_init[0]), hv.Dimension('z_max', range=z_range, default=z_init[1]),
-        hv.Dimension('tf_r', range=(-10.,10.), default=0.),
-        hv.Dimension('zfill', range=(1, 10), default=2),
-        hv.Dimension('overlap', range=(-1.,1.), default=1./8)
+        hv.Dimension('tf_r', label='Time-Frequency pixel ratio', range=(-10.,10.), default=0.),
+        hv.Dimension('zfill', label='Zero-filling factor', range=(1, 10), default=2),
+        hv.Dimension('overlap', label='Overlap factor', range=(-1.,1.), default=1./8)
     ]).options(
         framewise=True, # ???
         xlabel="Frequency [Hz]",
