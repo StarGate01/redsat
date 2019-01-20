@@ -147,7 +147,7 @@ def create_doc(doc, data_dir):
     range_stream = RangeXY(x_range=(min(f), max(f)), y_range=(max(t), min(t)), transient=False) # transient=True
     # vdims=hv.Dimension('z', range=(1e-4,1))
     z_range = (np.min(S), np.max(S))
-    z_init = np.percentile(S, (45,95))
+    z_init = np.percentile(S, (50,100))
     #z_init = z_range # for agg = max
 
     dmap = hv.DynamicMap(get_spectrogram_img, streams=[range_stream], kdims=[
