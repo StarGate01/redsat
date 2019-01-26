@@ -22,6 +22,8 @@ from bokeh.plotting import curdoc
 from threading import Lock
 from os.path import splitext, join, basename
 from configparser import ConfigParser
+import traceback
+
 
 #hv.extension('bokeh')
 renderer = hv.renderer('bokeh').instance(mode='server')
@@ -101,6 +103,7 @@ def create_doc(doc, data_dir):
             image = hv.Image(array, ['y','x'], 'z').redim.range(z=(z_min, z_max))
         except Exception as e:
             print("Exception in image generation:", e)
+            print(traceback.format_exc())
 
         lock.release()
         return image
