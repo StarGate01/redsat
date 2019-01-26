@@ -24,4 +24,6 @@ else
 	echo "already over. doing nothing"
 fi
 
+sleep 5
+rtl_biast -b 0
 echo "done."
