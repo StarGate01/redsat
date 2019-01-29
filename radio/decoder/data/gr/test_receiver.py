@@ -212,7 +212,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         self.digital_mpsk_receiver_cc_0_0 = digital.mpsk_receiver_cc(2, 0, 31.41e-3, -0.01, 0.01, 0.25, 0.05, samp_rate/self.oversample/12.5e3, 0.01, 0.005)
         self.digital_constellation_decoder_cb_0 = digital.constellation_decoder_cb(variable_constellation_0)
         self.ccsds_softbits_msg_to_bytes_b_0 = ccsds.softbits_msg_to_bytes_b()
-        self.ccsds_send_nanolink_0 = ccsds.send_nanolink("http://move2radio.lrt.mw.tum.de" if _submit else "http://localhost:8000")
+        self.ccsds_send_nanolink_0 = ccsds.send_nanolink("https://move2radio.lrt.mw.tum.de" if _submit else "http://localhost:8000")
         self.ccsds_randomiser_softbits_0 = ccsds.randomiser_softbits(0x95,0xFF)
         self.ccsds_mpsk_ambiguity_resolver_f_0 = ccsds.mpsk_ambiguity_resolver_f(2,'49E0DCC7',32,1,0.8,block_len_enc,0)
         self.ccsds_ldpc_decoder_0 = ccsds.ldpc_decoder('/tmp/AR4JA_r12_k1024n.a', ccsds.LDPC_SYS_FRONT, ccsds.LDPC_PUNCT_BACK, 512, tuple(([])))
