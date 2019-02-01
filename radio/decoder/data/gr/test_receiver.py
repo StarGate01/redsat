@@ -10,6 +10,7 @@
 import sys
 import os
 from os.path import splitext
+from optparse import OptionParser
 from ConfigParser import ConfigParser
 
 _meta_file = sys.argv[1] 
@@ -19,28 +20,25 @@ config = ConfigParser()
 config.read(_meta_file)
 _samp_rate = int(config.get('main', 'samp_rate', None))
 
-# TODO use the argparser instead...
 
-_repeat = False
-if '-r' in sys.argv:
-    _repeat = True
+def argument_parser():
+    parser = OptionParser(usage="%prog: [options]")
+    parser.add_option("-k", "--keep", dest="keep", type=int, default=0)
+    parser.add_option("-s", "--skip", dest="skip", type=int, default=0)
+    parser.add_option("-r", "--repeat", action="store_true", dest="repeat", default=False)
+    parser.add_option("--submit", action="store_true", dest="submit", default=False)
+    parser.add_option("--gui", action="store_true", dest="gui", default=False)
+    parser.add_option("--rt", "--realtime", action="store_true", dest="realtime", default=False)
+    parser.add_option("--wav", action="store_true", dest="wav", default=False)
+    return parser
 
-_submit = False
-if '--submit' in sys.argv:
-    _submit = True
+options, _ = argument_parser().parse_args()
 
-_gui = False
-if '--gui' in sys.argv:
-    _gui = True
-
-# realtime processing flag
-_rt = False
-if '--rt' in sys.argv:
-    _rt = True
-
-_wav = False
-if '--wav' in sys.argv:
-    _wav = True
+_repeat = options.repeat
+_submit = options.submit
+_gui = options.gui
+_rt = options.realtime
+_wav = options.wav
 
 if __name__ == '__main__' and _gui:
     import ctypes
@@ -54,6 +52,7 @@ if __name__ == '__main__' and _gui:
 
 sys.path.append(os.environ.get('GRC_HIER_PATH', os.path.expanduser('~/.grc_gnuradio')))
 from file_source import file_source  # grc-generated hier_block
+from range_selector import range_selector  # grc-generated hier_block
 
 from PyQt4 import Qt
 from gnuradio import analog
@@ -68,7 +67,6 @@ if _gui:
     from gnuradio.qtgui import Range, RangeWidget
 from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
-from optparse import OptionParser
 import ccsds
 import math
 import osmosdr
@@ -78,13 +76,13 @@ import time
 
 class downlink_em(gr.top_block, Qt.QWidget):
 
-    def __init__(self):
+    def __init__(self, skip=0, keep=0):
         gr.top_block.__init__(self, "Downlink for EM")
 
         if _gui:
             Qt.QWidget.__init__(self)
             self.setWindowTitle("Downlink for EM")
-            qtgui.util.check_set_qss()
+            #qtgui.util.check_set_qss()
             try:
                 self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
             except:
@@ -140,15 +138,15 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
         if _gui:
             self.qtgui_sink_x_0_0_1 = qtgui.sink_c(
-            	1024, #fftsize
-            	firdes.WIN_BLACKMAN_hARRIS, #wintype
-            	145.79e6, #fc
-            	samp_rate*oversample, #bw - 1??
-            	"Vor Sync", #name
-            	True, #plotfreq
-            	True, #plotwaterfall
-            	True, #plottime
-            	True, #plotconst
+                1024, #fftsize
+                firdes.WIN_BLACKMAN_hARRIS, #wintype
+                145.79e6, #fc
+                samp_rate*oversample, #bw - 1??
+                "Vor Sync", #name
+                True, #plotfreq
+                True, #plotwaterfall
+                True, #plottime
+                True, #plotconst
             )
             self.qtgui_sink_x_0_0_1.set_update_time(1.0/10)
             self._qtgui_sink_x_0_0_1_win = sip.wrapinstance(self.qtgui_sink_x_0_0_1.pyqwidget(), Qt.QWidget)
@@ -164,15 +162,15 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
 
             self.qtgui_sink_x_0_0_0_0 = qtgui.sink_c(
-            	1024, #fftsize
-            	firdes.WIN_BLACKMAN_hARRIS, #wintype
-            	0, #fc
-            	samp_rate/oversample, #bw
-            	"Vor Sync", #name
-            	True, #plotfreq
-            	True, #plotwaterfall
-            	True, #plottime
-            	True, #plotconst
+                1024, #fftsize
+                firdes.WIN_BLACKMAN_hARRIS, #wintype
+                0, #fc
+                samp_rate/oversample, #bw
+                "Vor Sync", #name
+                True, #plotfreq
+                True, #plotwaterfall
+                True, #plottime
+                True, #plotconst
             )
             self.qtgui_sink_x_0_0_0_0.set_update_time(1.0/10)
             self._qtgui_sink_x_0_0_0_0_win = sip.wrapinstance(self.qtgui_sink_x_0_0_0_0.pyqwidget(), Qt.QWidget)
@@ -188,15 +186,15 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
 
             self.qtgui_sink_x_0_0_0 = qtgui.sink_c(
-            	1024, #fftsize
-            	firdes.WIN_BLACKMAN_hARRIS, #wintype
-            	0, #fc
-            	samp_rate/oversample, #bw
-            	"Vor Sync", #name
-            	True, #plotfreq
-            	True, #plotwaterfall
-            	True, #plottime
-            	True, #plotconst
+                1024, #fftsize
+                firdes.WIN_BLACKMAN_hARRIS, #wintype
+                0, #fc
+                samp_rate/oversample, #bw
+                "Vor Sync", #name
+                True, #plotfreq
+                True, #plotwaterfall
+                True, #plottime
+                True, #plotconst
             )
             self.qtgui_sink_x_0_0_0.set_update_time(1.0/10)
             self._qtgui_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_sink_x_0_0_0.pyqwidget(), Qt.QWidget)
@@ -236,9 +234,15 @@ class downlink_em(gr.top_block, Qt.QWidget):
         )
         
         if _wav:
-	    input_src = (self.blocks_float_to_complex_0, 0)
+            input_src = (self.blocks_float_to_complex_0, 0)
         else:
             input_src = (self.file_source_0, 0)
+
+        self.range_selector = range_selector(
+            keep=keep,
+            samp_rate=samp_rate*oversample,
+            skip=skip,
+        )
 
         self.blocks_message_debug_1_0_0 = blocks.message_debug()
         self.ccsds_message_info_0 = ccsds.message_info("Block received and sent to Nanolink: ", 20)
@@ -258,7 +262,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         self.blocks_char_to_float_0 = blocks.char_to_float(1, 0.5)
         self.blocks_add_const_vxx_0 = blocks.add_const_vff((-1, ))
         self.band_pass_filter_0 = filter.fir_filter_ccc(oversample, firdes.complex_band_pass(
-        	1, samp_rate*oversample, 40e3, 60e3, 6e3, firdes.WIN_HAMMING, 6.76))
+            1, samp_rate*oversample, 40e3, 60e3, 6e3, firdes.WIN_HAMMING, 6.76))
         self.analog_sig_source_x_0_0 = analog.sig_source_c(samp_rate*oversample, analog.GR_COS_WAVE, frequency_offset_correction, 1, 0)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, -50000, 1, 0)
         self.analog_agc_xx_0 = analog.agc_cc(1e-4, 0.5, 1.0)
@@ -273,11 +277,13 @@ class downlink_em(gr.top_block, Qt.QWidget):
             self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_float_to_complex_0, 1))
             self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_float_to_complex_0, 0))        
 
-	if _rt:
+        if _rt:
             self.connect(input_src, (self.blocks_throttle_0, 0))
-            self.connect((self.blocks_throttle_0, 0), (self.blocks_multiply_xx_0_0, 0))
+            self.connect((self.blocks_throttle_0, 0), (self.range_selector, 0))
         else:
-            self.connect(input_src, (self.blocks_multiply_xx_0_0, 0))
+            self.connect(input_src, (self.range_selector, 0))
+
+        self.connect((self.range_selector,0), (self.blocks_multiply_xx_0_0, 0))
 
         self.msg_connect((self.ccsds_blob_msg_sink_b_0, 'out'), (self.blocks_message_debug_1_0_0, 'print_pdu'))
         self.msg_connect((self.ccsds_blob_msg_sink_b_0, 'out'), (self.ccsds_message_info_0, 'in'))
@@ -370,12 +376,30 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
 
 def main(top_block_cls=downlink_em, options=None):
+    
+    if not _gui:
+        tb = top_block_cls(skip=options.skip, keep=options.keep)
+        tb.start()
+        tb.wait()
+        return
 
-    tb = top_block_cls()
-    tb.start()
-    tb.wait()
+    from distutils.version import StrictVersion
+    if StrictVersion(Qt.qVersion()) >= StrictVersion("4.5.0"):
+        style = gr.prefs().get_string('qtgui', 'style', 'raster')
+        Qt.QApplication.setGraphicsSystem(style)
+    qapp = Qt.QApplication(sys.argv)
+
+    tb = top_block_cls(skip=options.skip, keep=options.keep)
+    tb.start(2080)
+    tb.show()
+
+    def quitting():
+        tb.stop()
+        tb.wait()
+    qapp.connect(qapp, Qt.SIGNAL("aboutToQuit()"), quitting)
+    qapp.exec_()
 
 
 
 if __name__ == '__main__':
-    main()
+    main(options=options)
