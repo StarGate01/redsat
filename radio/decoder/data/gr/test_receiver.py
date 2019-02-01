@@ -8,16 +8,18 @@
 ##################################################
 
 import sys
+import os
 from os.path import splitext
 from ConfigParser import ConfigParser
 
 _meta_file = sys.argv[1] 
-_file = splitext(_meta_file)[0] + ".wav"
+_file = splitext(_meta_file)[0]
 
 config = ConfigParser()
 config.read(_meta_file)
 _samp_rate = int(config.get('main', 'samp_rate', None))
 
+# TODO use the argparser instead...
 
 _repeat = False
 if '-r' in sys.argv:
@@ -36,6 +38,9 @@ _rt = False
 if '--rt' in sys.argv:
     _rt = True
 
+_wav = False
+if '--wav' in sys.argv:
+    _wav = True
 
 if __name__ == '__main__' and _gui:
     import ctypes
@@ -46,6 +51,9 @@ if __name__ == '__main__' and _gui:
             x11.XInitThreads()
         except:
             print "Warning: failed to XInitThreads()"
+
+sys.path.append(os.environ.get('GRC_HIER_PATH', os.path.expanduser('~/.grc_gnuradio')))
+from file_source import file_source  # grc-generated hier_block
 
 from PyQt4 import Qt
 from gnuradio import analog
@@ -215,11 +223,22 @@ class downlink_em(gr.top_block, Qt.QWidget):
         # self.osmosdr_source_0.set_antenna('', 0)
         # self.osmosdr_source_0.set_bandwidth(0, 0)
         
+
         
-        self.blocks_wavfile_source_0 = blocks.wavfile_source(_file, _repeat)
+        self.blocks_wavfile_source_0 = blocks.wavfile_source(_file + '.wav', _repeat)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
+
+        self.file_source_0 = file_source(
+            p_doppler_correct=100,
+            p_meta_file=_file + '.meta',
+            p_offset=10e3,
+            p_realtime=_rt,
+        )
         
-        input_src = (self.blocks_float_to_complex_0, 0)
+        if _wav:
+	    input_src = (self.blocks_float_to_complex_0, 0)
+        else:
+            input_src = (self.file_source_0, 0)
 
         self.blocks_message_debug_1_0_0 = blocks.message_debug()
         self.ccsds_message_info_0 = ccsds.message_info("Block received and sent to Nanolink: ", 20)
@@ -250,9 +269,9 @@ class downlink_em(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_float_to_complex_0, 1))
-        self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_float_to_complex_0, 0))        
-
+        if _wav:
+            self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_float_to_complex_0, 1))
+            self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_float_to_complex_0, 0))        
 
 	if _rt:
             self.connect(input_src, (self.blocks_throttle_0, 0))
