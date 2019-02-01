@@ -229,7 +229,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         self.file_source_0 = file_source(
             p_doppler_correct=100,
             p_meta_file=_file + '.meta',
-            p_offset=10e3,
+            p_offset=-10e3,
             p_realtime=_rt,
         )
         
