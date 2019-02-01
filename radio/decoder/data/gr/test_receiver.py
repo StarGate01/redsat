@@ -251,7 +251,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         self.ccsds_send_nanolink_0 = ccsds.send_nanolink("https://move2radio.lrt.mw.tum.de" if _submit else "http://localhost:8000")
         self.ccsds_randomiser_softbits_0 = ccsds.randomiser_softbits(0x95,0xFF)
         self.ccsds_mpsk_ambiguity_resolver_f_0 = ccsds.mpsk_ambiguity_resolver_f(2,'49E0DCC7',32,1,0.8,block_len_enc,0)
-        self.ccsds_ldpc_decoder_0 = ccsds.ldpc_decoder('/tmp/AR4JA_r12_k1024n.a', ccsds.LDPC_SYS_FRONT, ccsds.LDPC_PUNCT_BACK, 512, tuple(([])))
+        self.ccsds_ldpc_decoder_0 = ccsds.ldpc_decoder(os.path.dirname(os.path.realpath(__file__)) + '/../nonfree/AR4JA_r12_k1024n.a', ccsds.LDPC_SYS_FRONT, ccsds.LDPC_PUNCT_BACK, 512, tuple(([])))
         self.ccsds_blob_msg_sink_b_0 = ccsds.blob_msg_sink_b(256/2)
         self.blocks_multiply_xx_0_0 = blocks.multiply_vcc(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
