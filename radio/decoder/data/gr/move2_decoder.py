@@ -72,7 +72,9 @@ import math
 import osmosdr
 import sip
 import time
+from shutil import copyfile
 
+copyfile("/etc/ssl/certs/ca-certificates.crt", "/tmp/ca-bundle.crt")
 
 class downlink_em(gr.top_block, Qt.QWidget):
 
