@@ -1,10 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
+# This script is taken from https://github.com/move-II/move2radio/blob/master/AppDir/move-ii-gr/downlink_em.py
+
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Downlink for EM
 # Author: Sebastian Rückerl
 # Generated: Wed Nov 21 11:02:04 2018
+# Modified by alu96 (https://github.com/alu96)
 ##################################################
 
 import sys
@@ -114,10 +118,10 @@ class downlink_em(gr.top_block, Qt.QWidget):
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_calcdist(([-1, 1]), ([0, 1]), 4, 1).base()
 
         self.oversample = oversample = 4
-        
+
         self.samp_rate = samp_rate = _samp_rate / oversample
         self.payload = payload = block_len_enc+4
-        self.frequency_offset_correction = frequency_offset_correction = 60.0e3 
+        self.frequency_offset_correction = frequency_offset_correction = 60.0e3
 
         ##################################################
         # Blocks
@@ -130,7 +134,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
                 self.top_grid_layout.setRowStretch(r, 1)
             for c in range(0, 1):
                 self.top_grid_layout.setColumnStretch(c, 1)
-                
+
         self.rational_resampler_xxx_1 = filter.rational_resampler_ccc(
                 interpolation=1,
                 decimation=self.oversample,
@@ -222,7 +226,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         # self.osmosdr_source_0.set_bb_gain(0, 0)
         # self.osmosdr_source_0.set_antenna('', 0)
         # self.osmosdr_source_0.set_bandwidth(0, 0)
-        
+
 
         if _wav:
             self.blocks_wavfile_source_0 = blocks.wavfile_source(_file + '.wav', _repeat)
@@ -274,7 +278,7 @@ class downlink_em(gr.top_block, Qt.QWidget):
         ##################################################
         if _wav:
             self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_float_to_complex_0, 1))
-            self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_float_to_complex_0, 0))        
+            self.connect((self.blocks_wavfile_source_0, 1), (self.blocks_float_to_complex_0, 0))
 
         if _rt:
             self.connect(input_src, (self.blocks_throttle_0, 0))
@@ -375,7 +379,6 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
 
 def main(top_block_cls=downlink_em, options=None):
-    
     if not _gui:
         tb = top_block_cls(skip=options.skip, keep=options.keep)
         tb.start()
