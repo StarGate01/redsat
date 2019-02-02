@@ -222,20 +222,17 @@ class downlink_em(gr.top_block, Qt.QWidget):
         # self.osmosdr_source_0.set_bandwidth(0, 0)
         
 
-        
-        self.blocks_wavfile_source_0 = blocks.wavfile_source(_file + '.wav', _repeat)
-        self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
-
-        self.file_source_0 = file_source(
-            p_doppler_correct=100,
-            p_meta_file=_file + '.meta',
-            p_offset=-10e3,
-            p_realtime=_rt,
-        )
-        
         if _wav:
+            self.blocks_wavfile_source_0 = blocks.wavfile_source(_file + '.wav', _repeat)
+            self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
             input_src = (self.blocks_float_to_complex_0, 0)
         else:
+	    self.file_source_0 = file_source(
+                p_doppler_correct=100,
+                p_meta_file=_file + '.meta',
+                p_offset=-10e3,
+                p_realtime=_rt,
+            )
             input_src = (self.file_source_0, 0)
 
         self.range_selector = range_selector(
