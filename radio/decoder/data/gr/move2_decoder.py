@@ -17,14 +17,6 @@ from os.path import splitext
 from optparse import OptionParser
 from ConfigParser import ConfigParser
 
-_meta_file = sys.argv[1] 
-_file = splitext(_meta_file)[0]
-
-config = ConfigParser()
-config.read(_meta_file)
-_samp_rate = int(config.get('main', 'samp_rate', None))
-
-
 def argument_parser():
     parser = OptionParser(usage="%prog: [options]")
     parser.add_option("-k", "--keep", dest="keep", type=int, default=0)
@@ -34,6 +26,9 @@ def argument_parser():
     parser.add_option("--gui", action="store_true", dest="gui", default=False)
     parser.add_option("--rt", "--realtime", action="store_true", dest="realtime", default=False)
     parser.add_option("--wav", action="store_true", dest="wav", default=False)
+    parser.add_option("--nometa", action="store_true", dest="nometa", default=False)
+    parser.add_option("--samprate", dest="samprate", type=int, default=0)
+    parser.add_option("-o", "--oversample", dest="oversample", type=int, default=4)
     return parser
 
 options, _ = argument_parser().parse_args()
@@ -43,6 +38,24 @@ _submit = options.submit
 _gui = options.gui
 _rt = options.realtime
 _wav = options.wav
+_meta = not options.nometa
+_samprate = options.samprate
+_oversample = options.oversample
+
+_file = splitext(sys.argv[1])[0]
+
+if _meta:
+    _meta_file = _file + '.meta'
+    config = ConfigParser()
+    config.read(_meta_file)
+    _samprate = int(config.get('main', 'samp_rate', None))
+elif _wav:
+    from scipy.io.wavfile import read
+    _samprate, _ = read(_file + '.wav', mmap=True)
+    print "wav file, samprate:", _samprate
+elif _samprate == 0:
+    raise ValueError("No valid sample rate found or given as parameter")
+
 
 if __name__ == '__main__' and _gui:
     import ctypes
@@ -117,9 +130,9 @@ class downlink_em(gr.top_block, Qt.QWidget):
 
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_calcdist(([-1, 1]), ([0, 1]), 4, 1).base()
 
-        self.oversample = oversample = 4
+        self.oversample = oversample = _oversample
 
-        self.samp_rate = samp_rate = _samp_rate / oversample
+        self.samp_rate = samp_rate = _samprate / oversample
         self.payload = payload = block_len_enc+4
         self.frequency_offset_correction = frequency_offset_correction = 60.0e3
 
