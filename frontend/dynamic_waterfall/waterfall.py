@@ -214,9 +214,31 @@ def create_doc(doc, data_dir):
     ds_enabled = get_param('ds', 0, int) # datashade enable flap
     intp_enabled = get_param('intp', 0, int) # interpolation enable flap
     show_realtime = bool(get_param('rt', 0, int)) # show real time on vertical axis
-    
+
     mode = get_param('mode', 'psd', str)
-    
+
+    t_range = get_param('t', None, str)
+    f_range = get_param('f', None, str)
+
+    if t_range is not None:
+        try:
+            parts = t_range.split(",")
+            if len(parts) == 2:
+                t_range = list(map(float, parts))
+        except:
+            pass
+
+    if f_range is not None:
+        try:
+            parts = f_range.split(",")
+            if len(parts) == 2:
+                f_range = list(map(float, parts))
+            elif len(parts) == 1:
+                _f = abs(float(parts[0]))
+                f_range = (-_f, _f)
+        except:
+            pass
+
     if file.endswith(".meta"):
         config = ConfigParser()
         config.read(join(data_dir, file))
@@ -241,8 +263,9 @@ def create_doc(doc, data_dir):
     doc.session_context.freq_unit = freq_units[1000]
     
     range_stream = RangeXY(
-        x_range=tuple(x / freq_units_names[doc.session_context.freq_unit] for x in (min(f), max(f))), 
-        y_range=(max(t), min(t))) # transient=True
+        x_range=tuple(x / freq_units_names[doc.session_context.freq_unit] for x in
+                      ((min(f_range), max(f_range)) if f_range else (min(f), max(f)))),
+        y_range=(max(t_range), min(t_range)) if t_range else (max(t), min(t))) # transient=True
     
     z_range = (np.min(S), np.max(S))
     z_init = np.percentile(S, (50,100))    
