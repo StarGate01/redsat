@@ -211,7 +211,7 @@ def create_doc(doc, data_dir):
     # low resolution for raspberry
     width, height = get_param('width', 600, int), get_param('height', 500, int)
     res = get_param('res', 1.5, float)
-    ds_enabled = get_param('ds', 0, int) # datashade enable flap
+    ds_enabled = get_param('ds', None, str) # datashade option (default: avg)
     intp_enabled = get_param('intp', 0, int) # interpolation enable flap
     show_realtime = bool(get_param('rt', 0, int)) # show real time on vertical axis
 
@@ -284,8 +284,16 @@ def create_doc(doc, data_dir):
         ) #.redim.range(z=z_init)
     #dmap = dmap.opts(opts.Image(height=height, width=width))
 
-    if ds_enabled:
-        dmap = regrid(dmap, aggregator=dsr.mean, interpolation='linear', upsample=True, height=height*2, width=width*2) # aggregation=dsr.max
+    if ds_enabled != None:
+        print("datashade enabled: yes")
+        if ds_enabled == "" or ds_enabled=="mean":
+            ds_enabled = dsr.mean
+        elif ds_enabled == "max":
+            ds_enabled = dsr.max
+        else:
+            print("warning: invalid option for datashade. using default value: mean")
+            ds_enabled = dsr.mean
+        dmap = regrid(dmap, aggregator=ds_enabled, interpolation='linear', upsample=True, height=height*2, width=width*2) # aggregation=dsr.max
     
     #dmap = dmap.hist(num_bins=150, normed=False)
     
