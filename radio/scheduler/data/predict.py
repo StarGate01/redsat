@@ -42,7 +42,7 @@ for subdir, dirs, files in os.walk(args.path):
                 mid_ts = timegm(strptime(str(mid_time), '%Y/%m/%d %H:%M:%S'))
                 end_ts = timegm(strptime(str(end_time), '%Y/%m/%d %H:%M:%S'))
                 duration = end_ts - start_ts
-                print "%s, %d, %d \n | %s - %s - %s" % (name.strip(), start_ts, duration, fmt_date(start_ts), fmt_date(mid_ts), fmt_date(end_ts))
+                print "%s %d %d \n | %s - %s - %s" % (name.strip().replace(' ',''), start_ts, duration, fmt_date(start_ts), fmt_date(mid_ts), fmt_date(end_ts))
                 #print mktime(\
                 #    datetime.strptime(str(start_time), '%Y/%m/%d %H:%M:%S').timetuple())
 	        print "   AOS Az: %4.2f° LOS Az: %4.2f° Max Elv: %4.2f°" % \
