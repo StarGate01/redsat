@@ -21,13 +21,3 @@ services:
     networks:
       - frontend
       - monitor
-
-  apache:
-    image: "httpd:latest"
-    volumes:
-      - ./httpd/htdocs:/usr/local/apache2/htdocs/:ro
-    restart: always
-    expose:
-      - "80"
-    networks:
-      - frontend
