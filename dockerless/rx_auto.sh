@@ -2,6 +2,8 @@
 
 # for testing: ./rx_auto.sh MOVEII $((`date +%s`+5)) 60
 
+cd $(dirname "${BASH_SOURCE[0]}")
+
 CURRENT_TIME=`date +%s`
 START_TIME=$2
 
@@ -18,7 +20,6 @@ DELTA=$((${START_TIME}-${CURRENT_TIME}))
 echo "delta: $DELTA"
 if (( $DELTA > 0 )); then
 	sleep $DELTA
-        cd $(dirname "${BASH_SOURCE[0]}")
 	timeout "${DURATION}s" ./rx_run.sh $1
 else
 	echo "already over. doing nothing"
@@ -26,4 +27,7 @@ fi
 
 sleep 5
 rtl_biast -b 0
+
+# TODO read rtl device from config file
+python ../radio/receiver/data/gr/disable_bias.py -d rtl_tcp=10.0.0.101
 echo "done."

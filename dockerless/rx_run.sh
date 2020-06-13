@@ -6,4 +6,4 @@ export REDSAT_INPUT_DIR=./persistent-data/input
 export REDSAT_GR_DIR=./radio/receiver/data/gr
 export REDSAT_DEPS_DIR=./
 
-./radio/receiver/run.sh "$1" `date "+$1_%Y-%m-%d_%H_%M_%S"` nogui notcp cal
+./radio/receiver/run.sh "$1" `date "+$1_%Y-%m-%d_%H-%M-%S"` nogui notcp nocal
