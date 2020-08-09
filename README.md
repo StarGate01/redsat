@@ -40,6 +40,7 @@ Run ```./app.sh build``` to build and ```./app.sh up``` to run the full stack.
         - [TUM WARR](https://www.warr.de/de/) closed source assets
     - scheduler:
         - [PyEphem](https://rhodesmill.org/pyephem/)
+        - [Skyfield](https://rhodesmill.org/skyfield/)
     - tlesync: Loads the newest TLEs from the internet
         - [Celestrak NORAD](https://www.celestrak.com)
 - Frontend stack
