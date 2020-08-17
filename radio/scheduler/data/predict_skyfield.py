@@ -61,8 +61,6 @@ for subdir, dirs, files in os.walk(args.path):
                 mid_ts, mid_pos = o[1] if 1 in o else (None, None)
                 end_ts, end_pos = o[2] if 2 in o else (None, None)
 
-                print(end_ts)
-
                 if end_ts is None:
                    continue
 
@@ -75,4 +73,8 @@ for subdir, dirs, files in os.walk(args.path):
 
                 duration = end_ts - start_ts
                 print("%s %d %d \n | %s - %s - %s" % (name.strip().replace(' ',''), start_ts, duration, fmt_date(start_ts), fmt_date(mid_ts), fmt_date(end_ts)))
-                print ("   AOS Az: %4.2f° LOS Az: %4.2f° Max Elv: %4.2f°" % (start_pos["az"], end_pos["az"], mid_pos["alt"]))
+                fmt_angle = lambda v: "{:5.1f}°".format(v) if v else "?°"
+                print("   AOS Az: {} LOS Az: {} Max Elv: {}".format(
+                    fmt_angle(start_pos["az"]),
+                    fmt_angle(end_pos["az"]),
+                    fmt_angle(mid_pos["alt"] if mid_pos else None)))
