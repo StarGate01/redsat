@@ -26,6 +26,34 @@ ts_now = dt_now.timestamp()
 loc = Topos(latitude_degrees=float(os.environ['LAT']), longitude_degrees=float(os.environ['LON']), elevation_m=int(os.environ['ELV']))
 #print("loc:", loc)
 
+
+def get_overpasses(sat, t_range):
+    overpasses = {None:{}}
+    current = None
+    t, events = sat.find_events(loc, t0, t1)
+    for ti, event in zip(t, events):
+        _ts = ti.utc_datetime().timestamp()
+        alt, az, distance = diff.at(ti).altaz()
+        pos = dict(alt=alt.degrees, az=az.degrees)
+        if event == 0:
+            current = _ts
+            overpasses[_ts] = {}
+
+        overpasses[current][event] = _ts, pos
+
+    return overpasses
+
+
+def get_overpass_id(sat, mid_ts):
+    mid_dt = datetime.datetime.utcfromtimestamp(mid_ts)
+    t0_dt = datetime.datetime(year=mid_dt.year, month=mid_dt.month, day=mid_dt.day, tzinfo=datetime.timezone.utc)
+    t1_dt = t0_dt + datetime.timedelta(days=1)
+
+    t, events = sat.find_events(loc, ts.from_datetime(t0_dt), ts.from_datetime(t1_dt))
+    mid_ts_list = [abs(ti.utc_datetime().timestamp()-mid_ts) for ti, event in zip(t, events) if event == 1]
+    return "{}{:02d}{:02d}:{}".format(mid_dt.year, mid_dt.month, mid_dt.day, mid_ts_list.index(min(mid_ts_list)))
+
+
 fmt_date = lambda ts: strftime("%Y/%m/%d %H:%M:%S", localtime(ts) if args.local else gmtime(ts)) if ts else "."
 
 for subdir, dirs, files in os.walk(args.path):
@@ -42,18 +70,7 @@ for subdir, dirs, files in os.walk(args.path):
             diff = sat - loc
             #print("sat:", sat)
 
-            overpasses = {None:{}}
-            current = None
-            t, events = sat.find_events(loc, t0, t1)
-            for ti, event in zip(t, events):
-                _ts = ti.utc_datetime().timestamp()
-                alt, az, distance = diff.at(ti).altaz()
-                pos = dict(alt=alt.degrees, az=az.degrees)
-                if event == 0:
-                    current = _ts
-                    overpasses[_ts] = {}
-
-                overpasses[current][event] = _ts, pos
+            overpasses = get_overpasses(sat, (t0, t1))
 
             for start_ts in sorted(overpasses.keys(), key=lambda x: x if x else 0):
                 o = overpasses[start_ts]
@@ -72,9 +89,10 @@ for subdir, dirs, files in os.walk(args.path):
                     start_pos = o[0][1]
 
                 duration = end_ts - start_ts
-                print("%s %d %d \n | %s - %s - %s" % (name.strip().replace(' ',''), start_ts, duration, fmt_date(start_ts), fmt_date(mid_ts), fmt_date(end_ts)))
+                print("%s %d %d %s \n | %s - %s - %s" % (name, start_ts, duration, (name + ":" + get_overpass_id(sat, mid_ts)) if mid_ts else '-', fmt_date(start_ts), fmt_date(mid_ts), fmt_date(end_ts)))
                 fmt_angle = lambda v: "{:5.1f}°".format(v) if v else "?°"
                 print("   AOS Az: {} LOS Az: {} Max Elv: {}".format(
                     fmt_angle(start_pos["az"]),
                     fmt_angle(end_pos["az"]),
                     fmt_angle(mid_pos["alt"] if mid_pos else None)))
+
