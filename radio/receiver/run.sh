@@ -18,8 +18,8 @@
 source ${REDSAT_CONFIG_DIR}/station.config
 
 if [ -z "$1" ]; then
-    SAT="MOVEII"
-    echo "Warning: No satellite specified, defaulting to MOVE-II"
+    echo "Error: No satellite specified!"
+    exit 1
 else
     SAT=$1
 fi
@@ -33,7 +33,7 @@ fi
 
 if [ -z "$3" ]; then
     KIND="nogui"
-    echo "Info: No gui flag specified, defaulting to no GUI"
+    echo "Info: No GUI flag specified, defaulting to no GUI"
 else
     KIND="$3"
 fi
@@ -107,7 +107,8 @@ if [ "$SDRFREQCORR" == "" ]; then
 	SDRFREQCORR="0"
 fi
 
-FREQ=`grep "$SAT" "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
+FREQ=`grep "$SAT," "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
+FNAME=`grep "$SAT," "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f2`
 TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
 TLEALL=`tr -s '\r\n' ',' < $TLE | sed -e 's/,$/\n/'`
 

@@ -9,8 +9,8 @@ cd $REDSAT_CONFIG_DIR/elements && wget -i $REDSAT_CONFIG_DIR/sources.list -O all
 while read p; do
     SAT=`echo $p | cut -d, -f1`
     FNAME=`echo $p | cut -d, -f2`
-    sed -n "/$SAT\\s*$/{p;n;p;n;p;q}" $REDSAT_CONFIG_DIR/elements/all.tmp >> "$REDSAT_CONFIG_DIR/elements/$FNAME.txt"
-    cat "$REDSAT_CONFIG_DIR/elements/$FNAME.txt"
+    sed -n "/$SAT\\s*$/{p;n;p;n;p;q}" $REDSAT_CONFIG_DIR/elements/all.tmp >> "$REDSAT_CONFIG_DIR/elements/$SAT.txt"
+    cat "$REDSAT_CONFIG_DIR/elements/$SAT.txt"
 done <$REDSAT_CONFIG_DIR/sats.list
 
 rm $REDSAT_CONFIG_DIR/elements/all.tmp
