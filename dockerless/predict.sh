@@ -1,3 +1,3 @@
 cd $(dirname "${BASH_SOURCE[0]}")/..
 source persistent-data/config/station.config
-python radio/scheduler/data/predict.py --path persistent-data/config/elements/ --local | grep "$1"
+./radio/scheduler/data/predict_skyfield.py --path persistent-data/config/elements/ --local | grep "$1 "
