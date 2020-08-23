@@ -21,6 +21,8 @@ myloc.lon = os.environ['LON']
 myloc.lat = os.environ['LAT']
 myloc.elevation = int(os.environ['ELV'])
 
+print "loc:", myloc
+
 fmt_date = lambda ts: strftime("%Y/%m/%d %H:%M:%S", localtime(ts) if args.local else gmtime(ts))
 
 for subdir, dirs, files in os.walk(args.path):
@@ -35,9 +37,15 @@ for subdir, dirs, files in os.walk(args.path):
             name = data[0]
             mysat = ephem.readtle(name, data[1], data[2])
 
+            print "tle:", data, "sat:", mysat
+
             myloc.date = nowdate
-            for i in range(3):
-                start_time, aos_az, mid_time, max_elv, end_time, los_az = myloc.next_pass(mysat)
+            for i in range(9):
+                try:
+                    start_time, aos_az, mid_time, max_elv, end_time, los_az = myloc.next_pass(mysat)
+                except Exception as e:
+                    print("{} failed: {}".format(name.strip(), e))
+                    break
 		start_ts = timegm(strptime(str(start_time), '%Y/%m/%d %H:%M:%S'))
                 mid_ts = timegm(strptime(str(mid_time), '%Y/%m/%d %H:%M:%S'))
                 end_ts = timegm(strptime(str(end_time), '%Y/%m/%d %H:%M:%S'))
