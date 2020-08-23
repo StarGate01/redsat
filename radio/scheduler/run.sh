@@ -2,4 +2,4 @@
 
 source /app/config/station.config
 
-python /app/predict.py
+python /app/predict_skyfield.py
