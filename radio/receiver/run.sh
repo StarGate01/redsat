@@ -110,10 +110,10 @@ fi
 FREQ=`grep "$SAT," "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f3`
 FNAME=`grep "$SAT," "$REDSAT_CONFIG_DIR/sats.list" | cut -d, -f2`
 TLE="$REDSAT_CONFIG_DIR/elements/$SAT.txt"
-TLEALL=`tr -s '\r\n' ',' < $TLE | sed -e 's/,$/\n/'`
+TLEALL=`tr -s '\r\n' ',' < "$TLE" | sed -e 's/,$/\n/'`
 
 META=${REDSAT_INPUT_DIR}/${OUTPUT_BASE}.meta
-cat > $META <<-EOF
+cat > "$META" <<-EOF
 [main]
 time=$(date +%s)
 samp_rate=$SDRSAMP
@@ -130,9 +130,9 @@ EOF
 
 if [ "$REDSAT_OS" == "linux" ]; then
     if [ "$RECUDP" == "0" ]; then
-        python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file=$META --meta-dev=$GRDEV --meta-samp-rate-dev=$SDRSAMPDEV --meta-freq-corr=$SDRFREQCORR
+        nice -n -18 python $REDSAT_GR_DIR/receiver_${KIND}_dev.py --config-file="$META" --meta-dev=$GRDEV --meta-samp-rate-dev=$SDRSAMPDEV --meta-freq-corr=$SDRFREQCORR
     else
-        python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file=$META --meta-rec-audio-dev=$RECADDR
+        python $REDSAT_GR_DIR/receiver_${KIND}_audio.py --config-file="$META" --meta-rec-audio-dev=$RECADDR
     fi
 else
     echo "Running native on windows..."
