@@ -16,11 +16,12 @@ else
 fi
 
 DELTA=$((${START_TIME}-${CURRENT_TIME}))
+DELTA_END=$((${DELTA}+${DURATION}))
 
-echo "delta: $DELTA"
-if (( $DELTA > 0 )); then
+echo "delta: $DELTA $DELTA_END"
+if (( $DELTA_END >= 0 )); then
 	sleep $DELTA
-	timeout "${DURATION}s" ./rx_run.sh $1
+	timeout "${DURATION}s" ./rx_run.sh "$1"
 else
 	echo "already over. doing nothing"
 fi
