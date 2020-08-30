@@ -1,20 +1,196 @@
 <html>
-   <head>
-      <title>{{ title }}</title>
-   </head>
-   <body>
-        <form name="waterfall" method="GET" action="waterfall">
-            <input type="hidden" name="file" />
-            Width: <input type="text" name="width" value="600"><br />
-            Height: <input type="text" name="height" value="700"><br />
-            Resolution: <input type="text" name="res" value="1.5"><br />
-            Realtime: <input type="checkbox" name="rt" value="1"><br />
-            Interpolation: <input type="checkbox" name="intp" value="1"><br />
-            <ul>
-            {% for item in items %}
-                <li><a onclick="document.waterfall.file.value='{{ escape(item) }}'; document.waterfall.submit()">{{ escape(item) }}</a></li>
-            {% end %}
-            </ul>
-        </form>
-    </body>
+<head>
+    <title>Observations</title>
+    <link rel="stylesheet" href="static_2/bootstrap/min.css" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+
+    <br/>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1 col-sm-12">
+            <form action="{{ url }}" method="get">
+
+                <div class="card">
+                    <div class="card-header">
+                        Observations
+                    </div>
+                    <div class="card-body">
+
+                        <!-- TODO select items per page -->
+
+                        <div class="form-row align-items-center">
+
+                            <div class="col-auto">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <!--<button class="btn btn-outline-primary" type="button">-->
+                                        <span class="input-group-text">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                            </svg>
+                                        </span>
+                                        <!--</button>-->
+                                    </div>
+
+                                    <input type="text" value="{{ sat_filter }}" name="filter" class="form-control" placeholder="Satellite" aria-label="Satellite">
+
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item" name="filter" value="">All</button>
+                                            <div role="separator" class="dropdown-divider"></div>
+                                            {% for sat in sat_list %}
+                                            <button class="dropdown-item" name="filter" value="{{ sat }}">{{ sat }}</button>
+                                            {% end %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-auto">
+                                <div class="input-group mb-2">
+                                    <select name="sort" class="custom-select" id="sortingSelect">
+                                        {% for item in sort.options %}
+                                        <option value="{{ item[0] }}" {% if sort.key==item[0] %}selected="selected"{% end %}} >{{ item[1] }}</option>
+                                        {% end %}
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-{% if sort.down %}primary{% else %}secondary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M3 2a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 2z"/>
+                                                <path fill-rule="evenodd" d="M5.354 10.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 11.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 9a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-outline-{% if sort.down %}secondary{% else %}primary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M3 3a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 3z"/>
+                                                <path fill-rule="evenodd" d="M5.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 12.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary mb-2">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2 col-sm-12">
+            <div class="list-group">
+                {% for item in observations %}
+
+                <a class="list-group-item list-group-item-action">
+                    <div class="row">
+                        <div class="col-md-3"><div onclick="document.waterfall.file.value='{{ escape(item.file) }}'; document.waterfall.submit()" class="btn btn-sm btn-block {% if item.object %}btn-success{% else %}btn-info{% end %}">{{ item.object }}</div></div>
+                        <div class="col-md-6">
+                            <span class="text-monospace font-weight-bold text-left">
+                                {{ item }}
+                            </span>
+                            {% if item.duration %}({{ round(item.duration, 1) }} s){% end %}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="btn btn-sm btn-light float-right" data-toggle="modal" data-target="#modal" data-file="{{ item.file }}">Polar Plot</div>
+                        </div>
+                    </div>
+                </a>
+
+                {% end %}
+
+                <div class="modal" id="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-title"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="modal-window"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2 col-sm-12">
+            <div class="accordion" id="parametersAccordion">
+                <div class="card">
+                    <div class="card-header" id="parametersHeading">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseParameters" aria-expanded="true" aria-controls="collapseOne">
+                                Waterfall Parameters
+                            </button>
+                        </h2>
+
+                    </div>
+                    <div id="collapseParameters" class="collapse show" aria-labelledby="parametersHeading" data-parent="#parametersAccordion">
+                        <div class="card-body">
+                            <form name="waterfall" method="GET" action="waterfall">
+                                <input type="hidden" name="file" />
+
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="widthId">Width</label>
+                                        <input type="text" class="form-control" id="widthId" name="width" value="600" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="heightId">Height</label>
+                                        <input type="text" class="form-control" id="heightId" name="height" value="700" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="resolutionId">Resolution</label>
+                                        <input type="text" class="form-control" id="resolutionId" name="res" value="1.5" required>
+                                    </div>
+                                </div>
+
+                                Realtime: <input type="checkbox" name="rt" value="1"><br />
+                                Interpolation: <input type="checkbox" name="intp" value="1"><br />
+
+                                <!-- Rendering mode: fast, detailed (max), detailed(mean) -->
+
+                                <div class="btn btn-primary">Show all files</div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="static_2/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="static_2/popper.min.js" crossorigin="anonymous"></script>
+<script src="static_2/bootstrap/min.js" crossorigin="anonymous"></script>
+
+<script>
+    $('#modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var file = button.data('file');
+        var modal = $(this);
+        modal.find('.modal-title').text(file);
+        modal.find('.modal-body').text(''); // TODO loading indicator
+        $.get('/polar_plot/', {"file": file}, function(data) {
+            var svg = new XMLSerializer().serializeToString(data.documentElement);
+            modal.find('.modal-body').html(svg);
+        });
+    })
+</script>
+
+</body>
 </html>
