@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from skyfield.api import load, Topos, EarthSatellite
+from os.path import join, dirname
+from skyfield.api import load, Loader, Topos, EarthSatellite
 from time import gmtime, localtime, strftime
 import datetime
 import re
@@ -10,7 +11,9 @@ import re
 loc = Topos(latitude_degrees=float(os.environ['LAT']),
             longitude_degrees=float(os.environ['LON']),
             elevation_m=int(os.environ['ELV']))
-ts = load.timescale()
+
+#load = Loader(join(dirname(__file__), '../../persistent-data/config/skyfield-data'))
+ts = load.timescale(builtin=True)
 
 
 TLE_path = ""
@@ -106,7 +109,7 @@ def get_overpasses(tle, t_range, backsearch=3600*2):
            pos = get_position(tle, ti)
            overpasses[None][event] = _ts, pos
            if event == 0:
-               overpasses[events[None][0][0]] = overpasses[None]
+               overpasses[overpasses[None][0][0]] = overpasses[None]
                del overpasses[None]
                break
 
