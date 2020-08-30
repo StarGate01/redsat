@@ -30,26 +30,33 @@ class PolarPlot:
         alt, az, distance = self.diff.at(ts.from_datetime(dt)).altaz()
         return dict(alt=alt.degrees, az=az.degrees, distance=distance.km)
 
+    def get_overpass(self):
+        pass
+
     def generate_svg(self):
         fig, ax = plt.subplots(figsize=(2,2), subplot_kw=dict(projection='polar'))
 
-        #ax = fig.subplot(111, )
         az, alt = [], []
         for t in self.t:
             pos = self.get_position(t)
             az.append(pos["az"])
             alt.append(pos["alt"])
-        print(az, alt)
-        ax.plot(np.array(az)*np.pi/180, 90-np.array(alt))
+
+        az, alt = np.array(az), np.array(alt)
+        ah = alt > 0  # above horizon
+        p_az, r = az*np.pi/180, 90-alt
+        p_az, r = p_az[ah], r[ah]
+
+        ax.plot(p_az, r)
+
+        ax.scatter(p_az[0], r[0], color='C2', zorder=3)
+        ax.scatter(p_az[-1], r[-1], color='C3', zorder=3)
+
         ax.set_rmax(90)
         ax.set_rgrids([45, 90], ('', ''))
-        #ax.set_xticks(np.array([0,90,180,270])*np.pi/180)
         ax.set_thetagrids(range(0, 360, 90), ('N', 'E', 'S', 'W'))
         ax.set_theta_direction(-1)
         ax.set_theta_zero_location("N")
-        #ax.set_xtick_labels(["N", "E", "S", "W"])
-
-        #ax.set_rlabel_position(-22.5)
         ax.grid(True)
 
         fig.tight_layout()
