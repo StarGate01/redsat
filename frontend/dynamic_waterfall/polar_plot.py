@@ -49,8 +49,9 @@ class PolarPlot:
 
         ax.plot(p_az, r)
 
-        ax.scatter(p_az[0], r[0], color='C2', zorder=3)
-        ax.scatter(p_az[-1], r[-1], color='C3', zorder=3)
+        if len(p_az) > 0:
+            ax.scatter(p_az[0], r[0], color='C2', zorder=3)
+            ax.scatter(p_az[-1], r[-1], color='C3', zorder=3)
 
         ax.set_rmax(90)
         ax.set_rgrids([45, 90], ('', ''))
@@ -62,4 +63,5 @@ class PolarPlot:
         fig.tight_layout()
         f = io.BytesIO()
         fig.savefig(f, format="svg")
+        plt.close(fig)
         return f.getvalue()

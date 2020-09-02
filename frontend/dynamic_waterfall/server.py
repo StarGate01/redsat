@@ -86,13 +86,13 @@ class MainHandler(RequestHandler):
         sort_down = False if self.get_query_argument("down", "1") == "0" else True
         sort_map = {"s": "object", "t": "time", "d": "duration"}
         sort_default = {"s": "", "t": datetime.fromtimestamp(0), "d": 0}
-        sort_key = self.get_query_argument("sort", "s")
+        sort_key = self.get_query_argument("sort", "t")
         if sort_key not in sort_map:
             sort_key = "s"
 
         observations = list(sorted(observations, key=lambda o: getattr(o, sort_map[sort_key]) or sort_default[sort_key], reverse=sort_down))
 
-        self.render("list.html",
+        self.render("observations.html",
                     observations=observations,
                     sat_filter=sat_filter,
                     sat_list=sat_list,
