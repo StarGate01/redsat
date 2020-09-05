@@ -97,7 +97,8 @@ class MainHandler(RequestHandler):
                     sat_filter=sat_filter,
                     sat_list=sat_list,
                     sort=dotdict(key=sort_key, down=sort_down, options=[("s", "Satellite"), ("t", "Time"), ("d", "Duration")]),
-                    url=self.request.uri
+                    url=self.request.uri,
+                    get_query_argument=self.get_query_argument
                     )
 
 
@@ -130,7 +131,7 @@ else:
 basicConfig(level="warn")
 
 server = Server(
-    address=address, allow_websocket_origin=['*'], num_procs=1,
+    address=address, allow_websocket_origin=['*'], num_procs=2,
     applications={'/waterfall': partial(create_doc, data_dir=data_dir)}, extra_patterns=[
         ('/', MainHandler),
         ('/polar_plot/', PolarPlotHandler),
