@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>{% block title %}{% end %}</title>
+    <link rel="stylesheet" href="static_2/bootstrap/min.css" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <br/>
+
+    {% block content %}
+    {% end %}
+
+    <br />
+</div>
+
+<script src="static_2/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="static_2/popper.min.js" crossorigin="anonymous"></script>
+<script src="static_2/bootstrap/min.js" crossorigin="anonymous"></script>
+
+{% block scripts %}
+{% end %}
+
+</body>
+</html>

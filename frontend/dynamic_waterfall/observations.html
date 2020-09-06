@@ -1,293 +1,287 @@
-<html>
-<head>
-    <title>Observations</title>
-    <link rel="stylesheet" href="static_2/bootstrap/min.css" crossorigin="anonymous">
-</head>
-<body>
-<div class="container">
-    <br/>
+{% extends "main.html" %}
 
-    <div class="row">
-        <div class="col-md-8 offset-md-2 col-sm-12">
-            <form action="{{ url }}" method="get">
+{% block title %}Observations{% end %}
 
-                <div class="card">
-                    <div class="card-header">
-                        Observations
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <form action="{{ url }}" method="get">
+
+            <div class="card">
+                <div class="card-header">
+                    Observations
+                </div>
+                <div class="card-body">
+
+                    <!-- TODO select items per page -->
+                    <!-- TODO select time range: https://stackoverflow.com/questions/54032555/bootstrap-4-input-group-add-on-between-two-inputs -->
+
+                    <div class="form-row align-items-center">
+                        <div class="col-md-auto col-sm-12 mb-1 mt-1">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <!--<button class="btn btn-outline-primary" type="button">-->
+                                    <span class="input-group-text">
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                        </svg>
+                                    </span>
+                                    <!--</button>-->
+                                </div>
+
+                                <input type="text" value="{{ sat_filter }}" name="filter" class="form-control" placeholder="Satellite" aria-label="Satellite">
+
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item" name="filter" value="">All</button>
+                                        <div role="separator" class="dropdown-divider"></div>
+                                        {% for sat in sat_list %}
+                                        {% if sat is not None %}
+                                        <button class="dropdown-item" name="filter" value="{{ sat }}">{{ sat }}</button>
+                                        {% end %}
+                                        {% end %}
+                                        <div role="separator" class="dropdown-divider"></div>
+                                        <button class="dropdown-item" name="filter" value="None"><em>Unknown</em></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-auto col-sm-12 mb-1 mt-1">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Sort by</span>
+                                </div>
+
+                                <select name="sort" class="custom-select" id="sortingSelect">
+                                    {% for item in sort.options %}
+                                    <option value="{{ item[0] }}" {% if sort.key==item[0] %}selected="selected"{% end %}} >{{ item[1] }}</option>
+                                    {% end %}
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-{% if sort.down %}primary{% else %}secondary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}" {% if sort.down %}disabled{% end %}>
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M3 2a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 2z"/>
+                                            <path fill-rule="evenodd" d="M5.354 10.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 11.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 9a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-{% if sort.down %}secondary{% else %}primary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}"  {% if not sort.down %}disabled{% end %}>
+                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M3 3a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 3z"/>
+                                            <path fill-rule="evenodd" d="M5.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 12.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--
+                        <div class="col-auto col-sm-12 mb-1">
+                            <button class="btn btn-secondary">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar4-range" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                                    <path d="M9 7.5a.5.5 0 0 1 .5-.5H15v2H9.5a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 0-.5-.5H1v2h5.5a.5.5 0 0 0 .5-.5v-1z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        -->
+
+                        <div class="col-md-auto col-sm-12 mb-1 mt-1">
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                                    <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                                </svg>
+                                Update
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <div class="accordion" id="parametersAccordion">
+            <div class="card">
+                <div class="card-header btn text-left" id="parametersHeading" data-toggle="collapse" data-target="#collapseParameters" aria-expanded="false" aria-controls="collapseParameters">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-expand mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
+                    </svg>
+                    Waterfall Parameters
+                    <!-- TODO add profiles (presets) switch -->
+                </div>
+                <div class="collapse" id="collapseParameters" aria-labelledby="parametersHeading" data-parent="#parametersAccordion">
                     <div class="card-body">
+                        <form class="form mb-0" name="waterfall" method="GET" action="waterfall">
+                            <input type="hidden" name="file" />
 
-                        <!-- TODO select items per page -->
-
-                        <div class="form-row align-items-center">
-                            <div class="col-md-auto col-sm-12 mb-1 mt-1">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <!--<button class="btn btn-outline-primary" type="button">-->
+                            <div class="form-row">
+                                <div class="form-group col-md-8">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="dimensionsWidth">
+                                                Width (px)
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                </svg>
+                                                Height (px):
+                                            </label>
+                                        </div>
+                                        <input type="text" name="width"  value="{{ get_query_argument('width', 600) }}" class="form-control" id="dimensionsWidth" required>
+                                        <div class="input-group-prepend input-group-append">
                                         <span class="input-group-text">
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
-                                                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                             </svg>
                                         </span>
-                                        <!--</button>-->
-                                    </div>
-
-                                    <input type="text" value="{{ sat_filter }}" name="filter" class="form-control" placeholder="Satellite" aria-label="Satellite">
-
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <button class="dropdown-item" name="filter" value="">All</button>
-                                            <div role="separator" class="dropdown-divider"></div>
-                                            {% for sat in sat_list %}
-                                            {% if sat is not None %}
-                                            <button class="dropdown-item" name="filter" value="{{ sat }}">{{ sat }}</button>
-                                            {% end %}
-                                            {% end %}
-                                            <div role="separator" class="dropdown-divider"></div>
-                                            <button class="dropdown-item" name="filter" value="None"><em>Unknown</em></button>
                                         </div>
+                                        <input type="text" name="height" value="{{ get_query_argument('height', 800) }}" class="form-control" id="dimensionsHeight" required>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="resolutionId">Resolution:</label>
+                                        </div>
+                                        <input type="text" name="res" value="{{ get_query_argument('res', 1.5) }}" class="form-control" id="resolutionId" required>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-auto col-sm-12 mb-1 mt-1">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Sort by</span>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="timeAxis">Time Axis:</label>
+                                        </div>
+                                        <select class="custom-select" name="rt" data-value="{{ get_query_argument('rt',0) }}" id="timeAxis">
+                                            <option value="1">Calendar Time</option>
+                                            <option value="0">Relative to start</option>
+                                        </select>
                                     </div>
+                                </div>
+                            </div>
 
-                                    <select name="sort" class="custom-select" id="sortingSelect">
-                                        {% for item in sort.options %}
-                                        <option value="{{ item[0] }}" {% if sort.key==item[0] %}selected="selected"{% end %}} >{{ item[1] }}</option>
-                                        {% end %}
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-{% if sort.down %}primary{% else %}secondary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}" {% if sort.down %}disabled{% end %}>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M3 2a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 2z"/>
-                                                <path fill-rule="evenodd" d="M5.354 10.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 11.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 9a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
-                                            </svg>
-                                        </button>
-                                        <button class="btn btn-outline-{% if sort.down %}secondary{% else %}primary{% end %}" type="submit" name="down" value="{{ int(not sort.down) }}"  {% if not sort.down %}disabled{% end %}>
-                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sort-down-alt" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M3 3a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0v-10A.5.5 0 0 1 3 3z"/>
-                                                <path fill-rule="evenodd" d="M5.354 11.146a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L3 12.793l1.646-1.647a.5.5 0 0 1 .708 0zM7 6.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5zm0 3a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7a.5.5 0 0 0-.5.5zm0-9a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0-.5.5z"/>
-                                            </svg>
-                                        </button>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="colorQuality">Color Quality:</label>
+                                        </div>
+                                        <select class="custom-select" name="dtype" data-value="{{ get_query_argument('dtype','int8') }}" id="colorQuality">
+                                            <option value="int8">Low</option>
+                                            <option value="float16">Medium</option>
+                                            <option value="float32">High</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <!-- or Rendering Mode? -->
+                                            <label class="input-group-text" for="datashade">Datashade:</label>
+                                        </div>
+                                        <select class="custom-select" name="ds" data-value="{{ get_query_argument('ds','') }}" id="datashade">
+                                            <option value="">-</option>
+                                            <option value="mean">Mean</option>
+                                            <option value="max">Max</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6 mb-0">
+                                    <div class="input-group">
+                                        <label class="input-group-text" for="datashade">
+                                            Interpolation: &nbsp;
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" name="intp" value="{{ get_query_argument('intp',1) }}" class="custom-control-input" id="interpolation">
+                                                <label class="custom-control-label" for="interpolation"></label>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!--
-                            <div class="col-auto col-sm-12 mb-1">
-                                <button class="btn btn-secondary">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar4-range" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
-                                        <path d="M9 7.5a.5.5 0 0 1 .5-.5H15v2H9.5a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 0-.5-.5H1v2h5.5a.5.5 0 0 0 .5-.5v-1z"/>
-                                    </svg>
-                                </button>
-                            </div>
+                            Time offset: None, relative
+                            Time axis: calendar time, relative to: start, mid, end
                             -->
-
-                            <div class="col-md-auto col-sm-12 mb-1 mt-1">
-                                <button type="submit" class="btn btn-primary">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-                                        <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
-                                    </svg>
-                                    Update
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2 col-sm-12">
-            <div class="accordion" id="parametersAccordion">
-                <div class="card">
-                    <div class="card-header btn text-left" id="parametersHeading" data-toggle="collapse" data-target="#collapseParameters" aria-expanded="false" aria-controls="collapseParameters">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-expand mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-2.292a.5.5 0 0 0 .708 0L8 3.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708z"/>
-                        </svg>
-                        Waterfall Parameters
-                        <!-- TODO add profiles (presets) switch -->
-                    </div>
-                    <div class="collapse" id="collapseParameters" aria-labelledby="parametersHeading" data-parent="#parametersAccordion">
-                        <div class="card-body">
-                            <form class="form mb-0" name="waterfall" method="GET" action="waterfall">
-                                <input type="hidden" name="file" />
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-8">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="dimensionsWidth">
-                                                    Width (px)
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                    </svg>
-                                                    Height (px):
-                                                </label>
-                                            </div>
-                                            <input type="text" name="width"  value="{{ get_query_argument('width', 600) }}" class="form-control" id="dimensionsWidth" required>
-                                            <div class="input-group-prepend input-group-append">
-                                            <span class="input-group-text">
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                </svg>
-                                            </span>
-                                            </div>
-                                            <input type="text" name="height" value="{{ get_query_argument('height', 800) }}" class="form-control" id="dimensionsHeight" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="resolutionId">Resolution:</label>
-                                            </div>
-                                            <input type="text" name="res" value="{{ get_query_argument('res', 1.5) }}" class="form-control" id="resolutionId" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="timeAxis">Time Axis:</label>
-                                            </div>
-                                            <select class="custom-select" name="rt" data-value="{{ get_query_argument('rt',0) }}" id="timeAxis">
-                                                <option value="1">Calendar Time</option>
-                                                <option value="0">Relative to start</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <label class="input-group-text" for="colorQuality">Color Quality:</label>
-                                            </div>
-                                            <select class="custom-select" name="dtype" data-value="{{ get_query_argument('dtype','int8') }}" id="colorQuality">
-                                                <option value="int8">Low</option>
-                                                <option value="float16">Medium</option>
-                                                <option value="float32">High</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <!-- or Rendering Mode? -->
-                                                <label class="input-group-text" for="datashade">Datashade:</label>
-                                            </div>
-                                            <select class="custom-select" name="ds" data-value="{{ get_query_argument('ds','') }}" id="datashade">
-                                                <option value="">-</option>
-                                                <option value="mean">Mean</option>
-                                                <option value="max">Max</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-6 mb-0">
-                                        <div class="input-group">
-                                            <label class="input-group-text" for="datashade">
-                                                Interpolation: &nbsp;
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" name="intp" value="{{ get_query_argument('intp',1) }}" class="custom-control-input" id="interpolation">
-                                                    <label class="custom-control-label" for="interpolation"></label>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--
-                                Time offset: None, relative
-                                Time axis: calendar time, relative to: start, mid, end
-                                -->
-                            </form>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <br />
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2 col-sm-12">
-            <div class="list-group">
-                {% for item in observations %}
-
-                <a class="list-group-item list-group-item-action">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-6"><div onclick="update_waterfall_params(); document.waterfall.file.value='{{ escape(item.file) }}'; document.waterfall.submit()" class="btn btn-sm btn-block {% if item.object %}btn-success{% else %}btn-info{% end %}">{{ item.object }}</div></div>
-                        <div class="col-md-6 col-sm-12 order-md-1 order-sm-3" >
-                            <span class="text-monospace">
-                                <small>{{ item }}</small>
-                            </span>
-                            <span>
-                            {% if item.duration %}({{ round(item.duration, 1) }} s){% end %}
-                            </span>
-                        </div>
-                        <div class="col-md-3 col-sm-6 order-md-2 order-sm-2">
-                            <div class="btn-group btn-block float-right" role="group" aria-label="Control">
-                                <div class="btn btn-sm btn-light disabled" data-tooltip="plots" data-placement="top" title="Data" aria-disabled="true">D</div>
-                                <div class="btn btn-sm btn-light" data-tooltip="plots" data-placement="top" title="Waterfall Plot">W</div>
-                                <div class="btn btn-sm btn-light" data-toggle="modal" data-target="#modal" data-file="{{ item.file }}" data-tooltip="plots" data-placement="top" title="Polar Plot">P</div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                {% end %}
-
-                <div class="modal" id="modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modal-title"></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body text-center" id="modal-window"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-        <div class="col-md-8 offset-md-2 col-sm-12">
-            <div class="btn btn-secondary btn-block">Show all files...</div>
-        </div>
-    </div>
-
-    <br />
 </div>
 
-<script src="static_2/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-<script src="static_2/popper.min.js" crossorigin="anonymous"></script>
-<script src="static_2/bootstrap/min.js" crossorigin="anonymous"></script>
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <div class="list-group">
+            {% for item in observations %}
+
+            <a class="list-group-item list-group-item-action">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6"><div onclick="update_waterfall_params(); document.waterfall.file.value='{{ escape(item.file) }}'; document.waterfall.submit()" class="btn btn-sm btn-block {% if item.object %}btn-success{% else %}btn-info{% end %}">{{ item.object }}</div></div>
+                    <div class="col-md-6 col-sm-12 order-md-1 order-sm-3" >
+                        <span class="text-monospace">
+                            <small>{{ item }}</small>
+                        </span>
+                        <span>
+                        {% if item.duration %}({{ round(item.duration, 1) }} s){% end %}
+                        </span>
+                    </div>
+                    <div class="col-md-3 col-sm-6 order-md-2 order-sm-2">
+                        <div class="btn-group btn-block float-right" role="group" aria-label="Control">
+                            <div class="btn btn-sm btn-light disabled" data-tooltip="plots" data-placement="top" title="Data" aria-disabled="true">D</div>
+                            <div class="btn btn-sm btn-light" data-tooltip="plots" data-placement="top" title="Waterfall Plot">W</div>
+                            <div class="btn btn-sm btn-light" data-toggle="modal" data-target="#modal" data-file="{{ item.file }}" data-tooltip="plots" data-placement="top" title="Polar Plot">P</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            {% end %}
+
+            <div class="modal" id="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-title"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-center" id="modal-window"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-12">
+        <div class="btn btn-secondary btn-block">Show all files...</div>
+    </div>
+</div>
+
+{% end %}
+
+{% block scripts %}
 
 <script>
     function set_url_param(key,value) {
@@ -329,5 +323,4 @@
     })
 </script>
 
-</body>
-</html>
+{% end %}
