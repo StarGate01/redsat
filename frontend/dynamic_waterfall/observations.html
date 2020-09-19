@@ -90,8 +90,8 @@
                         </div>
                         -->
 
-                        <div class="col-md-auto col-sm-12 mb-1 mt-1">
-                            <button type="submit" class="btn btn-primary">
+                        <div class="col-md col-sm-12 mb-1 mt-1">
+                            <button type="submit" class="btn btn-block btn-primary float-right">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
                                     <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
@@ -228,13 +228,13 @@
 
 <div class="row">
     <div class="col-md-8 offset-md-2 col-sm-12">
-        <div class="list-group">
+        <div class="list-group" id="observation-list">
             {% for item in observations %}
 
-            <a class="list-group-item list-group-item-action">
+            <a class="list-group-item list-group-item-action" data-file="{{ item.file }}">
                 <div class="row">
                     <div class="col-md-3 col-sm-6"><div onclick="update_waterfall_params(); document.waterfall.file.value='{{ escape(item.file) }}'; document.waterfall.submit()" class="btn btn-sm btn-block {% if item.object %}btn-success{% else %}btn-info{% end %}">{{ item.object }}</div></div>
-                    <div class="col-md-6 col-sm-12 order-md-1 order-sm-3" >
+                    <div class="col-md-5 col-sm-12 order-md-1 order-sm-3" >
                         <span class="text-monospace">
                             <small>{{ item }}</small>
                         </span>
@@ -242,11 +242,23 @@
                         {% if item.duration %}({{ round(item.duration, 1) }} s){% end %}
                         </span>
                     </div>
-                    <div class="col-md-3 col-sm-6 order-md-2 order-sm-2">
-                        <div class="btn-group btn-block float-right" role="group" aria-label="Control">
-                            <div class="btn btn-sm btn-light disabled" data-tooltip="plots" data-placement="top" title="Data" aria-disabled="true">D</div>
-                            <div class="btn btn-sm btn-light" data-tooltip="plots" data-placement="top" title="Waterfall Plot">W</div>
-                            <div class="btn btn-sm btn-light" data-toggle="modal" data-target="#modal" data-file="{{ item.file }}" data-tooltip="plots" data-placement="top" title="Polar Plot">P</div>
+                    <div class="col-md-4 col-sm-6 order-md-2 order-sm-2">
+
+                        <div class="btn-toolbar float-right" role="toolbar">
+                            <div class="btn-group mr-2" role="group" aria-label="Control">
+                                <div class="btn btn-sm btn-light pl-3 pr-3 disabled" data-tooltip="plots" data-placement="top" title="Data" aria-disabled="true"><span class="text-monospace">D</span></div>
+                                <div class="btn btn-sm btn-light pl-3 pr-3" data-tooltip="plots" data-placement="top" title="Waterfall Plot"><span class="text-monospace">W</span></div>
+                                <div class="btn btn-sm btn-light pl-3 pr-3" data-toggle="modal" data-target="#modal" data-file="{{ item.file }}" data-tooltip="plots" data-placement="top" title="Polar Plot"><span class="text-monospace">P</span></div>
+                            </div>
+
+                            <div class="btn-group" role="group">
+                                <div class="btn btn-sm btn-danger pt-2" data-toggle="modal" title="Move to trash" data-target="#modal-delete" data-file="{{ item.file }}">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -258,12 +270,32 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-title"></h5>
+                            <h5 class="modal-title"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body text-center" id="modal-window"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal" id="modal-delete" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-center" id="modal-delete-window">
+                            Do you really want to delete this file?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" id="file-delete">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,6 +329,8 @@
             set_url_param(e, $('form[name="waterfall"]').find('[name="' + e + '"]').val());
         });
     }
+
+
 </script>
 
 <script>
@@ -320,7 +354,32 @@
             var svg = xml.serializeToString(data.documentElement);
             modal.find('.modal-body').html(svg);
         });
-    })
+    });
+
+    $('#modal-delete').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var file = button.data('file');
+        var modal = $(this);
+        modal.find('.modal-title').text(file);
+
+        $('#file-delete').data('file', file);
+        $('#observation-list').find('[data-file="'+file+'"]').hide();
+    });
+
+    $("#file-delete").on('click', function (e) {
+        $('#modal-delete').modal('hide');
+
+        $.ajax({
+            url: '/?' + $.param({"file": $('#file-delete').data('file')}),
+            type: 'DELETE',
+            success: function() {},
+            error: function () {
+                console.log('delete failed');
+                $('#observation-list').find('[data-file="'+file+'"]').show();
+            }
+        });
+        return true;
+    });
 </script>
 
 {% end %}

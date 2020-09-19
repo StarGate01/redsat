@@ -8,6 +8,7 @@ from bokeh.util.logconfig import basicConfig
 
 from functools import partial
 from sys import argv
+from os import mkdir, rename
 from os.path import isdir, join, dirname, basename, splitext, getsize
 from glob import glob
 from configparser import ConfigParser
@@ -65,6 +66,18 @@ class Observation:
 
 
 class MainHandler(RequestHandler):
+    def delete(self):
+        trash_bin_path = join(data_dir, "trash_bin")
+        if not isdir(trash_bin_path):
+            mkdir(trash_bin_path)
+
+        parts = splitext(basename(self.get_query_argument("file", None)))
+        if len(parts) >= 2:
+            file_base = parts[0]
+            for filename in glob(join(data_dir, "{}.*".format(file_base))):
+                print("deleting:", filename)
+                rename(filename, join(trash_bin_path, basename(filename)))
+
     def get(self):
 
         file_list = [glob(join(data_dir, pattern)) for pattern in ['*.meta', '*.raw', '*.wav']]
